@@ -1,0 +1,8 @@
+for i in *.bam; do 
+  echo "samtools view -bq 20 $i  > /scratch.global/qiuxx221/de_novo_assembly_sam/filter_bams/150_bam/"$i"_MAPQ_20.bam "
+done > /home/hirschc1/qiuxx221/widiv/de_novo/bam_filtering_467
+
+
+for i in *.bam; do 
+  echo "samtools view -bq 20 $i  > /scratch.global/qiuxx221/de_novo_assembly_sam/filter_bams/100_bam/"$i"_MAPQ_20.bam "
+done > /home/hirschc1/qiuxx221/widiv/de_novo/bam_filtering_62
