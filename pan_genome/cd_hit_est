@@ -68,3 +68,7 @@ cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/trimmed/config_fi
 module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query A272_soap_configure.txt_graph_prefix.contig_filter_by_200.fasta -outfmt 6 > 2FACC_blast.out
 
+#unmapped only 
+blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query 2FACC_config.txt_graph_prefix.contig_200.fasta -outfmt 6 > 2FACC_blast_unmapped_only.out
+
+2FACC_config.txt_graph_prefix.contig_200
