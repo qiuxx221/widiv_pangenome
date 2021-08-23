@@ -1,0 +1,70 @@
+# replace ">" for each sequence using part of the file name to present the genome
+
+for i in *.txt; do
+    id=$(echo "$i" | cut -d'_' -f1)
+    sed "s|>|>$id |g" $i |sed 's, ,_,g' > $(basename "$i")_rename_header.txt
+done
+
+# pooling sequences for cd-hit-est clustering
+
+cat *_rename* > cat_seq_for_clustering.fasta
+
+
+ /home/watkinse/qiuxx221/Programs/cdhit/cd-hit-est 
+ 
+ 
+ /home/watkinse/qiuxx221/Programs/cdhit/cd-hit-est -i cat_seq_for_clustering.fasta -c 0.95 -o cluster0.95_est
+ 
+ 
+ # get a list of genotype + cluster with presence 
+ 
+ cat cluster0.95_est.clstr | awk ' /Cluster/ { no+=1;}; !/Cluster/ { id=substr($3, 2, length($3)-4); printf("%s\t%s\n", no, id) } ' | cut -d '_' -f 1 | uniq | head
+ 
+ 
+ 
+ 
+ s3cmd get s3://merged_bam_files_529/merge_bams/B107_B73v5.bam
+ 
+ s3cmd get s3://merged_bam_files_529/merge_bams/NK778_B73v5.bam
+ s3cmd get s3://merged_bam_files_529/merge_bams/Va99_B73v5.bam
+ s3cmd get s3://merged_bam_files_529/merge_bams/W817G_B73v5.bam
+ 
+ s3cmd get s3://merged_bam_files_529/merge_bams/B84_B73v5.bam
+ s3cmd get s3://merged_bam_files_529/merge_bams/LH59_B73v5.bam
+ s3cmd get s3://merged_bam_files_529/merge_bams/NC230_B73v5.bam
+ 
+ s3cmd get s3://merged_bam_files_529/merge_bams/PHG39_B73v5.bam
+
+ s3cmd get s3://merged_bam_files_529/merge_bams/PHW52_B73v5.bam
+ 
+ 
+~/program/minimap2/minimap2 -ax map-ont 2FACC_soap_configure.txt_graph_prefix.contig_filter_by_200.txt /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta > 2FACC_align.sam
+
+
+
+
+# make blast database for B73_ref 
+
+makeblastdb -in Zm-B73-REFERENCE-NAM-5.0.fasta -dbtype nucl -parse_seqids
+
+# blastn –db nt –query nt.fsa –out results.out  
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=10gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blastk63.out
+#SBATCH -e blastk63.err
+#SBATCH --tmp=100gb
+
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/trimmed/config_file/kmer63
+module load ncbi_toolkit
+blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query A272_soap_configure.txt_graph_prefix.contig_filter_by_200.fasta -outfmt 6 > 2FACC_blast.out
+
