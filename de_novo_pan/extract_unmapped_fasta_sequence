@@ -1,0 +1,70 @@
+for i in *B73v5.bam; do 
+  samtools view -f4 $i > $i.unmapped.sam
+done 
+
+for j in *.unmapped.sam; do 
+  echo $j; 
+  cat $j | grep -v ^@  | awk 'NR%2==1 {print "@"$1"\n"$10"\n+\n"$11}' > "$j"_1.fastq 
+  cat $j | grep -v ^@  | awk 'NR%2==0 {print "@"$1"\n"$10"\n+\n"$11}' > "$j"_2.fastq
+done 
+
+
+java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 4 2FACC_B73v5.bam.unmapped.sam_1.fastq 2FACC_B73v5.bam.unmapped.sam_2.fastq 2FACC_B73v5_R1.trim.fastq 2FACC_B73v5_R1.single.fastq 2FACC_B73v5_R2.trim.fastq 2FACC_B73v5_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true
+
+
+max_rd_len=250
+[LIB]
+avg_ins=300
+reverse_seq=0
+asm_flags=3
+rd_len_cutoff=100
+rank=1
+pair_num_cutoff=3
+map_len=32
+q1=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R1.trim.fastq
+q2=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R2.trim.fastq
+max_rd_len=250
+[LIB]
+avg_ins=400
+reverse_seq=0
+asm_flags=3
+rd_len_cutoff=100
+rank=1
+pair_num_cutoff=3
+map_len=32
+q1=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R1.trim.fastq
+q2=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R2.trim.fastq
+max_rd_len=250
+[LIB]
+avg_ins=500
+reverse_seq=0
+asm_flags=3
+rd_len_cutoff=100
+rank=1
+pair_num_cutoff=3
+map_len=32
+q1=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R1.trim.fastq
+q2=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R2.trim.fastq
+max_rd_len=250
+[LIB]
+avg_ins=600
+reverse_seq=0
+asm_flags=3
+rd_len_cutoff=100
+rank=1
+pair_num_cutoff=3
+map_len=32
+q1=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R1.trim.fastq
+q2=/home/hirschc1/qiuxx221/widiv/unmapped_only/2FACC_B73v5_R2.trim.fastq
+
+
+
+for i in *.txt ; do
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s $i -K 63 -R -o "$i"_graph_prefix
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_graph_prefix -R 1> "$i"_contig.log 2>"$i"_contig.err
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_graph_prefix 1> "$i"_map.log 2>"$i"_map.err
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_graph_prefix -F 1>"$i"_scaff.log 2>"$i"_scaff.err
+done
+
+
+
