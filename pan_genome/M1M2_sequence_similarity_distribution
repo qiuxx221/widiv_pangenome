@@ -29,4 +29,16 @@ makeblastdb -dbtype nucl -in M1M2_gene.fa -parse_seqids
 
 module load ncbi_toolkit
 cd /home/hirschc1/qiuxx221/widiv/de_novo/M1M2
-blastn -db M1M2_gene.fa -query M1M2_gene.fa -out M1M2_ABA -outfmt "7 qseqid sseqid pident qlen length mismatch gapopen evalue bitscore" -max_target_seqs 1
+blastn -db M1M2_gene.fa -query M1M2_gene.fa -out M1M2_ABA -outfmt 6
+
+# processing the blast output 
+# remove self hit and keep one hit per blast 
+awk -F" " '$1!=$2' OFS="\t" M1M2_ABA | awk '!seen[$1]++' | awk -F" " '$12>200' OFS="\t" > M1M2_filtered.txt
+
+# 13978 gene has hits with bitscore >200 
+
+# finding pairwise pairs
+cut -f 2 M1M2_filtered.txt | sort > db_gene_id.txt
+cut -f 1 M1M2_filtered.txt |sort > query_gene_id.txt
+
+# ~10000 has pairs
