@@ -39,7 +39,6 @@ cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testin
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 12 < 12_bam_file_download_cmd
 
 
-
 # extracting unmapped reads
 
 #!/bin/bash
@@ -70,4 +69,4 @@ for j in *.unmapped.sam; do
 done 
 
 
-
+# Trim adaptors again using trimomatic 
