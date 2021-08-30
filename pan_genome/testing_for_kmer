@@ -37,3 +37,37 @@ module load parallel/20190122
 
 cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 12 < 12_bam_file_download_cmd
+
+
+
+# extracting unmapped reads
+
+#!/bin/bash
+#SBATCH --time=12:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o extract_unmapped.out
+#SBATCH -e extract_unmapped.err
+#SBATCH --tmp=100gb
+
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing
+
+module load samtools 
+
+for i in *B73v5.bam; do 
+  samtools view -f4 $i > $i.unmapped.sam
+done 
+
+for j in *.unmapped.sam; do 
+  echo $j; 
+  cat $j | grep -v ^@  | awk 'NR%2==1 {print "@"$1"\n"$10"\n+\n"$11}' > "$j"_1.fastq 
+  cat $j | grep -v ^@  | awk 'NR%2==0 {print "@"$1"\n"$10"\n+\n"$11}' > "$j"_2.fastq
+done 
+
+
+
