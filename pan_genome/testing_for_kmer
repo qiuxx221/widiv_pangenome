@@ -1,0 +1,39 @@
+# de novo testing for k-mer selection
+# samples involes in this process have coverage spans from 16~55
+
+PHK46_B73v5.bam	16.5998
+PHT11_B73v5.bam	18.8097
+6M502_B73v5.bam	19.4788
+PHT47_B73v5.bam	20.0882
+N200_B73v5.bam	22.6543
+B91_B73v5.bam	24.8481
+29MIBZ2_B73v5.bam	26.2253
+Seagull-Seventeen_B73v5.bam	27.6393
+Va22_B73v5.bam	33.7964
+B70_B73v5.bam	40.5048
+W604S_B73v5.bam	47.1192
+LH1_B73v5.bam	55.0503
+
+
+while read p; do
+  echo "s3cmd get s3://merged_bam_files_529/merge_bams/"$p""
+done <12_bam_list.txt > 12_bam_file_download_cmd
+
+
+#!/bin/bash
+#SBATCH --time=1:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=120gb
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o download_12_bam.out
+#SBATCH -e download_12_bam.err
+#SBATCH --tmp=350gb
+
+
+module load parallel/20190122
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 12 < 12_bam_file_download_cmd
