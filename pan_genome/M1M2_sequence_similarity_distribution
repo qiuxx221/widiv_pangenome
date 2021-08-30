@@ -1,0 +1,32 @@
+# getting M1,M2 info from Maggie, source to NAM paper
+
+# getting B73 gene list 
+cut -d ',' -f 2 Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1_Sb_subgenomes_complete_longest.csv > B73_M1_M2_gene_ID.txt
+
+# extracting fa sequence for each gene that has M1,M2 info. total around 20000 genes
+seqkit grep -f B73_M1_M2_gene_ID.txt Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > M1M2_gene.fa
+
+
+# making blast database
+module load ncbi_toolkit
+makeblastdb -dbtype nucl -in M1M2_gene.fa -parse_seqids
+
+# blastdb 
+/panfs/roc/groups/14/hirschc1/qiuxx221/widiv/de_novo/M1M2/M1M2_gene.fa
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 20:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o M1M2_ABA.out
+#SBATCH -e M1M2_ABA.err
+#SBATCH --tmp=100gb
+
+module load ncbi_toolkit
+cd /home/hirschc1/qiuxx221/widiv/de_novo/M1M2
+blastn -db M1M2_gene.fa -query M1M2_gene.fa -out M1M2_ABA -outfmt "7 qseqid sseqid pident qlen length mismatch gapopen evalue bitscore" -max_target_seqs 1
