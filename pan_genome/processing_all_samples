@@ -1,0 +1,6 @@
+# download unfiltered bam files 
+while read p; do
+  echo "s3cmd get s3://merged_bam_files_529/"$p"_B73v5.bam"
+done <widiv_509_sample_id.txt > 509_bam_file_download
+
+# split 509 lines into 100 each 
