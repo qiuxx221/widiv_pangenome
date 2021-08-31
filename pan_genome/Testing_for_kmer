@@ -70,3 +70,137 @@ done
 
 
 # Trim adaptors again using trimomatic 
+# generating a list of genotype ID
+ls | cut -d '.' -f 1 | sort | uniq > 12_sample_id.txt
+# creating cmd for adapter cleaning 
+while read p; do 
+    echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p".bam.unmapped.sam_1.fastq "$p".bam.unmapped.sam_2.fastq "$p"_R1.trim.fastq "$p"_R1.single.fastq "$p"_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
+done < 12_sample_id.txt
+
+# slurm trimming adaper 
+
+############
+# create configuration file for SOAP
+# getting fastq_name
+
+ls *.fastq | cut -d '_' -f 1 |sort | uniq > 13_genotype_ID.txt
+
+
+# generate batch configuration file for SOAP de novo assembly 
+with open("13_genotype_ID.txt") as entry_list:
+    for entry_line in entry_list:
+        # lib 1 
+        config_file_lib1 = 'max_rd_len=250\n[LIB]\navg_ins=300\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure1 = config_file_lib1 + str(reads_info_1) + '\n'+ str(reads_info_2)
+         # lib 2 
+        config_file_lib2 = 'max_rd_len=250\n[LIB]\navg_ins=400\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure2 = config_file_lib2 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 3 
+        config_file_lib3 = 'max_rd_len=250\n[LIB]\navg_ins=500\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure3 = config_file_lib3 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 4 
+        config_file_lib4 = 'max_rd_len=250\n[LIB]\navg_ins=600\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/fq/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure4 = config_file_lib4 + str(reads_info_1) + '\n'+ str(reads_info_2)
+             
+        file_name = str(entry_line.strip()).split("_B73")[0]
+        soap_config = open("/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/config/"+str(file_name.strip())+'_soap_configure.txt', 'w')
+        soap_config.writelines(soap_configure1 + "\n" +soap_configure2 + "\n" +soap_configure3 + "\n" +soap_configure4)
+        soap_config.close()
+
+# kmer 63 
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=80gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o kmer63.out
+#SBATCH -e kmer63.err
+#SBATCH --tmp=100gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/config/
+
+# run SOAP at k-mer of 63 using configuration file 
+
+for i in *.txt ; do 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s $i -K 63 -R -o "$i"_63_graph_prefix 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_63_graph_prefix -R 1> "$i"_63_contig.log 2>"$i"_63_contig.err 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_63_graph_prefix 1> "$i"_63_map.log 2>"$i"_63_map.err  
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_63_graph_prefix -F 1>"$i"_63_scaff.log 2>"$i"_63scaff.err
+done 
+
+
+# kmer43 
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=200gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o kmer43.out
+#SBATCH -e kmer43.err
+#SBATCH --tmp=100gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_assembly_test/12_bam_for_testing/config/
+
+# run SOAP at k-mer of 43 using configuration file 
+
+for i in *.txt ; do 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s $i -K 43 -R -o "$i"_43_graph_prefix 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_43_graph_prefix -R 1> "$i"_43_contig.log 2>"$i"_43_contig.err 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_43_graph_prefix 1> "$i"_43_map.log 2>"$i"_43_map.err  
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_43_graph_prefix -F 1>"$i"_43_scaff.log 2>"$i"_43_scaff.err
+done 
+
+
+
+
+
+
+# filter contigs by size of 200 bp 
+for j in *graph_prefix.contig; do 
+awk '
+/^>/{
+  if(sign_val && strLen>=200){
+    print sign_val ORS line
+  }
+  strLen=line=""
+  sign_val=$0
+  next
+}
+{
+  strLen+=length($0)
+  line=(line?line ORS:"")$0
+}
+END{
+  if(sign_val && strLen>=30){
+    print sign_val ORS line
+  }
+}
+' $j > "$j"_filter_by_200.txt
+done
+
+# create cmd to get assembly stats 
+
+# kmer 63 
+for i in *_63_*; do    echo "~/programs/assembly-stats/build/assembly-stats $i"; done > kmer63_stats_cmd 
+
+# kmer 53 
+for i in *_53_*; do    echo "~/programs/assembly-stats/build/assembly-stats $i"; done > kmer53_stats_cmd 
+
+# kmer 43 
+for i in *_43_*; do    echo "~/programs/assembly-stats/build/assembly-stats $i"; done > kmer43_stats_cmd 
