@@ -1,5 +1,50 @@
 # getting M1,M2 info from Maggie, source to NAM paper
 
+# getting B73 gene list that are in M1,M2 pair style
+# Zm00001eb073470;Zm00001eb428550
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=40gb
+#SBATCH -t 6:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o M1M2_blast.out
+#SBATCH -e M1M2_blast.err
+#SBATCH --tmp=380gb
+
+module load ncbi_toolkit
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/M1M2
+while read p; do
+  echo "$p" |cut -d ';' -f 1 > M1_id;  seqkit grep -f M1_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > M1_sequence.fa 
+  makeblastdb -dbtype nucl -in M1_sequence.fa -parse_seqids
+  echo "$p" | cut -d ';' -f 2  > M2_id;  seqkit grep -f M2_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > M2_sequence.fa 
+  makeblastdb -dbtype nucl -in M2_sequence.fa -parse_seqids
+  blastn -db M1_sequence.fa -query M2_sequence.fa -outfmt 6 -out "$p"_M1_db
+  blastn -db M2_sequence.fa -query M1_sequence.fa -outfmt 6 -out "$p"_M2_db
+  rm M1_*; rm M2_*
+done < gene_pair.txt
+
+
+cat Zm00001eb* > blast_output_merged; rm Zm00001eb*
+
+
+
+
+
+
+
+
+
+
+
+
 # getting B73 gene list 
 cut -d ',' -f 2 Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1_Sb_subgenomes_complete_longest.csv > B73_M1_M2_gene_ID.txt
 
