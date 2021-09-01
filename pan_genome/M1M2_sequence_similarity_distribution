@@ -11,8 +11,8 @@
 #SBATCH -t 6:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
-#SBATCH -o M1M2_blast.out
-#SBATCH -e M1M2_blast.err
+#SBATCH -o M1M2_blast_local_xaa.out
+#SBATCH -e M1M2_blast_local_xaa.err
 #SBATCH --tmp=380gb
 
 module load ncbi_toolkit
@@ -22,15 +22,15 @@ conda activate Widiv_SV_py3
 
 cd /home/hirschc1/qiuxx221/widiv/de_novo/M1M2
 while read p; do
-  echo "$p" |cut -d ';' -f 1 > M1_id;  seqkit grep -f M1_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > M1_sequence.fa 
-  makeblastdb -dbtype nucl -in M1_sequence.fa -parse_seqids
-  echo "$p" | cut -d ';' -f 2  > M2_id;  seqkit grep -f M2_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > M2_sequence.fa 
-  makeblastdb -dbtype nucl -in M2_sequence.fa -parse_seqids
-  blastn -db M1_sequence.fa -query M2_sequence.fa -outfmt 6 -out "$p"_M1_db
-  blastn -db M2_sequence.fa -query M1_sequence.fa -outfmt 6 -out "$p"_M2_db
-  rm M1_*; rm M2_*
-done < gene_pair.txt
-
+  echo "$p" |cut -d ';' -f 1 > M1_id;  seqkit grep -f M1_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > "$p"_M1_sequence.fa 
+  echo "$p" |cut -d ';' -f 2 > M2_id;  seqkit grep -f M2_id Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gene.fa > "$p"_M2_sequence.fa
+  makeblastdb -dbtype nucl -in "$p"_M1_sequence.fa -parse_seqids 
+  makeblastdb -dbtype nucl -in "$p"_M2_sequence.fa -parse_seqids
+  blastn -db "$p"_M1_sequence.fa -query "$p"_M2_sequence.fa -outfmt 6 -out "$p"_M1_db
+  blastn -db "$p"_M2_sequence.fa -query "$p"_M1_sequence.fa -outfmt 6 -out "$p"_M2_db
+done < (xaa-xae)
 
 cat Zm00001eb* > blast_output_merged; rm Zm00001eb*
+
+
 
