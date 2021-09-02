@@ -32,5 +32,10 @@ done < (xaa-xae)
 
 cat Zm00001eb* > blast_output_merged; rm Zm00001eb*
 
+# keep the top hit for each blast pair
 
+awk '!seen[$1]++' all_M1M2_merge_blast_out > all_M1M2_merge_blast_out_tophit
+
+# filter bitscore by 200 
+awk '{ if ($12 > 200) { print } }' all_M1M2_merge_blast_out_tophit > all_M1M2_merge_blast_out_tophit_bit200
 
