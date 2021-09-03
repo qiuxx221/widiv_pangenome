@@ -1,0 +1,25 @@
+# prepare cds squence 
+~/programs/AnchorWave/anchorwave gff2seq -i gff/B73_chr1.gff  -r /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta -o B73_chr1_cds.fa
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 2:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o anchorwave_step1.out
+#SBATCH -e anchorwave_step1.err
+#SBATCH --tmp=100gb
+
+cd /home/hirschc1/qiuxx221/widiv/anchorwave_test
+# cds.sam
+~/programs/minimap2/minimap2 -x splice -t 10 -k 12 -a -p 0.4 -N 20 ~/widiv/B97_B73v5/B97_chr1.fasta B73_chr1_cds.fa > B97_to_B73_chr1_cds.sam
+
+# ref.sam
+~/programs/minimap2/minimap2 -x splice -t 10 -k 12 -a -p 0.4 -N 20 ~/widiv/B73_index/minimap_B73/B73_chr1.fasta B73_chr1_cds.fa > refB73_chr1_chr1.sam
+
+
+# align
+~/programs/AnchorWave/anchorwave proali -i gff/B73_chr1.gff -as B73_chr1_cds.fa -r  /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta -a B97_to_B73_chr1_cds.sam -ar refB73_chr1_chr1.sam -s ~/widiv/B97_B73v5/B97_chr1.fasta -n anchors -R 1 -Q 2 -o alignment.maf -f alignment.f.maf -w 38000 -fa3 200000 -t 20
