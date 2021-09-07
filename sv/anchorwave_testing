@@ -23,3 +23,12 @@ cd /home/hirschc1/qiuxx221/widiv/anchorwave_test
 
 # align
 ~/programs/AnchorWave/anchorwave proali -i gff/B73_chr1.gff -as B73_chr1_cds.fa -r  /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta -a B97_to_B73_chr1_cds.sam -ar refB73_chr1_chr1.sam -s ~/widiv/B97_B73v5/B97_chr1.fasta -n anchors -R 1 -Q 2 -o alignment.maf -f alignment.f.maf -w 38000 -fa3 200000 -t 20
+
+
+~/programs/AnchorWave/anchorwave/anchorwave genoAli -i gff/B73_chr1.gff -as B73_chr1_cds.fa -r  /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta -a B97_to_B73_chr1_cds.sam -ar refB73_chr1_chr1.sam -s ~/widiv/B97_B73v5/B97_chr1.fasta -n anchors -o anchorwave.maf -f anchorwave.f.maf -w 38000 -fa3 200000 -B -6 -O1 -8 -E1 -2 -O2 -75 -E2 -1 -t 1 -IV
+
+
+
+
+# variant 
+~/programs/AnchorWave/anchorwave/anchorwave genoAli -i gff/B73_chr1.gff -as B73_chr1_cds.fa -r /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta -a B97_to_B73_chr1_cds.sam -ar refB73_chr1_chr1.sam -s ~/widiv/B97_B73v5/B97_chr1.fasta -v ler.vcf -n ler.anchors -o ler.maf -f ler.f.maf -t 15 > ler.log
