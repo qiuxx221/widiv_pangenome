@@ -72,3 +72,24 @@ blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fast
 blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query 2FACC_config.txt_graph_prefix.contig_200.fasta -outfmt 6 > 2FACC_blast_unmapped_only.out
 
 2FACC_config.txt_graph_prefix.contig_200
+
+
+
+
+
+# cd-hit-est
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o cdhitest_xaa.out
+#SBATCH -e cdhitest_xaa.err
+#SBATCH --tmp=100gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/set_xaa/200_filter
+module load cd-hit
+cd-hit-est -i xaa_merged.fasta -c 0.95 -o cluster_xaa_0.95 - M40000
