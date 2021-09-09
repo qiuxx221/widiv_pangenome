@@ -84,3 +84,21 @@ END{
 }
 ' $j > "$j"_filter_by_200.txt
 done
+
+
+
+
+
+
+#####xab 
+ls *.fastq | cut -d '_' -f 1 |sort | uniq > xab_genotype_ID.txt
+
+while read p; do 
+    echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_B73v5.bam.unmapped.sam_1.fastq "$p"_B73v5.bam.unmapped.sam_2.fastq "$p"_R1.trim.fastq "$p"_R1.single.fastq "$p"_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
+done < xab_genotype_ID.txt > xab_trim_cmd
+
+
+
+rm *.unmapped.sam_*
+
+rm *single*
