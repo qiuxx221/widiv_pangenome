@@ -18,6 +18,8 @@ while read p; do
     echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_B73v5.bam.unmapped.sam_1.fastq "$p"_B73v5.bam.unmapped.sam_2.fastq "$p"_R1.trim.fastq "$p"_R1.single.fastq "$p"_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
 done < xaa_genotype_ID.txt > xaa_trim_cmd
 
+bash xaa_trim_cmd
+
 rm *.unmapped.sam_*
 
 rm *single*
@@ -49,7 +51,6 @@ with open("xaa_genotype_ID.txt") as entry_list:
         soap_config = open("/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/config/"+str(file_name.strip())+'_soap_configure.txt', 'w')
         soap_config.writelines(soap_configure1 + "\n" +soap_configure2 + "\n" +soap_configure3 + "\n" +soap_configure4)
         soap_config.close()
-        
         
         
 # de novo assembly of xaa 100 genotypes
@@ -97,8 +98,70 @@ while read p; do
     echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_B73v5.bam.unmapped.sam_1.fastq "$p"_B73v5.bam.unmapped.sam_2.fastq "$p"_R1.trim.fastq "$p"_R1.single.fastq "$p"_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
 done < xab_genotype_ID.txt > xab_trim_cmd
 
-
+bash xab_trim_cmd
 
 rm *.unmapped.sam_*
-
 rm *single*
+
+# xab 
+with open("xab_genotype_ID.txt") as entry_list:
+    for entry_line in entry_list:
+        # lib 1 
+        config_file_lib1 = 'max_rd_len=250\n[LIB]\navg_ins=300\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure1 = config_file_lib1 + str(reads_info_1) + '\n'+ str(reads_info_2)
+         # lib 2 
+        config_file_lib2 = 'max_rd_len=250\n[LIB]\navg_ins=400\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure2 = config_file_lib2 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 3 
+        config_file_lib3 = 'max_rd_len=250\n[LIB]\navg_ins=500\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure3 = config_file_lib3 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 4 
+        config_file_lib4 = 'max_rd_len=250\n[LIB]\navg_ins=600\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+        reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+        reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/bams/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+        soap_configure4 = config_file_lib4 + str(reads_info_1) + '\n'+ str(reads_info_2)
+             
+        file_name = str(entry_line.strip()).split("_B73")[0]
+        soap_config = open("/home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/config/"+str(file_name.strip())+'_soap_configure.txt', 'w')
+        soap_config.writelines(soap_configure1 + "\n" +soap_configure2 + "\n" +soap_configure3 + "\n" +soap_configure4)
+        soap_config.close()
+
+# assemble
+cd /home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/config/
+
+for i in /home/hirschc1/qiuxx221/widiv/de_novo/split_folder_509/config/*.txt ; do 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s $i -K 53 -R -o "$i"_graph_prefix 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_graph_prefix -R 1> "$i"_contig.log 2>"$i"_contig.err 
+  /home/hirschc1/qiuxx221/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_graph_prefix 1> "$i"_map.log 2>"$i"_map.err  
+done 
+
+# filter contigs by size of 200 bp 
+for j in *soap_configure.txt_graph_prefix.contig; do 
+awk '
+/^>/{
+  if(sign_val && strLen>=200){
+    print sign_val ORS line
+  }
+  strLen=line=""
+  sign_val=$0
+  next
+}
+{
+  strLen+=length($0)
+  line=(line?line ORS:"")$0
+}
+END{
+  if(sign_val && strLen>=30){
+    print sign_val ORS line
+  }
+}
+' $j > "$j"_filter_by_200.txt
+done
+
+
