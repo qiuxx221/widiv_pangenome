@@ -1,0 +1,7 @@
+
+blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query xaa_merged.fasta -perc_identity 75 -outfmt 6 -out results.out
+
+# creating file that include the contig length info 
+
+cat results.out > cat_blast.out; cut -f 1 cat_blast.out | sed 's|_|\t|g' > cat_sequence_header_split ; paste cat_sequence_header_split cat_blast.out | awk -F" " '$21=($16-$15)/$4'  |awk '(NR>0) && ($21 >= 0.75 )' | cut -d ' ' -f 9-21 | head
+
