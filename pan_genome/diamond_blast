@@ -1,0 +1,10 @@
+/panfs/roc/risdb_new/diamond/nr.dmnd
+
+
+
+
+
+cd ~/widiv/de_novo/split_folder_509/bams/set_xaa/200_filter/
+module load diamond
+
+diamond blastx --db /panfs/roc/risdb_new/diamond/nr -q xaa_merged.fasta --outfmt 6 -o /scratch.global/qiuxx221/blast_to_nr/xaa_diamond_blastnr.out
