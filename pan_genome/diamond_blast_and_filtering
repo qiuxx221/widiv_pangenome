@@ -8,3 +8,11 @@ cd ~/widiv/de_novo/split_folder_509/bams/set_xaa/200_filter/
 module load diamond
 
 diamond blastx --db /panfs/roc/risdb_new/diamond/nr -q xaa_merged.fasta --outfmt 6 -o /scratch.global/qiuxx221/blast_to_nr/xaa_diamond_blastnr.out
+
+# select the best hit 
+
+awk '!seen[$1]++' xaa_diamond_blastnr.out > xaa_best_diamond_blastnr.out
+
+# filter blast output # options on identity and e-value 
+
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' xaa_best_diamond_blastnr.out
