@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH -p max
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 200:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blastn_xaa.out
+#SBATCH -e blastn_xaa.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/de_novo/split_folder_509/bams/set_xaa/200_filter
+
+module load ncbi_toolkits
+blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query xaa_merged.fasta -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out /scratch.global/qiuxx221/blast_to_ref/xaa_blast_results.out
+
+# creating file that include the contig length info 
+
+cat results.out > cat_blast.out; cut -f 1 cat_blast.out | sed 's|_|\t|g' > cat_sequence_header_split ; paste cat_sequence_header_split cat_blast.out | awk -F" " '$21=($16-$15)/$4'  |awk '(NR>0) && ($21 >= 0.75 )' | cut -d ' ' -f 9-21 | head
+
