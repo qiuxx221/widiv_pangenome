@@ -1,0 +1,13 @@
+# download all bams (split,discordant for lumpy as well)
+
+while read p; do 
+  echo "s3cmd get s3://merged_bam_files_529/merge_bams/"$p"_B73v5.bam; s3cmd get s3://merged_bam_files_529/merge_bams/"$p"_B73v5.disc.bam; s3cmd get s3://merged_bam_files_529/merge_bams/"$p"_B73v5.splt.bam"
+done <   xaa > xac_download_picard
+
+while read p; do 
+  echo "java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.disc.bam O="$p"_B73v5_disc_marked_duplicates.bam M="$p"_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.splt.bam O="$p"_B73v5_splt_marked_duplicates.bam M="$p"_B73v5_splt_marked_dup_metrics.txt"
+done <  xac  > xac_picard_cmd 
+
+
+
+java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I=B97_B73v5.bam O=B97_B73v5_marked_duplicates.bam M=B97_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I=B97_B73v5.disc.bam O=B97_B73v5_disc_marked_duplicates.bam M=B97_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I=B97_B73v5.splt.bam O=B97_B73v5_splt_marked_duplicates.bam M=B97_B73v5_splt_marked_dup_metrics.txt
