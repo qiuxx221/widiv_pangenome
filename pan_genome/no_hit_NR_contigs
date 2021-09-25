@@ -1,0 +1,15 @@
+#!/bin/bash
+#PBS -l mem=20gb,nodes=1:ppn=4,walltime=36:00:00
+#PBS -m abe
+#PBS -M qiuxx221@umn.edu
+#PBS -N EDTA
+#PBS -o EDTA.out
+#PBS -e EDTA.err
+
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate EDTA
+
+cd /home/hirschc1/qiuxx221/programs/EDTA/
+perl EDTA.pl --genome ~/widiv/de_novo/split_folder_509/509_all_contigs/batch_contigs/fmt_header_no_hit.fasta --species Maize --cds Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.cds.fa --curatedlib NAM.EDTA1.8.0.MTEC02052020.TElib.clean.fa
