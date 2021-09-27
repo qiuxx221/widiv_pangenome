@@ -7,8 +7,25 @@ diamond blastx --db /panfs/roc/risdb_new/diamond/nr -q cluster_all_509_0.95 --ou
 
 # select the best hit 
 
-awk '!seen[$1]++' xaa_diamond_blastnr.out > xaa_best_diamond_blastnr.out
+awk '!seen[$1]++' cluster_all_509_0.95_nr.out >  cluster_all_509_0.95_nr_best.out
 
 # filter blast output # options on identity and e-value 
 
-awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' xaa_best_diamond_blastnr.out
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' cluster_all_509_0.95_nr_best.out > filtered_best_blast_hit_509.out
+
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' cluster_all_509_0.95_nr_best.out | wc -l > filtered_best_blast_hit_509.out
+
+
+# get sequence id that has hits 
+cut -f 1 filtered_best_blast_hit_509.out > sequence_with_hits.txt
+
+# get nr ID for efetch features 
+cut -f 2 filtered_best_blast_hit_509.out > sequence_hits_nr_id.txt
+
+# split the nr ID into 20000 lines per file and perform parallel search 
+split -l 20000 sequence_hits_nr_id.txt
+
+
+while read p; do
+  echo "for i in `cat "$i"`; do  printf ${i}"\t"; efetch -db protein -id ${i} -format xml | xtract -pattern Seq-entry -element Org-ref_taxname, OrgName_lineage, NCBIeaa, Textseq-id_accession ;done > SummaryTable_509_a.tsv"
+done <batch_list | head 
