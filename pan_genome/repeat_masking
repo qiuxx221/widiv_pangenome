@@ -1,0 +1,7 @@
+module load trf
+module load phrap 
+module load rmblast 
+module load repeatmasker
+module load repeatmodeler
+
+RepeatMasker
