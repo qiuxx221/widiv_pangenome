@@ -1,0 +1,56 @@
+# to use delly call svs, use samtools index all the picard marked bam files first 
+module load samtools 
+
+while read p; do
+  echo "samtools index "$p"_B73v5_marked_duplicates.bam; samtools index "$p"_B73v5_splt_marked_duplicates.bam; samtools index "$p"_B73v5_disc_marked_duplicates.bam"
+done <xaa_gp.txt > xaa_index_bam_cmd
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=25
+#SBATCH --mem=240gb
+#SBATCH -t 40:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_index.out
+#SBATCH -e xaa_index.err
+#SBATCH --tmp=100gb
+
+cd /scratch.global/qiuxx221/bams_picard
+
+module load samtools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < xaa_index_bam_cmd  
+
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bams_picard/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xaa_gp.txt > xaa_delly_sv_cmd
+
+#!/bin/bash
+#SBATCH -p amd2tb
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=50
+#SBATCH --mem=750gb
+#SBATCH -t 40:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_delly.out
+#SBATCH -e xaa_delly.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bams_picard
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+module load samtools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 50 < xaa_delly_sv_cmd
+
+
+# run manta 
