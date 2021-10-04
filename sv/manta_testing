@@ -1,0 +1,13 @@
+
+
+
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate base
+
+configManta.py --bam B97_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta 
+
+# it produce this 
+
+/panfs/roc/groups/14/hirschc1/qiuxx221/widiv/de_novo/download_sample/test/runWorkflow.py
