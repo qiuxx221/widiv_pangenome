@@ -1,3 +1,14 @@
 /home/hirschc1/qiuxx221/programs/lumpy-sv/bin/lumpyexpress -R/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -B ~/widiv/de_novo/download_sample/B97_B73v5_marked_duplicates.bam \
 -S ~/widiv/de_novo/download_sample/B97_B73v5_splt_marked_duplicates.bam -D ~/widiv/de_novo/download_sample/B97_B73v5_disc_marked_duplicates.bam -o B97_B73v5_lumpy.vcf
 
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed B97_B73v5_lumpy.vcf 25 100000000 > B97_B73_lumpy.bed
+
+# Lumpy only calls DEL, DUP, INV, TRA, so only keep DEL for QC 
+
+total deletion 51214
+in chr1 7906
+
+# bed (column 3 and 6 are the cooridinates)        
+chr1	110396	110301(output)	chr1	111701	111606(ends)	1	,	+	-	DEL	chr1	110301	chr1	111606
+
+grep DEL B97_B73_lumpy.bed | grep chr1 | grep -v chr10 | cut -f 1,3,6 | awk '{if ($3-$2>=25){print}}' > B97_B73_lumpy_chr1_25.bed
