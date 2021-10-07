@@ -12,3 +12,5 @@ in chr1 7906
 chr1	110396	110301(output)	chr1	111701	111606(ends)	1	,	+	-	DEL	chr1	110301	chr1	111606
 
 grep DEL B97_B73_lumpy.bed | grep chr1 | grep -v chr10 | cut -f 1,3,6 | awk '{if ($3-$2>=25){print}}' > B97_B73_lumpy_chr1_25.bed
+
+grep DEL B97_B73_lumpy.bed | cut -f 1,3,4,6 | grep chr1 |grep -v chr10 | awk '{if($4-$2>20) {print}}'|awk '{if($1==$3) {print}}' | cut -f 1,2,4 > lumpy_chr1_redo_25.bed
