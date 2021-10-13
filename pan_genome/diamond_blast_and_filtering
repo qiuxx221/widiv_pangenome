@@ -29,3 +29,40 @@ split -l 20000 sequence_hits_nr_id.txt
 while read p; do
   echo "for i in `cat "$i"`; do  printf ${i}"\t"; efetch -db protein -id ${i} -format xml | xtract -pattern Seq-entry -element Org-ref_taxname, OrgName_lineage, NCBIeaa, Textseq-id_accession ;done > SummaryTable_509_a.tsv"
 done <batch_list | head 
+
+
+###swithc to uniprot
+
+cluster_all_509_0.95_uniprot.out
+
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' cluster_all_509_0.95_uniprot.out > filtered_uniprot_blast_hit_509.out # 10357851 hit 
+
+# check how many contigs has annotation
+
+cut -f 1 filtered_uniprot_blast_hit_509.out |sort |uniq > contigs_with_blasthit.txt # 664965 hits 
+
+# extract the accession number and search result in the blast output to extract lines with plant blast hit
+cut -f 2 filtered_uniprot_blast_hit_509.out | sort | uniq > uniq_blastout_accession.txt
+
+
+# blast output and retrive all info for taxomony search 
+grep -Fwf uniq_blastout_accession.txt uniref90_id_info.txt > uniprop_blast_out_info_line.txt
+
+# grep lines that have taxID in plants 
+grep -Fwf ~/db/taxon_file_search_db.txt uniprop_blast_out_info_line.txt > viridirplantea_accession_info.txt
+
+
+# get accession number for plant gene
+cut -f 1 -d ' ' viridirplantea_accession_info.txt | sed 's|>||g' > vidiriplante_accession_for_extraction.txt # 163653
+
+# finally, extracting plant related hits 
+grep -Fwf vidiriplante_accession_for_extraction.txt filtered_uniprot_blast_hit_509.out > plant_related_509_hits.txt # 390960
+
+# get unique plant related ID
+
+cut -f 1 plant_related_509_hits.txt | sort | uniq > uniq_plant_contigs_id.txt # 33999
+
+# extract fasta sequence for the ~40,000 contigs 
+seqtk subseq ~/widiv/de_novo/split_folder_509/509_all_contigs/cluster_all_509_0.95.fasta uniq_plant_contigs_id.txt > uniq_plant_contigs_id.fasta
+
+
