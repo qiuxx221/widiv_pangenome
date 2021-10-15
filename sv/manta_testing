@@ -17,4 +17,4 @@ configManta.py --bam B97_B73v5_marked_duplicates.bam --referenceFasta /home/hirs
 
 ~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed diploidSV.vcf 25 100000000 diploid_manta.bed
 
-grep -v "BND" diploid_manta.bed | grep -v DUP |cut -f 1,2,5,4 | awk '{if($4-$2 > 25){print}}' | awk '{if($1==$3 ){print}}' > diploid_chr1_25.bed
+grep -v "BND" diploid_manta.bed |grep chr1| grep -v chr10| grep -v DUP |cut -f 1,2,5,4 | awk '{if($4-$2 > 25){print}}' | awk '{if($1==$3 ){print}}' | cut -f 1,2,4 > diploid_chr1_25.bed
