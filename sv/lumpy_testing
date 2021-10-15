@@ -2,6 +2,7 @@
 -S ~/widiv/de_novo/download_sample/B97_B73v5_splt_marked_duplicates.bam -D ~/widiv/de_novo/download_sample/B97_B73v5_disc_marked_duplicates.bam -o B97_B73v5_lumpy.vcf
 
 ~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed B97_B73v5_lumpy.vcf 25 100000000 > B97_B73_lumpy.bed
+# use 1 Mb instead 100,000,000
 
 # Lumpy only calls DEL, DUP, INV, TRA, so only keep DEL for QC 
 
