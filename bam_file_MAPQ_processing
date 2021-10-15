@@ -1,7 +1,21 @@
-for i in *.bam; do 
-  echo "samtools view -bq 20 $i  > /scratch.global/qiuxx221/MAPQ20_bams/filter_bams/"$i"_MAPQ_20.bam "
-done 
+while read p; do
+  echo "samtools view -bq 20 "$p"  > /scratch.global/qiuxx221/MAPQ20_bams/"$p"_MAPQ_20.bam "
+done <picard_bams.txt > xaa_bam_filter
 
-for i in *.bam; do 
-  echo "samtools view -bq 20 $i  > /scratch.global/qiuxx221/de_novo_assembly_sam/filter_bams/100_bam/"$i"_MAPQ_20.bam "
-done > /home/hirschc1/qiuxx221/widiv/de_novo/bam_filtering_62
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=200gb
+#SBATCH -t 90:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_filter20.out
+#SBATCH -e xaa_filter20.err
+#SBATCH --tmp=300gb
+
+module load samtools 
+cd /scratch.global/qiuxx221/bam_picard_xaa
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 20 < xaa_bam_filter
