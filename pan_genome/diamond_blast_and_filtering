@@ -104,3 +104,79 @@ seqtk subseq ~/widiv/de_novo/split_folder_509/509_all_contigs/cluster_all_509_0.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+uniprot top 5 hits output 
+###########
+# 1e-5
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' cluster_all_509_0.95_uniprot_top5.out > top5_filtered_1e5_uniprot_blast_hit_509.out # 2834861 hit 
+
+# extract the accession number and search result in the blast output to extract lines with plant blast hit
+cut -f 2 top5_filtered_1e5_uniprot_blast_hit_509.out | sort | uniq > top5_uniq_blastout_accession1e5.txt 1437700
+
+
+# blast output and retrive all info for taxomony search 
+grep -Fwf top5_uniq_blastout_accession1e5.txt uniref90_id_info.txt > top5_uniprop_blast_out_info_line1e5.txt
+
+# grep lines that have taxID in plants 
+grep -Fwf ~/db/taxon_file_search_db.txt top5_uniprop_blast_out_info_line1e5.txt > top5_viridirplantea_accession_info1e5.txt
+
+
+# get accession number for plant gene
+cut -f 1 -d ' ' top5_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top5_vidiriplante_accession_for_extraction1e5.txt # 56890
+
+# finally, extracting plant related hits 
+grep -Fwf top5_vidiriplante_accession_for_extraction1e5.txt top5_filtered_1e5_uniprot_blast_hit_509.out > top5_plant_related_509_hits1e5.txt # 102892
+
+# get unique plant related ID
+
+cut -f 1 top5_plant_related_509_hits1e5.txt | sort | uniq > top5_uniq_plant_contigs_id1e5.txt # 29241
+
+# extract fasta sequence for the ~40,000 contigs 
+seqtk subseq ~/widiv/de_novo/split_folder_509/509_all_contigs/cluster_all_509_0.95.fasta top5_uniq_plant_contigs_id1e5.txt > top5_uniq_plant_contigs_id1e5.fasta
+
+
+
+
+
+### bit score 200 
+uniprot top 5 hits output 
+###########
+# bit200
+awk '{ if ($12 > 200 ){print}}' cluster_all_509_0.95_uniprot_top5.out > top5_filtered_bit200_uniprot_blast_hit_509.out # 2834861 hit 
+
+# extract the accession number and search result in the blast output to extract lines with plant blast hit
+cut -f 2 top5_filtered_bit200_uniprot_blast_hit_509.out | sort | uniq > top5_uniq_blastout_accessionbit200.txt #315259
+
+# blast output and retrive all info for taxomony search 
+grep -Fwf top5_uniq_blastout_accessionbit200.txt uniref90_id_info.txt > top5_uniprop_blast_out_info_line_bit200.txt
+
+# grep lines that have taxID in plants 
+grep -Fwf ~/db/taxon_file_search_db.txt top5_uniprop_blast_out_info_line_bit200.txt > top5_viridirplantea_accession_info_bit200.txt
+
+
+# get accession number for plant gene
+cut -f 1 -d ' ' top5_viridirplantea_accession_info_bit200.txt | sed 's|>||g' > top5_vidiriplante_accession_for_extraction_bit200.txt # 12659
+
+# finally, extracting plant related hits 
+grep -Fwf top5_vidiriplante_accession_for_extraction_bit200.txt top5_filtered_bit200_uniprot_blast_hit_509.out > top5_plant_related_509_hits_bit200.txt # 22450
+
+# get unique plant related ID
+
+cut -f 1 top5_plant_related_509_hits_bit200.txt | sort | uniq > top5_uniq_plant_contigs_id_bit200.txt # 6054
+
+# extract fasta sequence for the ~40,000 contigs 
+seqtk subseq ~/widiv/de_novo/split_folder_509/509_all_contigs/cluster_all_509_0.95.fasta top5_plant_related_509_hits_bit200.txt > top5_uniq_plant_contigs_id_bit200.fasta
+
+
+
+
