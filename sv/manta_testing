@@ -15,6 +15,29 @@ configManta.py --bam B97_B73v5_marked_duplicates.bam --referenceFasta /home/hirs
 
 # processing manta vcf file to bed file 
 
-~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed diploidSV.vcf 25 100000000 diploid_manta.bed
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed manta_SV.vcf 25 1000000 diploid_manta_25_1000000.bed
 
-grep -v "BND" diploid_manta.bed |grep chr1| grep -v chr10| grep -v DUP |cut -f 1,2,5,4 | awk '{if($4-$2 > 25){print}}' | awk '{if($1==$3 ){print}}' | cut -f 1,2,4 > diploid_chr1_25.bed
+awk '{if ($1=="chr1" && $4=="chr1"){print}}' diploid_manta_25_1000000.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > B97_B73_manta_chr1_25_1000000.bed
+# 7864 manta calls
+
+
+# when intersecting requires 80% reciprocoal coverage 
+
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_manta_chr1_25_1000000.bed  -f 0.8 -r -wa -wb| wc -l
+# sv 3409 from 3404 uniq delly call 
+
+# when intersecting requires 70% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_manta_chr1_25_1000000.bed  -f 0.7 -r -wa -wb | wc -l
+# sv 3637 from 3619 uniq delly call 
+
+# when intersecting requires 60% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_manta_chr1_25_1000000.bed  -f 0.6 -r -wa -wb| wc -l
+# sv 3884 from 3823 uniq delly call 
+
+# when intersecting requires 50% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_manta_chr1_25_1000000.bed  -f 0.5 -r -wa -wb| wc -l
+# sv 4159 from 4041 uniq delly call
+
+
+
+
