@@ -1,6 +1,5 @@
 ~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed B97_B73v5_marked_duplicates_delly.bam.vcf 25 1000000 B97_B73_delly_25_1000000.bed
 
-
 # filter sv calls only on chr1 to bench marking accuracy, with min sv size of 25 
 awk '{if ($1=="chr1" && $4=="chr1"){print}}' B97_B73_delly_25_1000000.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > B97_B73_delly_chr1_25_1000000.bed
 total number of SVs from Delly on Chr1 
@@ -33,3 +32,40 @@ bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/q
 # when intersecting requires 50% reciprocoal coverage 
 bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_delly_chr1_25_1000000.bed  -f 0.5 -r -wa -wb| wc -l
 # sv 5231 from 5048 uniq delly call
+
+
+
+
+
+
+#filter vcf before convert to bed 
+
+grep -v LowQual B97_B73v5_marked_duplicates_delly.bam.vcf> Qual_filter_delly_sv.vcf
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed Qual_filter_delly_sv.vcf 25 1000000 B97_B73_delly_25_1000000_filter.bed
+
+awk '{if ($1=="chr1" && $4=="chr1"){print}}' B97_B73_delly_25_1000000_filter.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > B97_B73_delly_chr1_25_1000000_flt.bed
+
+# total 8032 SVs
+
+# filtering anchorwave 
+
+awk '{if ($1=="chr1" && $4=="chr1"){print}}' anchorwave_chr1_maf_B97_B73.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > anchorwave_B97_B73_chr1_25_1000000 .bed
+# filter by 25 and 1m, total sv26973
+
+# when intersecting requires 80% reciprocoal coverage 
+
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_delly_chr1_25_1000000_flt.bed  -f 0.8 -r -wa -wb| wc -l
+# sv 3307 from 3300 uniq delly call 
+
+# when intersecting requires 70% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_delly_chr1_25_1000000_flt.bed  -f 0.7 -r -wa -wb | wc -l
+# sv 3694 from 3674 uniq delly call 
+
+# when intersecting requires 60% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_delly_chr1_25_1000000_flt.bed  -f 0.6 -r -wa -wb| wc -l
+# sv 4002 from 3938 uniq delly call 
+
+# when intersecting requires 50% reciprocoal coverage 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/B97_B73_delly_chr1_25_1000000_flt.bed  -f 0.5 -r -wa -wb| wc -l
+# sv 4290 from 4161 uniq delly call
+
