@@ -8,7 +8,7 @@ ls *vcf > sample_files
 ~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 2 1 1 0 25 sample_merged.vcf
 ~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed sample_merged.vcf 25 1000000 sample_merged.bed
 
-awk '{if ($1=="chr1" && $4=="chr1"){print}}' sample_merged.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > merged_sv_call.bed
+awk '{if ($1=="chr1" && $4=="chr1"){print}}' sample_merged.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > merged_sv_call_chr1.bed
 # total calls 
 7170
 
