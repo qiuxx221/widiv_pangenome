@@ -19,3 +19,12 @@ module load samtools
 cd /scratch.global/qiuxx221/bam_picard_xaa
 
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 20 < xaa_bam_filter
+
+
+
+xab set exclude LH1, bam can not be fixed, run separately in the end
+ls *_B73v5_marked_duplicates.bam > picard_xab_bam.txt
+
+while read p; do
+  echo "samtools view -bq 20 "$p"  > /scratch.global/qiuxx221/MAPQ20_bams/xab/"$p"_MAPQ_20.bam "
+done <picard_xab_bam.txt > xab_bam_filter
