@@ -6,9 +6,17 @@ ls *vcf > sample_files
 
 
 ~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 2 1 1 0 25 sample_merged.vcf
+~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 3 1 1 0 25 sample_merged_all.vcf
+
 ~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed sample_merged.vcf 25 1000000 sample_merged.bed
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed sample_merged_all.vcf 25 1000000 sample_merged_all.bed
+
 
 awk '{if ($1=="chr1" && $4=="chr1"){print}}' sample_merged.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > merged_sv_call_chr1.bed
+awk '{if ($1=="chr1" && $4=="chr1"){print}}' sample_merged_all.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > merged_sv_call_all_chr1.bed
+
+
+
 # total calls 
 7168
 
@@ -30,6 +38,24 @@ bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/
 # 50% 
 bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_chr1.bed  -f 0.5 -r -wa -wb| wc -l
 bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_chr1.bed  -f 0.5 -r -wa -wb| cut -f 5 | sort |uniq | wc -l
+
+
+
+# support by all three 
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.8 -r -wa -wb| wc -l
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.8 -r -wa -wb| cut -f 5 | sort |uniq | wc -l
+
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.7 -r -wa -wb| wc -l
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.7 -r -wa -wb| cut -f 5 | sort |uniq | wc -l
+
+
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.6 -r -wa -wb| wc -l
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.6 -r -wa -wb| cut -f 5 | sort |uniq | wc -l
+
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a anchorwave_B97_B73_chr1_25_1000000.bed -b ~/widiv/de_novo/download_sample/test_merge_sv/filter_delly/merged_sv_call_all_chr1.bed  -f 0.5 -r -wa -wb| cut -f 5 | sort |uniq | wc -l
+
+
 
 
 
