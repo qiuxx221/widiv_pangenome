@@ -1,0 +1,98 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 2:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o 1538_B73v5_unmap_pair.out
+#SBATCH -e 1538_B73v5_unmap_pair.err
+#SBATCH --tmp=100gb
+
+module load samtools
+cd /scratch.global/qiuxx221/bam_picard_xaa
+# R1 unmapped, R2 mapped
+samtools view -u -f 4 -F 264 1538_B73v5.bam  > 1538_B73v5_unmap_map.bam
+# R1 mapped, R2 unmapped
+samtools view -u -f 8 -F 260 1538_B73v5.bam  > 1538_B73v5_map_unmap.bam
+# R1 & R2 unmapped
+samtools view -u -f 12 -F 256 1538_B73v5.bam  > 1538_B73v5_unmap_unmap.bam
+
+samtools merge -o 1538_B73v5_unmapped_all.bam 1538_B73v5_unmap_map.bam 1538_B73v5_map_unmap.bam 1538_B73v5_unmap_unmap.bam
+
+# xaa 
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xaa_gp.txt > extracting_xaa_all_PE_unmapped_cmd
+
+# bash for job submission 
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_extract_unmapPE.out
+#SBATCH -e xaa_extract_unmapPE.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xaa
+
+module load samtools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xaa_all_PE_unmapped_cmd
+
+
+# xab 
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xab_gp.txt > extracting_xab_all_PE_unmapped_cmd
+
+# bash for job submission 
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xab_extract_unmapPE.out
+#SBATCH -e xab_extract_unmapPE.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xab
+
+module load samtools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xab_all_PE_unmapped_cmd
+
+# xac 
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
+
+# bash for job submission 
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xac_extract_unmapPE.out
+#SBATCH -e xac_extract_unmapPE.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xac
+
+module load samtools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xac_all_PE_unmapped_cmd
+
+
+
