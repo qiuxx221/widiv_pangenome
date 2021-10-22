@@ -23,8 +23,13 @@ samtools merge -o 1538_B73v5_unmapped_all.bam 1538_B73v5_unmap_map.bam 1538_B73v
 
 # xaa 
 while read p ; do
-  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
 done < xaa_gp.txt > extracting_xaa_all_PE_unmapped_cmd
+
+while read p ; do
+  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xaa_gp.txt > extracting_xaa_all_PE_unmapped_cmd
+
 
 # bash for job submission 
 #!/bin/bash
@@ -48,8 +53,14 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xaa_all_P
 
 # xab 
 while read p ; do
-  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
 done < xab_gp.txt > extracting_xab_all_PE_unmapped_cmd
+
+
+while read p ; do
+  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xab_gp.txt > extracting_xab_all_PE_unmapped_cmd
+
 
 # bash for job submission 
 #!/bin/bash
@@ -72,7 +83,11 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xab_all_P
 
 # xac 
 while read p ; do
-  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge -o "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
+
+while read p ; do
+  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
 done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
 
 # bash for job submission 
