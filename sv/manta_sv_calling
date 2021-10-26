@@ -1,0 +1,18 @@
+# generate manta cmd  xaa
+
+while read p; do
+  echo "configManta.py --bam "$p"_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir /scratch.global/qiuxx221/bam_picard_xaa/"$p"_manta" 
+done < xaa_gp.txt > manta_cmd_xaa
+
+# running manta 
+
+while read p; do
+  echo "python /scratch.global/qiuxx221/bam_picard_xaa/"$p"_manta/runWorkflow.py"
+done < xaa_gp.txt > run_manta_cmd_xaa
+
+
+# generate manta cmd  xac
+
+while read p; do
+  echo "configManta.py --bam "$p"_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir /scratch.global/qiuxx221/bam_picard_xaa/"$p"_manta" 
+done < xac_gp.txt > manta_cmd_xac
