@@ -26,11 +26,6 @@ while read p ; do
   echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
 done < xaa_gp.txt > extracting_xaa_all_PE_unmapped_cmd
 
-while read p ; do
-  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
-done < xaa_gp.txt > extracting_xaa_all_PE_unmapped_cmd
-
-
 # bash for job submission 
 #!/bin/bash
 #SBATCH --nodes=1
@@ -56,12 +51,6 @@ while read p ; do
   echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
 done < xab_gp.txt > extracting_xab_all_PE_unmapped_cmd
 
-
-while read p ; do
-  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
-done < xab_gp.txt > extracting_xab_all_PE_unmapped_cmd
-
-
 # bash for job submission 
 #!/bin/bash
 #SBATCH --nodes=1
@@ -83,11 +72,7 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xab_all_P
 
 # xac 
 while read p ; do
-  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
-done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
-
-while read p ; do
-  echo "samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam "  
 done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
 
 # bash for job submission 
@@ -110,4 +95,98 @@ module load parallel/20190122
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < extracting_xac_all_PE_unmapped_cmd
 
 
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam "  
+done < xac_gp.txt > extracting_xac_all_PE_unmapped_cmd
 
+
+
+
+##########
+# sort xaa, xab, and xac output sam file before extracting unmapped reads
+ls *.sam | cut -d '_' -f 1 > unmapped_list_xaa.txt
+while read p ; do
+ echo "samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all_sort.sam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq"  
+done < unmapped_list_xaa.txt > sort_extract_xaa_cmd
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_sort_extract.out
+#SBATCH -e xaa_sort_extract.err
+#SBATCH --tmp=400gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/unmap_sam_xaa
+
+module load samtools
+module load bedtools 
+module load parallel/20190122
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < sort_extract_xaa_cmd
+
+### xab section 
+
+# sort xaa, xab, and xac output sam file before extracting unmapped reads
+ls *.sam | cut -d '_' -f 1 > unmapped_list_xab.txt
+while read p ; do
+ echo "samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all_sort.sam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq"  
+done < unmapped_list_xab.txt > sort_extract_xab_cmd
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xab_sort_extract.out
+#SBATCH -e xab_sort_extract.err
+#SBATCH --tmp=400gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/unmap_sam_xab
+
+module load samtools
+module load bedtools 
+module load parallel/20190122
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < sort_extract_xab_cmd
+
+### xac section 
+
+# sort xaa, xab, and xac output sam file before extracting unmapped reads
+ls *.sam | cut -d '_' -f 1 > unmapped_list_xac.txt
+while read p ; do
+ echo "samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all_sort.sam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq"  
+done < unmapped_list_xac.txt > sort_extract_xac_cmd
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xac_sort_extract.out
+#SBATCH -e xac_sort_extract.err
+#SBATCH --tmp=400gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/unmap_sam_xac
+
+module load samtools
+module load bedtools 
+module load parallel/20190122
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < sort_extract_xac_cmd
