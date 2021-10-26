@@ -28,3 +28,33 @@ ls *_B73v5_marked_duplicates.bam > picard_xab_bam.txt
 while read p; do
   echo "samtools view -bq 20 "$p"  > /scratch.global/qiuxx221/MAPQ20_bams/xab/"$p"_MAPQ_20.bam "
 done <picard_xab_bam.txt > xab_bam_filter
+
+
+
+# xac set 
+ls *_B73v5_marked_duplicates.bam > picard_xac_bam.txt
+
+while read p; do
+  echo "samtools view -bq 20 "$p"  > /scratch.global/qiuxx221/MAPQ20_bams/xac/"$p"_MAPQ_20.bam ; samtools index "$p"_MAPQ_20.bam"
+done <picard_xac_bam.txt > xac_bam_filter
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=200gb
+#SBATCH -t 90:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xac_filter20.out
+#SBATCH -e xac_filter20.err
+#SBATCH --tmp=300gb
+
+module load samtools 
+cd /scratch.global/qiuxx221/bam_picard_xac
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 20 < xac_bam_filter
+
+
+
+
