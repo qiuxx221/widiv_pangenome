@@ -190,3 +190,64 @@ module load bedtools
 module load parallel/20190122
 
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < sort_extract_xac_cmd
+
+
+## xad 
+
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq "  
+done < xad_gp.txt > extracting_xad_all_PE_unmapped_cmd
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 80:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xad_sort_extract.out
+#SBATCH -e xad_sort_extract.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xad
+
+module load samtools
+module load bedtools 
+module load parallel/20190122
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/extracting_xad_all_PE_unmapped_cmd
+
+
+
+
+
+## xaef 
+
+while read p ; do
+  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq "  
+done < xaef_gp.txt > extracting_xaef_all_PE_unmapped_cmd
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 40:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaef_sort_extract.out
+#SBATCH -e xaef_sort_extract.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xaef
+
+module load samtools
+module load bedtools 
+module load parallel/20190122
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < /home/hirschc1/qiuxx221/widiv/de_novo/download_sample/extracting_xaef_all_PE_unmapped_cmd
