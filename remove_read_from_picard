@@ -1,0 +1,1 @@
+samtools view -h LH1_B73v5.bam | grep -vf reads_to_remove.txt | samtools view -bS -o LH1_B73v5_filter.bam 
