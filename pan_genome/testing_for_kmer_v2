@@ -1,0 +1,109 @@
+# de novo testing for k-mer selection
+# samples involes in this process have coverage spans from 16~55
+
+PHK46_B73v5.bam	16.5998
+PHT11_B73v5.bam	18.8097
+6M502_B73v5.bam	19.4788
+PHT47_B73v5.bam	20.0882
+N200_B73v5.bam	22.6543
+B91_B73v5.bam	24.8481
+29MIBZ2_B73v5.bam	26.2253
+Seagull-Seventeen_B73v5.bam	27.6393
+Va22_B73v5.bam	33.7964
+B70_B73v5.bam	40.5048
+W604S_B73v5.bam	47.1192
+LH1_B73v5.bam	55.0503
+
+
+
+ls *.fastq | cut -d '_' -f 1 |sort | uniq > kmer_test_gp.txt
+
+while read p; do 
+    echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_unmap_R1.fastq "$p"_unmap_R2.fastq "$p"_B73v5_R1.trim.fastq "$p"_R1.single.fastq "$p"_B73v5_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
+done < kmer_test_gp.txt > kmer_test_gp_trim
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=80gb
+#SBATCH -t 1:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o trim_adapt_kmer.out
+#SBATCH -e trim_adapt_kmer.err
+#SBATCH --tmp=400gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer
+
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 8 < kmer_test_gp_trim  
+
+## after adaptor trimming
+
+# generate batch configuration file for SOAP de novo assembly 
+with open("kmer_test_gp.txt") as entry_list:
+    for entry_line in entry_list:
+        # lib 1 
+      config_file_lib1 = 'max_rd_len=250\n[LIB]\navg_ins=300\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure1 = config_file_lib1 + str(reads_info_1) + '\n'+ str(reads_info_2)
+         # lib 2 
+      config_file_lib2 = 'max_rd_len=250\n[LIB]\navg_ins=400\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure2 = config_file_lib2 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 3 
+      config_file_lib3 = 'max_rd_len=250\n[LIB]\navg_ins=500\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure3 = config_file_lib3 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 4 
+      config_file_lib4 = 'max_rd_len=250\n[LIB]\navg_ins=600\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure4 = config_file_lib4 + str(reads_info_1) + '\n'+ str(reads_info_2)
+             
+      file_name = str(entry_line.strip()).split("_B73")[0]
+      soap_config = open("/home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/config/"+str(file_name.strip())+'_soap_configure.txt', 'w')
+      soap_config.writelines(soap_configure1 + "\n" +soap_configure2 + "\n" +soap_configure3 + "\n" +soap_configure4)
+      soap_config.close()
+
+
+while read i ; do 
+  echo "~/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s "$i" -K 63 -R -o "$i"_63_graph_prefix ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_63_graph_prefix -R 1> "$i"_63_contig.log 2>"$i"_63_contig.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_63_graph_prefix 1> "$i"_63_map.log 2>"$i"_63_map.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_63_graph_prefix -F 1>"$i"_63_scaff.log 2>"$i"_63scaff.err"
+done < configure_input.txt > batch_de_novo_test_kmer_63_cmd
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=80gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o kmer63_test.out
+#SBATCH -e kmer63_test.err
+#SBATCH --tmp=400gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/config/
+
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 4 < /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/config/batch_de_novo_test_kmer_63_cmd  
+
+
+
+# kmer 53 
+while read i ; do 
+  echo "~/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s "$i" -K 53 -R -o "$i"_53_graph_prefix ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_53_graph_prefix -R 1> "$i"_53_contig.log 2>"$i"_53_contig.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_53_graph_prefix 1> "$i"_53_map.log 2>"$i"_53_map.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_53_graph_prefix -F 1>"$i"_53_scaff.log 2>"$i"_53scaff.err"
+done < configure_input.txt > batch_de_novo_test_kmer_53_cmd
+
+
+
+
+# kmer 43 
+while read i ; do 
+  echo "~/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s "$i" -K 43 -R -o "$i"_43_graph_prefix ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_43_graph_prefix -R 1> "$i"_43_contig.log 2>"$i"_43_contig.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_43_graph_prefix 1> "$i"_43_map.log 2>"$i"_43_map.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_43_graph_prefix -F 1>"$i"_43_scaff.log 2>"$i"_43scaff.err"
+done < configure_input.txt > batch_de_novo_test_kmer_43_cmd
