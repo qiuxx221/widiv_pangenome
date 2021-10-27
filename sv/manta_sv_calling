@@ -16,3 +16,11 @@ done < xaa_gp.txt > run_manta_cmd_xaa
 while read p; do
   echo "configManta.py --bam "$p"_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir /scratch.global/qiuxx221/bam_picard_xaa/"$p"_manta" 
 done < xac_gp.txt > manta_cmd_xac
+
+
+
+#renaming manta_output
+
+for i in *_manta; do
+  cp "$i/results/variants/diploidSV.vcf.gz" ""$i"_diploidSV.vcf.gz";
+done
