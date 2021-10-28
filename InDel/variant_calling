@@ -1,4 +1,4 @@
 # variant calling is done using freebayes
 
 
-freebayes --fasta-reference /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta --bam-list bam.fofn --vcf output.vcf
+freebayes --fasta-reference /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta --bam-list  xaa_filter_bam.txt --vcf output.vcf
