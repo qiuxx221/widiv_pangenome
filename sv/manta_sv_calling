@@ -28,6 +28,10 @@ for i in *_manta; do
 done
 
 
+while read p; do
+  echo "configManta.py --bam "$p"_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir /scratch.global/qiuxx221/bam_picard_xab/"$p"_manta" 
+done < xab_gp.txt > manta_cmd_xab
+
 
 while read p; do
   echo "python /scratch.global/qiuxx221/bam_picard_xab/"$p"_manta/runWorkflow.py"
