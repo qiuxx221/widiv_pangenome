@@ -102,6 +102,74 @@ while read p; do   echo "samtools index "$p"_B73v5_marked_duplicates.bam; samtoo
 cd /scratch.global/qiuxx221/bam_picard_xac
 
 module load samtools
+module load bcftools
 module load parallel/20190122
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < /home/hirschc1/qiuxx221/widiv/sv_batch/xac/xac_index_bam_cmd  
+
+
+
+#### xab delly
+
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xab/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xab_gp.txt > xab_delly_sv_cmd
+
+#!/bin/bash
+#SBATCH -p amd2tb
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=25
+#SBATCH --mem=500gb
+#SBATCH -t 80:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xab_delly_4.out
+#SBATCH -e xab_delly_4.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xab
+
+module load samtools
+module load bcftools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < /scratch.global/qiuxx221/bam_picard_xab/delly_cmd/xad
+
+
+
+## delly xac
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xac/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xac_gp.txt > xac_delly_sv_cmd
+
+
+#!/bin/bash
+#SBATCH -p amd2tb
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=25
+#SBATCH --mem=500gb
+#SBATCH -t 80:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xac_delly_1.out
+#SBATCH -e xac_delly_1.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xac
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+module load bcftools
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < /scratch.global/qiuxx221/bam_picard_xac/delly_cmd/xaa
+
+
+
+
+
+
 
