@@ -1,0 +1,10 @@
+# repeat masking
+
+# split contigs into 0.1 million contigs frame 
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("myseq%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < cluster_all_contigs_200_0.95.fasta
+ls *.fa > split_fasta.fa
+# stored at ~/widiv/de_novo/
+
+while read p; do
+  echo "RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa ~/widiv/de_novo/"$p" -pa 24"
+done < split_fasta.fa
