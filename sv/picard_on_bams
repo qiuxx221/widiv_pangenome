@@ -35,8 +35,21 @@ done <  xac  > xac_picard_cmd
 
 # picard xad
 while read p; do 
-  echo "java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.disc.bam O="$p"_B73v5_disc_marked_duplicates.bam M="$p"_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.splt.bam O="$p"_B73v5_splt_marked_duplicates.bam M="$p"_B73v5_splt_marked_dup_metrics.txt"
+  echo "java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.disc.bam O="$p"_B73v5_disc_marked_duplicates.bam M="$p"_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.splt.bam O="$p"_B73v5_splt_marked_duplicates.bam M="$p"_B73v5_splt_marked_dup_metrics.txt       
 done <  xad  > xad_picard_cmd 
+
+# xaef
+# picard xad
+while read p; do   
+   echo "java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.disc.bam O="$p"_B73v5_disc_marked_duplicates.bam M="$p"_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.splt.bam O="$p"_B73v5_splt_marked_duplicates.bam M="$p"_B73v5_splt_marked_dup_metrics.txt;rm "$p"_B73v5.bam;rm "$p"_B73v5_disc_marked_duplicates.bam; rm "$p"_B73v5.splt.bam " 
+done <  xaef_gp.txt  > xaef_picard_cmd
+
+# xad
+# picard xad
+while read p; do   
+   echo "java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.disc.bam O="$p"_B73v5_disc_marked_duplicates.bam M="$p"_B73v5_disc_marked_dup_metrics.txt; java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_B73v5.splt.bam O="$p"_B73v5_splt_marked_duplicates.bam M="$p"_B73v5_splt_marked_dup_metrics.txt;rm "$p"_B73v5.bam;rm "$p"_B73v5_disc_marked_duplicates.bam; rm "$p"_B73v5.splt.bam " 
+done <  to_do.txt  > xad_picard_cmd_to_finish
+
 
 
 
