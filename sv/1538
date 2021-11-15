@@ -1,0 +1,29 @@
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed 1538_delly_pass.vcf 25 1000000 1538_B73_delly_25_1000000.bed
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed 1538_B73v5_lumpy.vcf 25 1000000 1538_B73_lumpy_25_1000000.bed
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed 1538_manta_diploidSV.vcf 25 1000000 1538_B73_manta_25_1000000.bed
+
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed 1538_2_callers_sv.vcf 25 1000000 1538_B73_2_3_callers_25_1000000.bed
+
+awk '{if ($1==$4){print}}' 1538_B73_2_3_callers_25_1000000.bed |  awk '{if ($5-$3>=25 || $3-$5>=25){print}}' | awk '{if ($6-$2<=1000000 ||$2-$6<=1000000 ){print}}' | cut -f 1,2,6 > merged_sv_call_1538.bed
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=200gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o 1538_figure.out
+#SBATCH -e 1538_figure.err
+#SBATCH --tmp=100gb
+
+cd /home/hirschc1/qiuxx221/widiv/figure/
+module load R/3.6.3
+
+Rscript 1538_circos_plot.R 
