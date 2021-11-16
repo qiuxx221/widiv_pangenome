@@ -1,0 +1,32 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40gb
+#SBATCH -t 60:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blastn_contigs_to_ref.out
+#SBATCH -e blastn_contigs_to_ref.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/de_novo/blastn_check/
+
+module load ncbi_toolkit
+blastn -query cluster_all_contigs_200_0.95.fasta -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -outfmt "6 qseqid sseqid pident length qlen evalue bitscore" -out contigs_to_reference_blastn.out
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o bwa_mapback_to_contig.out
+#SBATCH -e bwa_mapback_to_contig.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/de_novo/blastn_check/
+bwa mem cluster_all_contigs_200_0.95.fasta ~/widiv/de_novo/de_novo_unmap_sam/fastq/pool_fastq/PHK56_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/pool_fastq/PHK56_B73v5_R2.trim.fastq > PHK56.sam
