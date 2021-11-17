@@ -169,6 +169,11 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < /scratch.global/qiux
 
 
 
+## delly xaef
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xac/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xaef_gp.txt > xaef_delly_sv_cmd
 
 
 
