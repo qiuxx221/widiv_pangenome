@@ -36,3 +36,15 @@ done < xab_gp.txt > manta_cmd_xab
 while read p; do
   echo "python /scratch.global/qiuxx221/bam_picard_xab/"$p"_manta/runWorkflow.py"
 done < xab_gp.txt > run_manta_cmd_xab
+
+
+
+# manta on xaef 
+
+while read p; do
+  echo "configManta.py --bam "$p"_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir /scratch.global/qiuxx221/bam_picard_xab/"$p"_manta" 
+done < xaef_gp.txt > /scratch.global/qiuxx221/bam_picard_xaef/manta_cmd_xaef
+
+while read p; do
+  echo "python /scratch.global/qiuxx221/bam_picard_xaef/"$p"_manta/runWorkflow.py"
+done < xaef_gp.txt > run_manta_cmd_xaef
