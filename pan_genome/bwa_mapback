@@ -1,0 +1,32 @@
+bwa mem 29MIBZ2_soap_configure.txt_63_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R2.trim.fastq > 29MIBZ2_kmer63.sam
+bwa mem 29MIBZ2_soap_configure.txt_53_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R2.trim.fastq > 29MIBZ2_kmer53.sam
+bwa mem 29MIBZ2_soap_configure.txt_43_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/29MIBZ2_B73v5_R2.trim.fastq > 29MIBZ2_kmer43.sam
+
+
+while read i; do
+  echo "bwa mem "$i"_soap_configure.txt_63_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R2.trim.fastq > "$i"kmer63.sam ;bwa mem "$i"_soap_configure.txt_53_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R2.trim.fastq > "$i"_kmer53.sam; bwa mem "$i"_soap_configure.txt_43_graph_prefix.contig_filter_by_200.txt ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R1.trim.fastq ~/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/"$i"_B73v5_R2.trim.fastq > "$i"_kmer43.sam" 
+done < 13_gp.txt > bwa_13_gp_cmd
+
+
+
+
+
+   
+#!/bin/bash
+#SBATCH --time=2:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=13
+#SBATCH --mem=130gb
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o 13gp_bwa.out
+#SBATCH -e 13gp_bwa.err
+#SBATCH --tmp=380gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/test_kmer/config/all_contigs/200_bp_contigs
+
+module load parallel/20190122
+module load bwa
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 13 < bwa_13_gp_cmd
