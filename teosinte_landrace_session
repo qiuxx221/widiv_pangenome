@@ -1,0 +1,43 @@
+while read p ; do
+  echo "samtools sort /home/hirschc1/agilber/widiv/teosinte/scripts/bwamem/"$p".bwa.bam -o "$p"_sorted.bam; samtools index "$p"_sorted.bam; ~/programs/picard/build/libs/picard.jar AddOrReplaceReadGroups I="$p"_sorted.bam O="$p"_sorted_addGP.bam RGID=ID_"$p" RGLB=LB_"$p" RGPL=ILLUMINA RGPU=unit_"$p" RGSM=SM_"$p";java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_sorted_addGP.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; samtools index "$p"_B73v5_marked_duplicates.bam; samtools view -bq 20 "$p"_B73v5_marked_duplicates.bam  > "$p"_picard_sort_MAPQ_20.bam"
+done < teosinte20_gp.txt > teosinte_sort_index_mapq20
+
+
+
+while read p ; do
+  echo "samtools sort /home/hirschc1/agilber/widiv/landrace/bam_files/sorted_bams"$p".bwa.bam -o "$p"_sorted.bam; samtools index "$p"_sorted.bam; ~/programs/picard/build/libs/picard.jar AddOrReplaceReadGroups I="$p"_sorted.bam O="$p"_sorted_addGP.bam RGID=ID_"$p" RGLB=LB_"$p" RGPL=ILLUMINA RGPU=unit_"$p" RGSM=SM_"$p";java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_sorted_addGP.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; samtools index "$p"_B73v5_marked_duplicates.bam; samtools view -bq 20 "$p"_B73v5_marked_duplicates.bam  > "$p"_picard_sort_MAPQ_20.bam"
+done < teosinte20_gp.txt > teosinte_sort_index_mapq20
+
+
+while read p ; do
+  echo "java -jar ~/programs/picard/build/libs/picard.jar AddOrReplaceReadGroups I="$p"_sorted.bam O="$p"_sorted_addGP.bam RGID=ID_"$p" RGLB=LB_"$p" RGPL=ILLUMINA RGPU=unit_"$p" RGSM=SM_"$p";java -jar ~/programs/picard/build/libs/picard.jar MarkDuplicates I="$p"_sorted_addGP.bam O="$p"_B73v5_marked_duplicates.bam M="$p"_B73v5_marked_dup_metrics.txt; samtools index "$p"_B73v5_marked_duplicates.bam; samtools view -bq 20 "$p"_B73v5_marked_duplicates.bam  > "$p"_picard_sort_MAPQ_20.bam"
+done < teosinte20_gp.txt > teosinte_sort_index_mapq20
+
+
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=60gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o B84_vcf_filter.out
+#SBATCH -e B84_vcf_filter.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/gatk_arun/B84_snp
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+module load gatk
+
+gatk VariantFiltration \
+    --reference ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+    --variant  merged_sorted_slurm.vcf \
+    --filter-expression "QD < 2.0 || FS > 60.0 || MQ < 45.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0 |DP > 178.876" \
+    --filter-name "FAIL" \
+    --output merged_sorted_filtered_slurm.vcf
