@@ -160,8 +160,7 @@ done <xac_gp.txt > xac_delly_sv_cmd
 cd /scratch.global/qiuxx221/bam_picard_xac
 export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
 
-source ~/anaconda2/etc/profile.d/conda.sh
-conda activate Widiv_SV_py3
+xad
 
 module load bcftools
 module load parallel/20190122
@@ -172,9 +171,24 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 25 < /scratch.global/qiux
 ## delly xaef
 # run delly
 while read p; do
-  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xac/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
 done <xaef_gp.txt > xaef_delly_sv_cmd
 
 
+## delly xad
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xad_gp.txt > xad_delly_sv_cmd
+
+# delly xab
+# run delly
+while read p; do
+  echo "delly call -o "$p"_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta /scratch.global/qiuxx221/bam_picard_xab/picard_xab_bams/"$p"_B73v5_marked_duplicates.bam; bcftools view "$p"_B73v5_marked_duplicates.bam.delly.bcf > "$p"_B73v5_marked_duplicates.bam.delly.vcf" 
+done <xab_gp.txt > xab_delly_sv_cmd
 
 
+
+for i in *.sub; do 
+  sed -i s'|conda_envir_replace|export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"|g' $i
+done
