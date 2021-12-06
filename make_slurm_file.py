@@ -36,7 +36,7 @@ else:
         w.write("#!/bin/bash\n")
         w.write("#SBATCH -N 1\n")
         w.write("#SBATCH -n 10\n")
-        w.write("#SBATCH -t 30:00:00\n")
+        w.write("#SBATCH -t 40:00:00\n")
         w.write("#SBATCH --mem=100gb\n")
         w.write("#SBATCH --tmp=300gb\n")
         w.write("#SBATCH -J "+jobname+"_"+str(filecount)+"\n")
@@ -44,9 +44,10 @@ else:
         w.write("#SBATCH -e "+jobname+"_"+str(filecount)+".e%j\n")
         w.write("#SBATCH --mail-user=qiuxx221@umn.edu\n")
         w.write("#SBATCH --mail-type=ALL\n")
-        w.write("cd /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam\n")
+        w.write("cd /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam\n")
         w.write("module load samtools\n")
-        w.write("parallel -j 10 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
+        w.write("module load parallel\n")
+        w.write("parallel -j 1 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
         count = 0
         while (count < numcmds):
            w.write(cmd[count])
