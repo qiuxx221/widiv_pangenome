@@ -49,7 +49,7 @@ else:
 	w.write("conda activate Widiv_SV_py3\n")
 	w.write("module load bcftools\n")
         w.write("cd /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam/\n")
-        w.write("module load parallel\n")
+        w.write("module load samtools\n")
         w.write("parallel -j 1 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
         count = 0
         while (count < numcmds):
