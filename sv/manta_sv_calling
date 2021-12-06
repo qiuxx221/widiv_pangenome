@@ -45,8 +45,8 @@ while read p; do
 done < xad_gp.txt > /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam
 
 while read p; do
-  echo "python /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam/"$p"_manta/runWorkflow.py"
-done < xaef_gp.txt > run_manta_cmd_xaef
+  echo "python /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/"$p"_manta/runWorkflow.py"
+done < xad_gp.txt > run_manta_cmd_xad
 
 
 
