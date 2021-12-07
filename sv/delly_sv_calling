@@ -192,3 +192,29 @@ done <xab_gp.txt > xab_delly_sv_cmd
 for i in *.sub; do 
   sed -i s'|conda_envir_replace|export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"|g' $i
 done
+
+
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=100gb
+#SBATCH -t 60:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_delly.out
+#SBATCH -e xaa_delly.err
+#SBATCH --tmp=400gb
+
+cd ~/widiv/sv_batch/LH1_fix
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+module load samtools
+module load bcftools
+
+delly call -o LH1_B73v5_marked_duplicates.bam.delly.bcf -g /panfs/roc/groups/6/maize/shared/databases/genomes/Zea_mays/B73_NAMassembly/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM-5.0.fasta LH1_B73v5_marked_duplicates.bam; bcftools view LH1_B73v5_marked_duplicates.bam.delly.bcf > LH1_B73v5_marked_duplicates.bam.delly.vcf" 
