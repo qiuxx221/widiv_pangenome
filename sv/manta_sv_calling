@@ -61,3 +61,12 @@ done < xaef_gp.txt > /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam
 while read p; do
   echo "python /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam/"$p"_manta/runWorkflow.py"
 done < xaef_gp.txt > run_manta_cmd_xaef
+
+
+
+
+
+
+####
+configManta.py --bam LH1_B73v5_marked_duplicates.bam --referenceFasta /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta --runDir LH1_manta
+
