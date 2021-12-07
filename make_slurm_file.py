@@ -37,7 +37,7 @@ else:
         w.write("#SBATCH -N 1\n")
         w.write("#SBATCH -n 10\n")
         w.write("#SBATCH -t 40:00:00\n")
-        w.write("#SBATCH --mem=100gb\n")
+        w.write("#SBATCH --mem=150gb\n")
         w.write("#SBATCH --tmp=300gb\n")
         w.write("#SBATCH -J "+jobname+"_"+str(filecount)+"\n")
         w.write("#SBATCH -o "+jobname+"_"+str(filecount)+".o%j\n")
@@ -47,7 +47,7 @@ else:
         w.write("cd /scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam\n")
         w.write("module load samtools\n")
         w.write("module load parallel\n")
-        w.write("parallel -j 1 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
+        w.write("parallel -j 10 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
         count = 0
         while (count < numcmds):
            w.write(cmd[count])
