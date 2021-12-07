@@ -11,3 +11,28 @@ done < xac_gp.txt > lumpy_xac_batch.txt
 while read p; do 
   echo "/home/hirschc1/qiuxx221/programs/lumpy-sv/bin/lumpyexpress -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -B "$p"_B73v5_marked_duplicates.bam -S "$p"_B73v5_splt_marked_duplicates.bam -D "$p"_B73v5_disc_marked_duplicates.bam -o "$p"_B73v5_lumpy.vcf"
 done < xad_gp.txt > lumpy_xad_batch.txt
+
+
+while read p; do 
+  echo "/home/hirschc1/qiuxx221/programs/lumpy-sv/bin/lumpyexpress -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -B "$p"_B73v5_marked_duplicates.bam -S "$p"_B73v5_splt_marked_duplicates.bam -D "$p"_B73v5_disc_marked_duplicates.bam -o "$p"_B73v5_lumpy.vcf"
+done < xaef_gp.txt > lumpy_xaef_batch.txt
+
+/scratch.global/qiuxx221/bam_picard_xaef/picard_xaef_bam
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=50gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o LH1_lumpy.out
+#SBATCH -e LH1_lumpy.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/sv_batch/LH1_fix
+
+/home/hirschc1/qiuxx221/programs/lumpy-sv/bin/lumpyexpress -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -B LH1_B73v5_marked_duplicates.bam  -S LH1_B73v5_splt_marked_duplicates.bam -D LH1_B73v5_disc_marked_duplicates.bam  -o LH1_B73v5_lumpy.vcf
+
