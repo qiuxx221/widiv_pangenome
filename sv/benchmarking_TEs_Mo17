@@ -1,0 +1,61 @@
+# this is to use Mo17, PH207, and W22 polymorphic TE to check the accuracy of a known deletion
+
+# working dir is at ~/widiv/sv_batch/benchmarking_TE_PAV
+
+# test 1, without doing any filtering before merging using survior, choose either support by 2 or 3 callers
+
+# support by two callers:
+
+# Mo17 
+
+ls *vcf > sample_files
+
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 2 1 1 0 25 Two_caller_sample_merged.vcf
+~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 3 1 1 0 25 Three_caller_sample_merged.vcf
+
+# stats related to this testing
+grep -v "#" Two_caller_sample_merged.vcf | wc -l
+# two callers 154153
+grep -v "#" Three_caller_sample_merged.vcf | wc -l
+# three callers 48853
+
+# getting the B73-Mo17 uniq TEs
+grep Absent B73_TEs_Mo17status.txt | wc -l 
+# 134040
+grep Absent B73_TEs_Mo17status.txt | cut -f 1 > B73_Mo17_TE_absent.txt
+
+# getting te bed file for TE absent call
+grep -Fwf B73_Mo17_TE_absent.txt B73.structuralTEv2.2018.12.20.filteredTE.gff3 | cut -f 1,4,5,9 | awk '$1="chr"$1' > B73_Mo17_TE_absent.bed
+
+
+#### two callers support 
+# narrow to the deletion section to see how many B73 specific TEs are present in this DEL call
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed Two_caller_sample_merged.vcf 25 1000000 Two_caller_sample_merged.bed
+
+# choose the outer range for the del to fmt into bed file
+grep DEL Two_caller_sample_merged.bed | cut -f 12,13,15 > B73_Mo17_2_caller_deletion_sv.bed
+# 53123
+
+sed -i 's| |\t|g' *.bed
+bedtools intersect -a B73_Mo17_TE_absent.bed -b B73_Mo17_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+# 5072/53123 = ~9.5% TEs are within the deletion calls
+# 5072/134040 = ~ 3.7%
+
+
+#### three callers support 
+# narrow to the deletion section to see how many B73 specific TEs are present in this DEL call
+~/programs/SURVIVOR-master/Debug/SURVIVOR vcftobed Three_caller_sample_merged.vcf 25 1000000 Three_caller_sample_merged.bed
+
+# choose the outer range for the del to fmt into bed file
+grep DEL Three_caller_sample_merged.bed | cut -f 12,13,15 > B73_Mo17_3_caller_deletion_sv.bed
+# 53123
+
+sed -i 's| |\t|g' *.bed
+bedtools intersect -a B73_Mo17_TE_absent.bed -b B73_Mo17_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+# 4195/36554 =~ 11.4% TEs are within the deletion calls
+# 4195/134040 = ~ 3.1% 
+
+
+# test 2, perform quality filtering "LowQual" from delly caller 
+
