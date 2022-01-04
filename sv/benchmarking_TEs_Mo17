@@ -44,6 +44,7 @@ sed -i 's| |\t|g' B73v5_fmt_Mo17.bed
 ######################### after coordinate lifting 
 bedtools intersect -a B73v5_fmt_Mo17.bed -b B73_Mo17_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
 
+bedtools intersect -a B73v5_fmt_Mo17.bed -b B73_Mo17_2_caller_deletion_sv.bed -f 0.1 -r -wa -wb| wc -l
 
 #### three callers support 
 # narrow to the deletion section to see how many B73 specific TEs are present in this DEL call
@@ -55,6 +56,7 @@ grep DEL Three_caller_sample_merged.bed | cut -f 12,13,15 > B73_Mo17_3_caller_de
 
 sed -i 's| |\t|g' *.bed
 bedtools intersect -a B73v5_fmt_Mo17.bed -b B73_Mo17_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a B73v5_fmt_Mo17.bed -b B73_Mo17_3_caller_deletion_sv.bed -f 0.9 -r -wa -wb| wc -l
 
 
 #######################################
