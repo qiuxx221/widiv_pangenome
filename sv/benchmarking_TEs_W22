@@ -21,8 +21,9 @@ grep Absent B73_TEs_W22status.txt | cut -f 1 > B73_W22_TE_absent.txt
 grep -Fwf B73_W22_TE_absent.txt B73.structuralTEv2.2018.12.20.filteredTE.gff3 | cut -f 1,4,5,9 | awk '$1="chr"$1' > B73_W22_TE_absent.bed
 wc -l B73_W22_TE_absent.bed
 
+awk '$1="chr"$1' B73v5_W22.bed > B73v5_fmt_W22.bed 
 
-# W22 
+sed -i 's| |\t|g' B73v5_fmt_W22.bed  
 
 ls *vcf > sample_files
 
@@ -41,9 +42,8 @@ wc -l B73_W22_2_caller_deletion_sv.bed
 # 45120
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_W22_TE_absent.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3711/45120 = ~8.22% TEs are within the deletion calls
-# 3711/127581 = ~ 2.91%
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
 
 
 #### three callers support 
@@ -56,9 +56,8 @@ wc -l B73_W22_3_caller_deletion_sv.bed
 # 35839
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_W22_TE_absent.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3333/35839 =~ 9.3% TEs are within the deletion calls
-# 3333/127581 = ~ 2.61% 
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
 
 
 
@@ -92,9 +91,9 @@ wc -l B73_W22_2_caller_deletion_sv.bed
 # 42739
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_W22_TE_absent.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3524/42739 = ~8.24% TEs are within the deletion calls
-# 3524/127581 = ~2.76%
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.1 -r -wa -wb| wc -l
 
 
 #### three callers support 
@@ -107,6 +106,9 @@ wc -l B73_W22_3_caller_deletion_sv.bed
 # 30662
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_W22_TE_absent.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3155/30662 =~ 10.29% TEs are within the deletion calls
-# 3155/136407 = ~ 2.31% 
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
+
+
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.1 -r -wa -wb| wc -l
+
