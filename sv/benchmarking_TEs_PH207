@@ -28,6 +28,10 @@ grep Absent B73_TEs_PH207status.txt | cut -f 1 > B73_PH207_TE_absent.txt
 # getting te bed file for TE absent call
 grep -Fwf B73_PH207_TE_absent.txt B73.structuralTEv2.2018.12.20.filteredTE.gff3 | cut -f 1,4,5,9 | awk '$1="chr"$1' > wc -l 
 
+awk '$1="chr"$1' B73v5_PH207.bed > B73v5_fmt_PH207.bed 
+
+sed -i 's| |\t|g' B73v5_fmt_PH207.bed 
+
 
 #### two callers support 
 # narrow to the deletion section to see how many B73 specific TEs are present in this DEL call
@@ -38,9 +42,7 @@ grep DEL Two_caller_sample_merged.bed | cut -f 12,13,15 > B73_PH207_2_caller_del
 # 50935
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_PH207_TE_absent.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 4887/50935 = ~9.59% TEs are within the deletion calls
-# 4887/136407 = ~ 3.58%
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
 
 
 #### three callers support 
@@ -53,9 +55,8 @@ wc -l B73_PH207_3_caller_deletion_sv.bed
 # 33631
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_PH207_TE_absent.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3878/33631 =~ 11.53% TEs are within the deletion calls
-# 3878/136407 = ~ 2.84% 
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
 
 
 
@@ -89,9 +90,8 @@ wc -l B73_PH207_2_caller_deletion_sv.bed
 # 48135
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_PH207_TE_absent.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 4639/48135 = ~9.63% TEs are within the deletion calls
-# 4639/136407 = ~ 3.4%
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
 
 
 #### three callers support 
@@ -104,6 +104,5 @@ wc -l B73_PH207_3_caller_deletion_sv.bed
 # 30662
 
 sed -i 's| |\t|g' *.bed
-bedtools intersect -a B73_PH207_TE_absent.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
-# 3428/30662 =~ 11.17% TEs are within the deletion calls
-# 3428/136407 = ~ 2.51% 
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+
