@@ -43,6 +43,7 @@ wc -l B73_W22_2_caller_deletion_sv.bed
 
 sed -i 's| |\t|g' *.bed
 bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_2_caller_deletion_sv.bed -f 0.9 -r -wa -wb| wc -l
 
 
 
@@ -57,6 +58,7 @@ wc -l B73_W22_3_caller_deletion_sv.bed
 
 sed -i 's| |\t|g' *.bed
 bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a B73v5_fmt_W22.bed -b B73_W22_3_caller_deletion_sv.bed -f 0.9 -r -wa -wb| wc -l
 
 
 
