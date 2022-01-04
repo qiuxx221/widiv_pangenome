@@ -43,6 +43,7 @@ grep DEL Two_caller_sample_merged.bed | cut -f 12,13,15 > B73_PH207_2_caller_del
 
 sed -i 's| |\t|g' *.bed
 bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_2_caller_deletion_sv.bed -f 0.9 -r -wa -wb| wc -l
 
 
 #### three callers support 
@@ -56,6 +57,7 @@ wc -l B73_PH207_3_caller_deletion_sv.bed
 
 sed -i 's| |\t|g' *.bed
 bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.5 -r -wa -wb| wc -l
+bedtools intersect -a B73v5_fmt_PH207.bed -b B73_PH207_3_caller_deletion_sv.bed -f 0.9 -r -wa -wb| wc -l
 
 
 
