@@ -1,7 +1,7 @@
-# bedtool create window
-bedtools makewindows -g sizes.genome -w 250000 > B73_250000_window.bed
-
-# format the window and replace 0 starting value with 1
-awk '{if(length($2)==1){sub("0","1",$2)};if(length($4)==1){sub("0","1",$4)}} 1' OFS="\t" B73_250000_window.bed > B73_250000_window_fmt.bed
-
-# this fmt bed will be used to call SNP using 96 hours wall time. total of 
+bedtools makewindows -w 250000 -g sizes.genome |\
+   awk '{print $1"\t"$2+1"\t"$3}' |\
+   sed 's/\t/:/1' |\
+   sed 's/\t/-/1' > B73_250000_window.bed
+   
+# create link for the bam files 
+for finalbam in /scratch.global/qiuxx221/MAPQ20_bams/*_MAPQ_20.ba? ; do ln -s $finalbam; done
