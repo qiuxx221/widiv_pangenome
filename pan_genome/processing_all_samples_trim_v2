@@ -22,3 +22,26 @@ cd /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/pool_fastq
 module load parallel/20190122
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 4 < 509_gp_trim_cmd  
 
+
+#rerun 5 genotypes 
+while read p; do 
+    echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_unmap_R1.fastq "$p"_unmap_R2.fastq "$p"_B73v5_R1.trim.fastq "$p"_R1.single.fastq "$p"_B73v5_R2.trim.fastq "$p"_R2.single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
+done < genotype.txt > 5_gp_trim_cmd
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=5
+#SBATCH --mem=40gb
+#SBATCH -t 1:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o trim_adapt_5.out
+#SBATCH -e trim_adapt_5.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq
+
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 5 < 5_gp_trim_cmd  
