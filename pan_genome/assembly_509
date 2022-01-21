@@ -121,4 +121,55 @@ module load parallel/20190122
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < xaef
 
 
+## rerun 5 genotypes
+with open("genotype.txt") as entry_list:
+    for entry_line in entry_list:
+        # lib 1 
+      config_file_lib1 = 'max_rd_len=250\n[LIB]\navg_ins=300\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure1 = config_file_lib1 + str(reads_info_1) + '\n'+ str(reads_info_2)
+         # lib 2 
+      config_file_lib2 = 'max_rd_len=250\n[LIB]\navg_ins=400\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure2 = config_file_lib2 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 3 
+      config_file_lib3 = 'max_rd_len=250\n[LIB]\navg_ins=500\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure3 = config_file_lib3 + str(reads_info_1) + '\n'+ str(reads_info_2)
+        # lib 4 
+      config_file_lib4 = 'max_rd_len=250\n[LIB]\navg_ins=600\nreverse_seq=0\nasm_flags=3\nrd_len_cutoff=100\nrank=1\npair_num_cutoff=3\nmap_len=32\n'
+      reads_info_1 = 'q1=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R1.trim.fastq'
+      reads_info_2 = 'q2=/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/'+str(entry_line.strip()) + '_B73v5_R2.trim.fastq'
+      soap_configure4 = config_file_lib4 + str(reads_info_1) + '\n'+ str(reads_info_2)
+             
+      file_name = str(entry_line.strip()).split("_B73")[0]
+      soap_config = open("/scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim/"+str(file_name.strip())+'_soap_configure.txt', 'w')
+      soap_config.writelines(soap_configure1 + "\n" +soap_configure2 + "\n" +soap_configure3 + "\n" +soap_configure4)
+      soap_config.close()
+      
+      
+while read i ; do 
+  echo "~/programs/SOAPdenovo2/SOAPdenovo-63mer pregraph -s "$i" -K 53 -R -o "$i"_53_graph_prefix ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer contig -g "$i"_53_graph_prefix -R 1> "$i"_53_contig.log 2>"$i"_53_contig.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer map -s $i -g "$i"_53_graph_prefix 1> "$i"_53_map.log 2>"$i"_53_map.err ; ~/programs/SOAPdenovo2/SOAPdenovo-63mer scaff -g "$i"_53_graph_prefix -F 1>"$i"_53_scaff.log 2>"$i"_53scaff.err"
+done < 5_gp_config.txt > 5_de_novo_test_kmer_53_cmd      
 
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=5
+#SBATCH --mem=100gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o k53_5_rerun.out
+#SBATCH -e k53_5_rerun.err
+#SBATCH --tmp=400gb
+
+cd /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq/trim
+
+module load parallel/20190122
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < 5_de_novo_test_kmer_53_cmd
