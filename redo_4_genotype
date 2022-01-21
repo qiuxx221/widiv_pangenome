@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=100gb
+#SBATCH -t 58:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o merge_bam2022.out
+#SBATCH -e merge_bam2022.err
+#SBATCH --tmp=400gb
+
+
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+cd /scratch.global/qiuxx221/remerge4gp/NK740
+sambamba merge NK740_2022.bam GH17_1349_DSW61012-V_HK7CLCCXY_L7_B73v5.bam r1349_FDPL192293038-1a_HWN3LDSXX_L3_B73v5.bam
+cd /scratch.global/qiuxx221/remerge4gp/PH207
+sambamba merge PH207_2022.bam 6486.5.44756.CAGATC_B73v5.bam 6734.3.52347.GTCCGC_B73v5.bam 6734.4.52348.GTCCGC_B73v5.bam
+cd /scratch.global/qiuxx221/remerge4gp/PHG39
+sambamba merge PHG39_2022.bam 6450.6.44485.GTCCGC_B73v5.bam 6751.6.53224.TTAGGC_B73v5.bam 6751.7.53225.TTAGGC_B73v5.bam G39_B73v5.bam
+cd /scratch.global/qiuxx221/remerge4gp/PHG35
+sambamba merge PHG35_2022.bam 6451.7.44309.TAGCTT_B73v5.bam 6778.7.54418.GTGAAA_B73v5.bam 6779.4.54423.GTGAAA_B73v5.bam G35_B73v5.bam
