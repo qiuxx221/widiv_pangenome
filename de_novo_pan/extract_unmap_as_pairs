@@ -255,14 +255,13 @@ parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 10 < /home/hirschc1/qiuxx
 
 # redo session for 5 genotypes
 PH207
-LH1
 PHG39
 PHG35
 NK740
 
 
 while read p ; do
-  echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq "  
+  echo "samtools view -u -f 4 -F 264 "$p"_2022.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_2022.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_2022.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort -n -o "$p"_B73v5_unmapped_sort_by_name.bam "$p"_B73v5_unmapped_all.bam ; bedtools bamtofastq -i "$p"_B73v5_unmapped_sort_by_name.bam -fq "$p"_unmap_R1.fastq -fq2 "$p"_unmap_R2.fastq "  
 done < genotype.txt > extracting_redo_all_PE_unmapped_cmd
 
 #!/bin/bash
@@ -277,7 +276,7 @@ done < genotype.txt > extracting_redo_all_PE_unmapped_cmd
 #SBATCH -e redo_extract.err
 #SBATCH --tmp=400gb
 
-cd /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo
+cd /scratch.global/qiuxx221/remerge4gp/merged
 module load samtools
 for i in *.bam; do 
   samtools index $i;
@@ -285,4 +284,4 @@ done
 
 module load parallel/20190122
 
-parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 5 < genotype.txt
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 4 < extracting_redo_all_PE_unmapped_cmd
