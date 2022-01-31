@@ -32,7 +32,7 @@ done < genotype.txt > 5_gp_trim_cmd
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=5
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=40gb
 #SBATCH -t 1:00:00
 #SBATCH --mail-type=ALL
@@ -41,7 +41,6 @@ done < genotype.txt > 5_gp_trim_cmd
 #SBATCH -e trim_adapt_5.err
 #SBATCH --tmp=400gb
 
-cd /scratch.global/qiuxx221/bam_picard_xad/picard_xad_bam/update_bam/redo_denovo/fastq
-
+cd /scratch.global/qiuxx221/remerge4gp/merged
 module load parallel/20190122
-parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 5 < 5_gp_trim_cmd  
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 4 < 4_gp_trim_cmd  
