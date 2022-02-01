@@ -1,0 +1,1 @@
+while read p ; do echo "mv "$p".vcf ~/widiv/widiv_B73v5_SNPs" ; echo "mv "$p".vcf.idx ~/widiv/widiv_B73v5_SNPs/" ; done < vcf_done_window1 > mv_done_vcf_cmd1
