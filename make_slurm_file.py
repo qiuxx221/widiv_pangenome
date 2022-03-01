@@ -34,11 +34,10 @@ else:
                 line = cmds.readline()
         w = open(jobname+'_'+str(filecount)+'.sub','w')
         w.write("#!/bin/bash\n")
-        w.write("#SBATCH -p amd2tb\n")
         w.write("#SBATCH -N 1\n")
-        w.write("#SBATCH -n 128\n")
+        w.write("#SBATCH -n 64\n")
         w.write("#SBATCH -t 96:00:00\n")
-        w.write("#SBATCH --mem=1600gb\n")
+        w.write("#SBATCH --mem=248gb\n")
         w.write("#SBATCH --tmp=400gb\n")
         w.write("#SBATCH -J "+jobname+"_"+str(filecount)+"\n")
         w.write("#SBATCH -o "+jobname+"_"+str(filecount)+".o%j\n")
@@ -48,7 +47,7 @@ else:
         w.write("cd /scratch.global/qiuxx221/MAPQ20_bams/\n")
         w.write("module load gatk\n")
         w.write("module load parallel\n")
-        w.write("parallel -j 64 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
+        w.write("parallel -j 32 --joblog "+jobname+"_progress_"+str(filecount)+".log --workdir $PWD <<FIL\n")
         count = 0
         while (count < numcmds):
            w.write(cmd[count])
