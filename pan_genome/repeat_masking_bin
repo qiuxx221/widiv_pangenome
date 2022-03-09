@@ -1,11 +1,47 @@
 # repeat masking
 
+cut -d '_' -f 1,2 pan_contigs_no_hit.fasta > pan_contigs_no_hit_short_header.fasta
+cut -d '_' -f 1,2 top5_uniq_plant_contigs_id1e5.fasta > top5_uniq_plant_contigs_id1e5_short_header.fasta
+
+
 # split contigs into 0.1 million contigs frame 
-awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("myseq%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < fmt_509_0.95_cluster.fa
-ls *.fa > split_fasta.fa
-# stored at ~/widiv/de_novo/
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("myseq%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < pan_contigs_no_hit_short_header.fasta
+ls *.fa > split_no_hit_fasta.list_fa
+# stored at /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation
 
 while read p; do
-  echo "RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa ~/widiv/de_novo/"$p" -pa 24"
-done < split_fasta.fa
+  echo "RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation/"$p" -pa 24"
+done < split_no_hit_fasta.list_fa > repeat_masking_no_hit_contigs_cmd
+
+RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation/top5_uniq_plant_contigs_id1e5_short_header.fasta -pa 24
+
+
+# on MSI
+module load trf phrap rmblast repeatmasker
+
+#RepeatMasker version open-4.0.5
+#Search Engine: NCBI/RMBLAST [ 2.2.27+ ]
+#Master RepeatMasker Database: /panfs/roc/msisoft/repeatmasker/4.0.5/Libraries/RepeatMaskerLib.embl ( Complete Database: 20140131 )
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=200gb
+#SBATCH -t 40:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o repeat_masking.out
+#SBATCH -e repeat_masking.err
+#SBATCH --tmp=400gb
+
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation
+
+module load parallel/20190122
+module load trf phrap rmblast repeatmasker
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 5 < repeat_masking_no_hit_plant_hit_contigs_cmd
+
+
 
