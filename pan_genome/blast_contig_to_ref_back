@@ -1,20 +1,20 @@
 #!/bin/bash
-#SBATCH -p max
+#SBATCH --partition=small,amdsmall,amdlarge,amd512
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=20gb
-#SBATCH -t 200:00:00
+#SBATCH -t 24:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
-#SBATCH -o blastn_xaa.out
-#SBATCH -e blastn_xaa.err
+#SBATCH -o blastn_contigs_back_ref.out
+#SBATCH -e blastn_contigs_back_ref.err
 #SBATCH --tmp=100gb
 
-cd ~/widiv/de_novo/split_folder_509/bams/set_xaa/200_filter
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509
 
 module load ncbi_toolkits
-blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query xaa_merged.fasta -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out /scratch.global/qiuxx221/blast_to_ref/xaa_blast_results.out
+blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query cluster_all_contigs_200_0.95_fixed.fasta -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out cluster_all_contigs_200_0.95_fixed.fasta_blast_back_ref_results.out
 
 # creating file that include the contig length info 
 
