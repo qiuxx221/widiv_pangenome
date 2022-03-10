@@ -1,0 +1,7 @@
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%50000==0){file=sprintf("contigs_for_blast%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < contigs_for_annotation_combine.fasta
+
+ls *.fa > blast_to_ref_list_fa
+
+while read p; do
+  echo "blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query "$p" -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out /scratch.global/qiuxx221/"$p"_blast_to_ref75.out "
+done < blast_to_ref_list_fa> blast_to_ref_list_fa_cmd
