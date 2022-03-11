@@ -1,22 +1,20 @@
 #!/bin/bash
-#SBATCH --partition=small,amdsmall,amdlarge,amd512
+#SBATCH --partition=amdsmall,ram1t,amd512
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=20gb
-#SBATCH -t 24:00:00
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=100gb
+#SBATCH -t 96:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
 #SBATCH -o blastn_contigs_back_ref.out
 #SBATCH -e blastn_contigs_back_ref.err
 #SBATCH --tmp=100gb
 
-cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation/blast_ref
 
+module load parallel/20190122
 module load ncbi_toolkits
-blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query cluster_all_contigs_200_0.95_fixed.fasta -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out cluster_all_contigs_200_0.95_fixed.fasta_blast_back_ref_results.out
 
-# creating file that include the contig length info 
-
-cat results.out > cat_blast.out; cut -f 1 cat_blast.out | sed 's|_|\t|g' > cat_sequence_header_split ; paste cat_sequence_header_split cat_blast.out | awk -F" " '$21=($16-$15)/$4'  |awk '(NR>0) && ($21 >= 0.75 )' | cut -d ' ' -f 9-21 | head
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 19 < blast_to_ref_list_fa_cmd 
 
