@@ -5,3 +5,6 @@ ls *.fa > blast_to_ref_list_fa
 while read p; do
   echo "blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query "$p" -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out /scratch.global/qiuxx221/"$p"_blast_to_ref75.out "
 done < blast_to_ref_list_fa> blast_to_ref_list_fa_cmd
+
+# filtering blast output to get seq with 90% coverage and 90% identity, and remove them from the pan-contigs
+awk -F"\t" '$1=$1' OFS="\t" best_hit_contigs_with_gene_model_blast.out | awk 'NR >1, $13=($8-$7)/$4'| awk '{ if (($3>90) && ($13 > 0.90 )){print}}' | cut -f 1 -d ' ' > contigs_ID_annotation_blast_9090hit.out
