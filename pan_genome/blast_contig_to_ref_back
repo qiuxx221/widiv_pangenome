@@ -18,3 +18,6 @@ module load ncbi_toolkits
 
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 19 < blast_to_ref_list_fa_cmd 
 
+blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query contigs_for_blast100000.fa -perc_identity 75 -max_target_seqs 1 -outfmt "7 qseqid sseqid slen qstart qend length mismatch gapopen gaps sseq qcovs" -out /scratch.global/qiuxx221/contigs_for_blast100000.fa_blast_to_ref75_qcov.out 
+
+
