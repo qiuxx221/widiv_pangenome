@@ -1,0 +1,27 @@
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("0.95_contigs_%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < cluster_all_contigs_200_0.95_fixed.fasta
+
+while read p; do
+  echo "blastn -db ~/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query "$p" -perc_identity 75 -max_target_seqs 1 -outfmt 6 -out /scratch.global/qiuxx221/"$p"_blast_back_ref_results.out "
+done < list_split_contigs_blasting.txt > blast_all_0.95_contigs_cmd.txt
+
+   
+#!/bin/bash
+#SBATCH --partition=amdsmall,ram1t,amd512
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=80gb
+#SBATCH -t 96:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blastn_contigs_back_ref.out
+#SBATCH -e blastn_contigs_back_ref.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/blast_all_contigs
+
+module load parallel/20190122
+module load ncbi_toolkits
+
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 16 < blast_all_0.95_contigs_cmd.txt
+
