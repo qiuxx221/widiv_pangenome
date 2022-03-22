@@ -1,26 +1,25 @@
-uniprot top 5 hits output # total number of hits 3,960,622
-# counting total uniq transcript that is in the blast hit 850311
-cut -f 1  pan_contigs_blastx_v3_10_hits.out | sort | uniq | wc -l 
+# counting total uniq transcript that is in the blast hit 759025
+cut -f 1  pan_contigs_blastx_v4.out | sort | uniq | wc -l 
 ###########
 
 #After 1e-5 e value filtering, # 3,081,274 hit retained
-awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v3_10_hits.out > pan_contigs_blastx_v3_10_hits_uniprot751e5.out 
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v4.out > pan_contigs_blastx_v4_10_hits_uniprot751e5.out 
 
-# counting unique asssembly ID: 740898 (before 738744) 
-cut -f 1 pan_contigs_blastx_v3_10_hits_uniprot751e5.out | sort | uniq | wc -l
-cut -f 1 pan_contigs_blastx_v3_10_hits_uniprot751e5.out | sort | uniq > pan_contigs_with_hits.txt
+# counting unique asssembly ID: 690187 
+cut -f 1 pan_contigs_blastx_v4_10_hits_uniprot751e5.out | sort | uniq | wc -l
+cut -f 1 pan_contigs_blastx_v4_10_hits_uniprot751e5.out | sort | uniq > pan_contigs_with_top10_hits.txt
 
 #########
-# full list of IDs 1576951
-grep ">" cluster_all_contigs_200_0.95_fixed.fasta | sed 's|>||g' > full_pan_contigs_id.txt
+# full list of IDs 1098205
+grep ">" contigs_ID_uniref_search.fasta | sed 's|>||g' > full_pan_contigs_id.txt
 
 # get a list of contigs has no blast hits or hits below the cutoff
-grep -Fvf pan_contigs_with_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 838207
+grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 408018
 
 grep -Fvf pan_contigs_with_hits.txt full_pan_contigs_id.txt > contigs_no_hits.txt
 
 # extract contigs without uniprot hits:
-seqtk subseq cluster_all_contigs_200_0.95_fixed.fasta contigs_no_hits.txt > pan_contigs_no_hit.fasta
+seqtk subseq contigs_ID_uniref_search.fasta contigs_no_hits.txt > pan_contigs_no_hit.fasta
 
 
 #########################
@@ -28,7 +27,7 @@ seqtk subseq cluster_all_contigs_200_0.95_fixed.fasta contigs_no_hits.txt > pan_
 
 
 # extract the accession number and search result in the blast output to extract lines with plant blast hit
-cut -f 2 pan_contigs_blastx_v3_10_hits_uniprot751e5.out | sort | uniq > top5_uniq_blastout_accession1e5.txt # 2467460 before 1496457
+cut -f 2 pan_contigs_blastx_v4_10_hits_uniprot751e5.out | sort | uniq > top5_uniq_blastout_accession1e5.txt # 2418724 
 
 
 # blast output and retrive all info for taxomony search 
@@ -40,17 +39,17 @@ grep -Fwf ~/db/taxon_file_search_db.txt top5_uniprop_blast_out_info_line1e5.txt 
 
 
 # get accession number for plant gene
-cut -f 1 -d ' ' top5_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top5_vidiriplante_accession_for_extraction1e5.txt # 95980
+cut -f 1 -d ' ' top5_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top5_vidiriplante_accession_for_extraction1e5.txt # 105468
 
 # finally, extracting plant related hits 
-grep -Fwf top5_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v3_10_hits_uniprot751e5.out > top5_plant_related_509_hits1e5.txt # 400827 before 245657  
+grep -Fwf top5_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v4_10_hits_uniprot751e5.out > top5_plant_related_509_hits1e5.txt # 213146   
 
 # get unique plant related ID
 
-cut -f 1 top5_plant_related_509_hits1e5.txt | sort | uniq > top5_uniq_plant_contigs_id1e5.txt # 86735 before 84102 
+cut -f 1 top5_plant_related_509_hits1e5.txt | sort | uniq > top5_uniq_plant_contigs_id1e5.txt # 37865 before 84102 
 
 # extract fasta sequence for the 8,4102 contigs 
-seqtk subseq cluster_all_contigs_200_0.95_fixed.fasta top5_uniq_plant_contigs_id1e5.txt > top5_uniq_plant_contigs_id1e5.fasta
+seqtk subseq contigs_ID_uniref_search.fasta top5_uniq_plant_contigs_id1e5.txt > top5_uniq_plant_contigs_id1e5.fasta
 
 # sequences were moved to /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation for annotation
 # pan_contigs_no_hit.fasta
