@@ -21,7 +21,7 @@ done < list_split_contigs_blasting.txt > blast_all_0.95_contigs_cmd.txt
 cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/blast_all_contigs
 
 module load parallel/20190122
-module load ncbi_toolkits
+module load ncbi_toolkit
 
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 16 < blast_all_0.95_contigs_cmd.txt
 
