@@ -1,0 +1,56 @@
+vcf2bed < B97_B73v5_lumpy.vcf | grep "DEL" | cut -f 1,2,3 -d ";" | sed 's|;|\t|g’ | cut -f 1,2,3,11 > B97_merged_deletion.bed
+cat NAM_sv_sniffles_B97v1.bed | cut –d sed 's|;|\t|g' | sed 's|SVLEN=-||g' |  sed 's|SVLEN=||g' | grep "<DEL>" | cut -f 1,2,3,11  long_reads_deletion.bed
+
+
+vcf2bed < B97_B73v5_marked_duplicates.bam.delly.vcf | grep "DEL" | sed 's|;|\t|g'| sed 's|SVLEN=-||g' | cut -f 1,2,3,11 > lumpy_only_deletion.bed
+
+
+
+
+# NAM line B97 to B73
+
+# manta stats 
+# generate stats for manta calls 
+
+for i in *.vcf; do 
+  echo "$i"
+  cut -d ":" -f 1 "$i" | grep -v "##" | cut -f 3 | sort | uniq -c 
+done 
+
+# calculate size distribution, only on INS and DEL 
+
+# first convert all vcf to bed file fmt and get deletion calls 
+for i in *.vcf; do 
+  echo " vcf2bed < "$i" | grep "MantaDEL" | cut -f 1,2,3,9 | sed 's|;|\t|g' | cut -f 1,2,3,6 | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' > "$i"_deletion.bed " 
+done > deletion_cmd 
+
+bash deletion_cmd
+for i in *_deletion.bed; do
+  id=$(echo "$i" | cut -d'_' -f1)
+  awk -F '\t' -v OFS='\t' '{ $(NF+1) = "deletion"; print }' "$i" | sed "s/$/\t$id/"  > "$i"_fmt_bed.txt
+done 
+
+# then convert all vcf to bed file fmt and get insertion calls 
+for i in *.vcf; do 
+  echo " vcf2bed < "$i" | grep "MantaINS" | cut -f 1,2,3,9 | sed 's|;|\t|g' | cut -f 1,2,3,6 | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' > "$i"_insertion.bed " 
+done > insertion_cmd 
+
+bash insertion_cmd
+
+for i in *_insertion.bed; do
+  id=$(echo "$i" | cut -d'_' -f1)
+  awk -F '\t' -v OFS='\t' '{ $(NF+1) = "insertion"; print }' "$i" | sed "s/$/\t$id/"  > "$i"_fmt_bed.txt
+done 
+
+
+
+
+ cat NAM_B97_deletion.bed| cut -f 1,2,3,9 | sed 's|;|\t|g' | cut -f 1,2,3,6 | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' | head
+
+
+######## Lumpy 
+
+vcf2bed < B97_B73v5_lumpy.vcf > B97_B73v5_lumpy.vcf.bed
+
+cat  B97_lumpy_deletion.bed | cut -f 1,2,3,9 | sed 's|;|\t|g' | cut -f 1,2,3,6 | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' > B97_lumpy_deletion_size.bed
+
