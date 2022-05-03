@@ -29,6 +29,8 @@
 
 ############################### widiv SNP related files  ###############################
 
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/SNP
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/snp
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/snp/cmd250000  ## gatk cmd to generate SNP calls
+
 
 #############################################################################################
