@@ -1,0 +1,26 @@
+# All files are located at dir: /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome
+
+## This folder contains subfolders: 
+
+
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome
+
+### widiv pan-genome related files
+
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv
+
+### widiv pan-sv related files
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv/delly_sv_509  ## 509 genotype delly sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv/lumpy_sv_509  ## 509 genotype lumpy sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv/manta_sv_509  ## 509 genotype manta sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv/merged_individual_calls_dir_type_required  ## merged sv calls for each genotype, required stand direction and sv type
+
+
+
+
+
+
+
+
+
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/SNP
