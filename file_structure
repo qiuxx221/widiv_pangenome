@@ -30,7 +30,9 @@
 ############################### widiv SNP related files  ###############################
 
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/snp
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/snp/cmd250000  ## gatk cmd to generate SNP calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/snp/cmd250000  ## gatk cmd to generate SNP calls, this cmd includes 8533 windows to run on widiv
+
+
 
 
 #############################################################################################
