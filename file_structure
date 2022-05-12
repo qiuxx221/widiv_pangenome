@@ -14,20 +14,57 @@
 
 
 ############################### widiv pan-sv related files ###############################
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/delly_sv_509  ## 509 genotype delly sv calls
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/lumpy_sv_509  ## 509 genotype lumpy sv calls
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/manta_sv_509  ## 509 genotype manta sv calls
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_individual_calls_dir_type_required  ## merged sv calls for each genotype, required stand direction and sv type
+## 509 genotype delly sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/delly_sv_509  
 
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_merging/sample_file  ## these are files to feed in survivor 
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_merging/SURVIVOR_merge_calls_per_genotype_type_dir_required_cmd ## this is the SURVIVOR cmd to merge all the SVs for each genotype
+## 509 genotype lumpy sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/lumpy_sv_509  
 
+## 509 genotype manta sv calls
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/manta_sv_509 
+
+
+###########when requiring strand direction, and sv type for merging
+## merged sv calls for each genotype, required stand direction and sv type
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_individual_calls_dir_type_required 
+
+## these are files to feed in survivor 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_merging/sample_file  
+
+## this is the SURVIVOR cmd to merge all the SVs for each genotype
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_merging/SURVIVOR_merge_calls_per_genotype_type_dir_required_cmd 
 
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_individual_calls_dir_type_required/509_genotype_vcf.txt
 ~/programs/SURVIVOR-master/Debug/SURVIVOR merge 509_genotype_vcf.txt 1000 2 1 1 0 25 # 509_genotype_vcf.txt contains all the sv calls for each genotype after merging, require same type, direction
-~/programs/SURVIVOR-master/Debug/SURVIVOR merge 509_genotype_vcf.txt 1000 2 1 0 0 25 # 509_genotype_vcf.txt contains all the sv calls for each genotype after merging, require same type, no direction required
 
+
+###########when not requiring strand direction, and sv type for merging
+## this is the SURVIVOR cmd to merge all the SVs for each genotype
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_merging/SURVIVOR_merge_calls_per_genotype_type_dir_not_required_cmd
+
+## these are the merged sv calls from callers without requiring strand direction
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_individual_calls_type_required_no_dir
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR merge 509_genotype_vcf.txt 1000 2 1 0 0 25 # 509_genotype_vcf.txt contains all the sv calls for each genotype after merging, require same type, no direction required
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_509_sv_require_type_not_direction.vcf # this vcf file is the merged sv call without requiring sv strand direction
+
+
+
+########### using strand not required version for all the analysis, sv size below 1 Mb
+#sv in raw hapmap format
+# instruction ./. is missing data; 0/0 recessive; 1/1 variant; 0/1 heterzygous 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/hapmap_coded_DEL_smaller_than_1mb.txt
+
+
+
+
+
+
+
+
+
+
+
 
 #############################################################################################
 
