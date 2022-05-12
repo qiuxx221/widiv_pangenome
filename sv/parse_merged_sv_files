@@ -1,0 +1,32 @@
+# generated header for the vcf files and merge the header with deletion call only 
+
+grep "#" merged_509_sv_require_type_not_direction.vcf > vcf_header.txt
+grep "<DEL>" merged_509_sv_require_type_not_direction.vcf > sorted_merged_509_sv_DEL_no_dir.vcf 
+cat vcf_header.txt sorted_merged_509_sv_DEL_no_dir.vcf > DEL_sorted_merged_no_dir.vcf
+
+
+grep "SVTYPE=INS" merged_509_sv_require_type_not_direction.vcf > sorted_merged_509_sv_INS_no_dir.vcf
+cat vcf_header.txt sorted_merged_509_sv_INS_no_dir.vcf > INS_sorted_merged_no_dir.vcf
+
+# getting deletion calls smaller than 1 Mb in size
+grep -v "#"  DEL_sorted_merged_no_dir.vcf | cut -f 8 | cut -d ';' -f 3- | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' | awk -F';' '{if ($1 < 1000000)print $0}' > below_1MB_grep.txt
+
+grep "#" DEL_sorted_merged_no_dir.vcf > vcf_header.txt
+cat vcf_header.txt DEL_smaller_than_1_Mb > DEL_smaller_than_1_Mb.vcf
+# sort the file in tassel
+
+~/programs/tassel-5-standalone
+./run_pipeline.pl -Xms60g -Xmx200g -fork1 -SortGenotypeFilePlugin -inputFile /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/DEL_smaller_than_1_Mb.vcf -outputFile tassel_sort_DEL_sm
+aller_than_1_Mb.vcf -fileType VCF -runfork1
+
+cat tassel_sort_DEL_smaller_than_1_Mb.vcf | cut -f 1,2,10- | grep -v "#" | sed 's|:0:0||g' | sed 's|:33:0||g' | sed 's|:0,0:0||g' | sed 's|,0,0||g' > hapmap_coded_DEL_smaller_than_1mb.txt
+# changing DEL vcf to hapmap format 
+sed 's|0/1|AT|g' hapmap_coded_DEL_smaller_than_1mb.txt | sed 's|0/0|AA|'g | sed 's|./0|AA|g'| sed 's|1/1|TT|g' | sed 's|./.|NA|g' > diploid_coded.txt
+
+
+# count AA AT TT NA 
+awk -F\TT '{print NF-1}' diploid_coded.txt > TT_count.txt
+awk -F\AT '{print NF-1}' diploid_coded.txt > AT_count.txt
+awk -F\AA '{print NF-1}' diploid_coded.txt > AA_count.txt
+awk -F\NA '{print NF-1}' diploid_coded.txt > NA_count.txt
+ cut -f 1,2 diploid_coded.txt > variant.txt
