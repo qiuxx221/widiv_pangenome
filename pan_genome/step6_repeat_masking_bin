@@ -1,20 +1,22 @@
-# repeat masking
+# repeat masking for plant related contigs 
+cut -d '_' -f 1,2 top10_uniq_plant_contigs_id1e5.fasta > top10_uniq_plant_contigs_id1e5_short_header.fasta
+# file stored at /home/hirschc1/qiuxx221/widiv/de_novo/uniref_plant_hit_contigs_and_annotation
+RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa top10_uniq_plant_contigs_id1e5_short_header.fasta -pa 24
+
+
+
+
+# repeat masking for no hit related contigs 
 
 cut -d '_' -f 1,2 pan_contigs_no_hit.fasta > pan_contigs_no_hit_short_header.fasta
-cut -d '_' -f 1,2 top5_uniq_plant_contigs_id1e5.fasta > top5_uniq_plant_contigs_id1e5_short_header.fasta
-
-
 # split contigs into 0.1 million contigs frame 
-awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("no_hit_%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' <  fmt_pan_contigs_no_hit.fasta
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("no_hit_%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' <  pan_contigs_no_hit_short_header.fasta
 ls *.fa > split_no_hit_fasta.list_fa
-# stored at /home/hirschc1/qiuxx221/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation
+# stored at ~/widiv/de_novo/no_uniref_hit_contigs_and_annotation
 
 while read p; do
   echo "RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/03212022_pan_TE_lib/fmt_pan_TE_lib.fasta "$p" -pa 24"
 done < split_no_hit_fasta.list_fa > repeat_masking_no_hit_contigs_cmd
-
-RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/pan_contigs_annotation/top5_uniq_plant_contigs_id1e5_short_header.fasta -pa 24
-
 
 # on MSI
 module load trf phrap rmblast repeatmasker
@@ -43,8 +45,5 @@ module load trf phrap rmblast repeatmasker
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 6 < repeat_masking_no_hit_contigs_cmd
 
 
-cd /scratch.global/qiuxx221/
-
-RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/03212022_pan_TE_lib/fmt_pan_TE_lib.fasta /scratch.global/qiuxx221/fmt_plant_hit.fasta -pa 24
 
 
