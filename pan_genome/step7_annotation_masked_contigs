@@ -1,0 +1,45 @@
+# for plant related contgis
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=60gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o annotate_plant_contigs.out
+#SBATCH -e annotate_plant_contigs.err
+
+cd ~/widiv/de_novo/uniref_plant_hit_contigs_and_annotation
+
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+augustus --species=maize --strand=both fmt_top10_uniq_plant_contigs_id1e5.fasta.masked --gff3=on > fmt_plant_hit.fasta.masked_complete_or_partial.gff3
+
+
+# for no hit contigs
+# for plant related contgis
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=60gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o annotate_no_plant_contigs.out
+#SBATCH -e annotate_no_plant_contigs.err
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/no_uniref_hit_contigs_and_annotation/repeat_masking
+
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+augustus --species=maize --strand=both no_hit_masked_all.fasta --gff3=on > no_plant_hit.fasta.masked_complete_or_partial.gff3
