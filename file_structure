@@ -7,10 +7,21 @@
 
 ############################### widiv pan-genome related files ###############################
 
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-sv
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-genome
+
+# all 509 individual assembly files 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/all_genotype_509_assembly
+
+# after blast back to reference and cd-hit-est identity collapse 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/collapsed_contigs/
+
+
 
 
 #############################################################################################
+
+
+
 
 
 ############################### widiv pan-sv related files ###############################
@@ -47,7 +58,6 @@
 
 ~/programs/SURVIVOR-master/Debug/SURVIVOR merge 509_genotype_vcf.txt 1000 2 1 0 0 25 # 509_genotype_vcf.txt contains all the sv calls for each genotype after merging, require same type, no direction required
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_509_sv_require_type_not_direction.vcf # this vcf file is the merged sv call without requiring sv strand direction
-
 
 
 ########### using strand not required version for all the analysis, sv size below 1 Mb
