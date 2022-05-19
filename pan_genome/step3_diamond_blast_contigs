@@ -1,0 +1,19 @@
+# diamond blast and obtain top 10 hits
+
+#!/bin/bash
+#SBATCH --partition=small,amdsmall,amdlarge,amd512
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o diamondblast_v4.out
+#SBATCH -e diamondblast_v4.err
+#SBATCH --tmp=300gb
+
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/blast_all_contigs/
+
+module load diamond
+diamond blastx --db /home/hirschc1/qiuxx221/db/uniref90.dmnd -q contigs_ID_uniref_search.fasta --outfmt 6 -k 10 -o /scratch.global/qiuxx221/pan_contigs_blastx_v4.out
