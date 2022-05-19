@@ -1,0 +1,18 @@
+# using 0.95 sequence identity cutoff to compress the contigs
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o cdhitest_v2.out
+#SBATCH -e cdhitest_v2.err
+#SBATCH --tmp=100gb
+
+cd ~/widiv/de_novo/de_novo_unmap_sam/fastq/509_assembly/kmer53_509/genotype_contig_200_rename
+module load cd-hit
+cd-hit-est -i 509_all_contigs.fasta -c 0.95 -o cluster_all_contigs_200_0.95_fixed -M 400000
