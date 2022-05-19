@@ -1,3 +1,5 @@
+#final output files are at /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering
+
 awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%50000==0){file=sprintf("contigs_for_blast%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < contigs_for_annotation_combine.fasta
 
 ls *.fa > blast_to_ref_list_fa
@@ -7,18 +9,15 @@ while read p; do
 done < blast_to_ref_list_fa> blast_to_ref_list_fa_cmd
 
 # filtering blast output to get seq with 90% coverage and 90% identity, and remove them from the pan-contigs
-
-# keep the top hit from the blast for each contig 
 # total number of blast hit: 
 awk '!seen[$1]++'  0.95_all_blast_back_ref_results.out > tophit_0.95_all_blast_back_ref_results.out
 
 awk -F"\t" '$1=$1' OFS="\t" tophit_0.95_all_blast_back_ref_results.out | awk 'NR >1, $13=($8-$7)/$4'| awk '{ if (($3>90) && ($13 > 0.90 )){print}}' | cut -f 1 -d ' ' > contigs_ID_reference_blast_9090hit.out
-grep -Fvf contigs_ID_referece_blast_9090hit.out full_pan_contigs_id.txt > contigs_ID_uniref_search.txt  # 1098205 for UniRef
+grep -Fvf contigs_ID_reference_blast_9090hit.out full_pan_contigs_id.txt > contigs_ID_uniref_search.txt  # 1098205 for UniRef
 
 
 # extracting fasta sequence for blast search 
 seqtk subseq cluster_all_contigs_200_0.95_fixed.fasta contigs_ID_uniref_search.txt > contigs_ID_uniref_search.fasta
 
-blast_all_contigs/contigs_ID_uniref_search.fasta
 
 
