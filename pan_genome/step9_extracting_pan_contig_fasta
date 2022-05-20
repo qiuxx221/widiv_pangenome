@@ -10,9 +10,12 @@ grep -Ff fmt_plant_final_contig.txt fmt_full_pan_contig.txt > fmt_plant_final_co
 
 # no hit related contigs
 awk '{print $0,"_"}' no_hit_related_final_contig_id.txt | sed 's| ||g' > no_hit_fmt_id.txt
-sed -e 's|^|_|' no_uniref_hit_contigs_and_annotation/no_hit_fmt_id.txt > fmt_no_hit_final_contig.tx
+sed -e 's|^|_|' no_uniref_hit_contigs_and_annotation/no_hit_fmt_id.txt > fmt_no_hit_final_contig.txt
 grep -Ff fmt_no_hit_final_contig.txt fmt_full_pan_contig.txt > fmt_no_hit_final_contig_full_name.txt
 
 cat fmt_no_hit_final_contig_full_name.txt fmt_plant_final_contig_full_name.txt | cut -d '_' -f 2- > final_pan_contigs_id.txt
 # extracting fasta sequence
 seqkit grep -n -f final_pan_contigs_id.txt ~/widiv/de_novo/pan_contigs_filtering/cluster_all_contigs_200_0.95_fixed.fasta > pan_contigs.fasta
+
+# generate assembly stats 
+~/programs/assembly-stats/build/assembly-stats pan_contigs.fasta 
