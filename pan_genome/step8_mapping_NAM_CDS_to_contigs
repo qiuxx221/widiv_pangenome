@@ -22,8 +22,8 @@ gmap_build -D ~/widiv/de_novo/gmap_db/ -d no_plant_contig pan_contigs_no_hit.fas
 gmap -D ~/widiv/de_novo/gmap_db/  -d no_plant_contig -n 1 -f gff3_gene ~/widiv/de_novo/NAM_CDS/NAM_CDS.fasta > NAM_CDS_to_no_plant_contigs_to_1_path.gff3
 grep mRNA NAM_CDS_to_no_plant_contigs_to_1_path.gff3 | cut -f 1,9 | sed 's|\t|;|g' | cut -d ';' -f 1,2,5,6 | sed 's|coverage=||g' | sed 's|identity=||g' | awk -F';' '$4>80' | awk -F';' '$3>80' > NAM_cds_no_hit_contig
 # getting contig ID from cds mapping
-cut -d ';' -f 1 NAM_cds_no_hit_contig |sort | uniq > NAM_cds_no_hit_contig_id.txt
+cut -d ';' -f 1 NAM_cds_no_hit_contig | cut -d '_' -f 1,2 |sort | uniq > NAM_cds_no_hit_contig_id.txt
 
 grep -v "#" no_plant_hit.fasta.masked_complete_or_partial.gff3 | grep gene | cut -f 1 > fmt_no_hit.fasta.masked_augustus_id.txt
 
-cat NAM_cds_no_hit_contig_id.txt fmt_no_hit.fasta.masked_augustus_id.txt | sort | uniq > no_hit_related_final_contig_id.txt #16906
+cat NAM_cds_no_hit_contig_id.txt fmt_no_hit.fasta.masked_augustus_id.txt | sort | uniq > no_hit_related_final_contig_id.txt #16777
