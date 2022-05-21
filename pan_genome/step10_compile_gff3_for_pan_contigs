@@ -1,0 +1,16 @@
+# all annotation information will be merged together to create pan-contig gff file
+
+# grep out contig ID that are from AUGUSTUS in gmap
+# gmap contigs
+NAM_cds_plant_contig_id.txt
+sed -e 's|^|_|' NAM_cds_plant_contig_id.txt | awk '{print $0,"_"}' |sed 's| ||g'  > grep_NAM_cds_plant_contig_id.txt
+
+# augustus contig 
+sed -e 's|^|_|' fmt_plant_hit.fasta.masked_augustus_id.txt | awk '{print $0,"_"}' |sed 's| ||g' > grep_fmt_plant_hit.fasta.masked_augustus_id.txt
+
+awk 'FNR==NR {a[$0]++; next} !($0 in a)' grep_fmt_plant_hit.fasta.masked_augustus_id.txt grep_NAM_cds_plant_contig_id.txt
+
+
+sed -e 's|^|_|' plant_related_final_contig_id.txt | awk '{print $0,"_"}' |sed 's| ||g' > grep_fmt_plant_final_contig.txt
+
+awk 'FNR==NR {a[$0]++; next} !($0 in a)' grep_fmt_plant_hit.fasta.masked_augustus_id.txt grep_fmt_plant_final_contig.txt
