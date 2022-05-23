@@ -1,0 +1,40 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=160gb
+#SBATCH -t 96:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o merge_variant_2.out
+#SBATCH -e merge_variant_2.err
+#SBATCH --tmp=400gb
+export PATH="/home/hirschc1/qiuxx221/anaconda2/bin/:$PATH"
+
+source ~/anaconda2/etc/profile.d/conda.sh
+conda activate Widiv_SV_py3
+
+module load gatk
+module load bcftools
+module load parallel
+
+cd /scratch.global/qiuxx221/MAPQ20_bams 
+
+bcftools stats merged_sorted.vcf > merged_sorted.vchk
+plot-vcfstats merged_sorted.vchk -p plots/
+maxdepth=$(grep -oh ";DP=.*;" merged_sorted.vcf | cut -d ";" -f 2 | cut -d "="  -f 2 | datamash mean 1 sstdev 1 | awk '{print $1+$2*5}')
+# separate SNPs and INDELs
+vcftools --vcf merged_sorted.vcf --keep-only-indels --recode --recode-INFO-all --out merged_sorted-indels.vcf
+vcftools --vcf merged_sorted.vcf --remove-indels --recode --recode-INFO-all --out merged_sorted-snps.vcf
+gatk --java-options \"-Xmx80g -XX:+UseParallelGC\" VariantFiltration \
+    --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+    --variant merged_sorted-snps.vcf \
+    --filter-expression "QD < 2.0 || FS > 60.0 || MQ < 45.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0 || DP > ${maxdepth}" \
+    --filter-name "FAIL" \
+    --output merged_filtered-snps.vcf
+gatk --java-options \"-Xmx80g -XX:+UseParallelGC\" VariantFiltration \
+    --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+    --variant merged_sorted-indels.vcf \
+    --filter-expression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0" \
+    --filter-name "FAIL" \
+    --output merged_filtered-indels.vcf
