@@ -1,0 +1,29 @@
+# download reads
+
+#!/bin/bash
+#SBATCH -N 1
+#SBATCH -n 12
+#SBATCH -t 96:00:00
+#SBATCH --mem=30gb
+#SBATCH --tmp=400gb
+#SBATCH -J download_reads
+#SBATCH -o download_reads.o
+#SBATCH -e download_reads.e
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH --mail-type=ALL
+cd /scratch.global/qiuxx221/
+module load gatk
+module load parallel
+
+parallel -j 11 --joblog download_reads.log --workdir $PWD <<FIL
+s3cmd get --recursive s3://Widiv_clean_reads_set1 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set2 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set3 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set4 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set5 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set6 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set7 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set8 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set9 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://Widiv_clean_reads_set1011 /scratch.global/qiuxx221/fastq
+s3cmd get --recursive s3://biomap_clean_reads /scratch.global/qiuxx221/fastq
