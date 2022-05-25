@@ -9,12 +9,15 @@ while read p ; do echo "mv "$p".vcf ~/widiv/widiv_B73v5_SNPs" ; echo "mv "$p".vc
 #SBATCH -t 24:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
-#SBATCH -o s3cmd_bam.out
-#SBATCH -e s3cmd_bam.err
+#SBATCH -o sv_merge.out
+#SBATCH -e sv_merge.err
 #SBATCH --tmp=100gb
 
 
-cd /home/hirschc1/qiuxx221/
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/merged_individual_calls_type_required_no_dir/test
+
+~/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_list.txt 1000 1 1 0 0 25 merged_sv_dir_not_required
+
 
 
 s3cmd put *.bam s3://picard_MAPQ20_B73v5
