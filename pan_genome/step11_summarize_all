@@ -1,0 +1,10 @@
+# fmt pan contigs: 23131 contigs, header is the short version, with only genotype and contig number info
+
+cut -f 1,2 -d "_" pan_contigs.fasta > fmt_pan_contigs.fasta 
+
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_contigs/fmt_pan_contigs.fasta 
+
+
+# annotation for pan-contigs
+cat no_plant_hit_all_contig.gff3 plant_related_contigs_all.gff3 > pan_contig.gff3
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_contigs/
