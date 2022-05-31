@@ -8,14 +8,14 @@
 ############################### widiv pan-genome related files ###############################
 
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan-genome
+# all reads used for each genotype indivudual assembly 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/reads_for_assembly
 
 # all 509 individual assembly files 
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/all_genotype_509_assembly
 
 # after blast back to reference and cd-hit-est identity collapse 
 /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/collapsed_contigs/
-
-
 
 
 #############################################################################################
