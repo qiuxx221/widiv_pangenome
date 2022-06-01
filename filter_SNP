@@ -1,9 +1,0 @@
-cat merged.vcf | vcf-sort -t /scratch.global/qiuxx221 -p 36 -c > merged_sorted.vcf
-
-
-gatk --java-options \"-Xmx80g -XX:+UseParallelGC\" VariantFiltration \
-    --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
-    --variant merge.vcf \
-    --filter-expression "QD < 2.0 || FS > 60.0 || MQ < 45.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0 || DP > ${maxdepth}" \
-    --filter-name "FAIL" \
-    --output merge_filtered-snps.vcf
