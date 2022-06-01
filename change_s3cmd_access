@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {"AWS": [ "arn:aws:iam:::user/uid=75512", "arn:aws:iam:::user/uid=" ]},
+      "Action": [ "s3:*" ],
+      "Resource": ["arn:aws:s3:::picard_MAPQ20_B73v5/*", "arn:aws:s3:::picard_MAPQ20_B73v5"]
+    }
+  ]
+}
