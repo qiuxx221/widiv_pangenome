@@ -3,3 +3,13 @@ ls *.gz | cut -d '_' -f 1-6 | sort | uniq >  reads_name
 while read p; do
   echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_R1_cutadapt_sickle.fq.gz "$p"_R2_cutadapt_sickle.fq.gz "$p"_R1_cutadapt_trim.fastq "$p"_R1_cutadapt_single.fastq "$p"_R2_cutadapt_trim.fastq "$p"_R2_cutadapt_single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
 done < reads_name > trim_cmd_run_1
+
+
+ls *.gz | cut -d '_' -f 1-6 | sort | uniq >  reads_name
+
+while read p; do
+  echo "java -jar /panfs/roc/itascasoft/trimmomatic/0.33/trimmomatic.jar PE -phred33 -threads 6 "$p"_R1_cutadapt_sickle.fq.gz "$p"_R2_cutadapt_sickle.fq.gz "$p"_R1_cutadapt_trim.fastq "$p"_R1_cutadapt_single.fastq "$p"_R2_cutadapt_trim.fastq "$p"_R2_cutadapt_single.fastq ILLUMINACLIP:/panfs/roc/itascasoft/trimmomatic/0.33/adapters/all_illumina_adapters.fa:2:30:10:2:true"
+done < reads_name > trim_cmd_run_2
+
+
+python2 /home/hirschc1/qiuxx221/sbatch_run2.py 24 trim_cmd_run_2 
