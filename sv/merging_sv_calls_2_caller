@@ -1,16 +1,28 @@
 # generate genotype information 
-ls *.vcf | cut -f 1 -d '_' | sort | uniq > xaa_sv_gp.txt
+ls *.vcf | cut -f 1 -d '_' | sort | uniq > 509_sv_gp.txt
 
 while read p; do 
-  echo -e ""$p"_B73v5_marked_duplicates.bam.delly.vcf\n"$p"_B73v5_lumpy.vcf\n"$p"_manta_diploidSV.vcf" > "$p"_sample.txt
-done < xaa_sv_gp.txt
+  echo -e "/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/delly_sv_509/"$p"_B73v5_marked_duplicates.bam.delly.vcf\n/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/lumpy_sv_509/"$p"_B73v5_lumpy.vcf\n/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/manta_sv_509/"$p"_manta_diploidSV.vcf" > "$p"_sample.txt
+done < 509_sv_gp.txt
 
 ls *_sample.txt > sv_merge_sample_files
 
 while read p; do
   echo "echo "$p"_genotype"
-  echo "~/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 1000 2 1 1 0 25 "$p"_2_callers_merge_sv.vcf " 
-done < xaa_sv_gp.txt > SURVIVOR_merge_cmd
+  echo "/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 1000 2 1 0 0 25 "$p"_2_callers_merge_sv_no_strand.vcf " 
+done < 509_sv_gp.txt > SURVIVOR_merge_cmd_no_strand
+
+
+
+
+
+
+
+
+
+
+
+
 
 ######xab
 # generate genotype information 
