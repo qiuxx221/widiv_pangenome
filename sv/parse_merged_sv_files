@@ -10,18 +10,31 @@ cat vcf_header.txt sorted_merged_509_sv_INS_no_dir.vcf > INS_sorted_merged_no_di
 
 # getting deletion calls smaller than 1 Mb in size
 grep -v "#"  DEL_sorted_merged_no_dir.vcf | cut -f 8 | cut -d ';' -f 3- | sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' | awk -F';' '{if ($1 < 1000000)print $0}' > below_1MB_grep.txt
+grep -Fwf  below_1MB_grep.txt DEL_sorted_merged_no_dir.vcf > DEL_smaller_than_1_Mb.txt
+cat vcf_header.txt DEL_smaller_than_1_Mb.txt > DEL_smaller_than_1_Mb.vcf
 
-grep "#" DEL_sorted_merged_no_dir.vcf > vcf_header.txt
-cat vcf_header.txt DEL_smaller_than_1_Mb > DEL_smaller_than_1_Mb.vcf
 # sort the file in tassel
+/home/hirschc1/qiuxx221/programs/tassel-5-standalone/run_pipeline.pl -Xms60g -Xmx200g -fork1 -SortGenotypeFilePlugin -inputFile DEL_smaller_than_1_Mb.vcf -outputFile tassel_sort_DEL_smaller_than_1_Mb.vcf -fileType VCF -runfork1
 
-~/programs/tassel-5-standalone
-./run_pipeline.pl -Xms60g -Xmx200g -fork1 -SortGenotypeFilePlugin -inputFile /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/DEL_smaller_than_1_Mb.vcf -outputFile tassel_sort_DEL_sm
-aller_than_1_Mb.vcf -fileType VCF -runfork1
+cat tassel_sort_DEL_smaller_than_1_Mb.vcf | sed s'|;|\t|g' |cut -f 1,2,13,15,17,20- | grep -v "#" | sed 's|:0:0||g' | sed 's|:33:0||g' | sed 's|:0,0:0||g' | sed 's|,0,0||g' > hapmap_coded_DEL_smaller_than_1mb.txt
 
-cat tassel_sort_DEL_smaller_than_1_Mb.vcf | cut -f 1,2,10- | grep -v "#" | sed 's|:0:0||g' | sed 's|:33:0||g' | sed 's|:0,0:0||g' | sed 's|,0,0||g' > hapmap_coded_DEL_smaller_than_1mb.txt
+tail -n1 vcf_header.txt > genotype_info.txt 
+# use nano to fix the genotype_info header
+#.   #CHROM	POS	SUPP	SVLEN	SVTYPE XXX genotypes
+
+cat genotype_info.txt  hapmap_coded_DEL_smaller_than_1mb.txt > DEL_fmt_smaller_than_1_Mb_hapmap.txt
+
+
 # changing DEL vcf to hapmap format 
-sed 's|0/1|AT|g' hapmap_coded_DEL_smaller_than_1mb.txt | sed 's|0/0|AA|'g | sed 's|./0|AA|g'| sed 's|1/1|TT|g' | sed 's|./.|NA|g' > diploid_coded.txt
+sed 's|0/1|AT|g' DEL_fmt_smaller_than_1_Mb_hapmap.txt | sed 's|0/0|AA|'g | sed 's|./0|AA|g'| sed 's|1/1|TT|g' | sed 's|./.|NA|g' > diploid_coded.txt
+
+# due to there are sv calls at one position but with different sv size, they were stored as individual sv calls. We need to merge this information using R script to collapse coordinates
+
+## create chr_position information and sv_related information using underscore 
+awk '{$1=(NR==1?"ID":$1"_"$2); $2=""}1' diploid_coded.txt | awk '{$2=(NR==2?"ID":$2"_"$3"_"$4);$3="" ;$4=""}1'> diploid_coded_for_merging.txt
+
+
+
 
 
 # count AA AT TT NA 
