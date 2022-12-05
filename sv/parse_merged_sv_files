@@ -34,12 +34,27 @@ sed 's|0/1|AT|g' DEL_fmt_smaller_than_1_Mb_hapmap.txt | sed 's|0/0|AA|'g | sed '
 awk '{$1=(NR==1?"ID":$1"_"$2); $2=""}1' diploid_coded.txt | awk '{$2=(NR==2?"ID":$2"_"$3"_"$4);$3="" ;$4=""}1'> diploid_coded_for_merging.txt
 
 
+# creating files with no conflict in DEL size and conflict in size
+cut -f 1 diploid_coded_for_merging.txt | sed s'| |\t|g' diploid_coded_for_merging.txt | cut -f 1 | sort | uniq -cd > conflict_coordinates.txt
+cut -d " " -f 8 conflict_coordinates.txt > conflict_coordinates_to_grep.txt
+grep -Fwf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  | head
+grep -Fwf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > conflict_coordinates_hapmap.txt
+grep -Fvf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > no_conflict_coordinates_hapmap.txt
 
+
+# fix the first row of no_conflict_coordinates_hapmap.txt
+1_43674,SUPP=10_SVLEN=-256_SVTYPE=DEL
+no_conflict_coordinates_hapmap_fix.txt
 
 
 # count AA AT TT NA 
-awk -F\TT '{print NF-1}' diploid_coded.txt > TT_count.txt
-awk -F\AT '{print NF-1}' diploid_coded.txt > AT_count.txt
-awk -F\AA '{print NF-1}' diploid_coded.txt > AA_count.txt
-awk -F\NA '{print NF-1}' diploid_coded.txt > NA_count.txt
- cut -f 1,2 diploid_coded.txt > variant.txt
+grep -v ID no_conflict_coordinates_hapmap_fix.txt | awk -F\TT '{print NF}'  > TT_count.txt
+grep -v ID no_conflict_coordinates_hapmap_fix.txt | awk -F\AT '{print NF}' > AT_count.txt
+grep -v ID no_conflict_coordinates_hapmap_fix.txt | awk -F\AA '{print NF}' > AA_count.txt
+grep -v ID no_conflict_coordinates_hapmap_fix.txt | awk -F\NA '{print NF}'  > NA_count.txt
+# for variant has no size conflict: 
+cut -d ',' -f 1,2 no_conflict_coordinates_hapmap_fix.txt | sed s'|_|\t|'g | sed s'|,|\t|'g| cut -f 1,2,4 | sed s'|SVLEN=-||'g | sed s'|SVLEN=||'g | grep -v ID > variant_and_sv_size.txt
+
+
+
+
