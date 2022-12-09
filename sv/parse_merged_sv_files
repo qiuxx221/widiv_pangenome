@@ -38,8 +38,8 @@ awk '{$1=(NR==1?"ID":$1"_"$2); $2=""}1' diploid_coded.txt | awk '{$2=(NR==2?"ID"
 cut -f 1 diploid_coded_for_merging.txt | sed s'| |\t|g' diploid_coded_for_merging.txt | cut -f 1 | sort | uniq -cd > conflict_coordinates.txt
 cut -d " " -f 8 conflict_coordinates.txt > conflict_coordinates_to_grep.txt
 grep -Fwf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  | head
-grep -Fwf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > conflict_coordinates_hapmap.txt
-grep -Fvf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > no_conflict_coordinates_hapmap.txt
+grep -Fwf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > conflict_coordinates_hapmap.csv
+grep -Fvf conflict_coordinates_to_grep.txt diploid_coded_for_merging.csv  > no_conflict_coordinates_hapmap.csv
 
 
 # fix the first row of no_conflict_coordinates_hapmap.txt
