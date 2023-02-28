@@ -56,5 +56,7 @@ grep -v ID no_conflict_coordinates_hapmap_fix.txt | awk -F\NA '{print NF}'  > NA
 cut -d ',' -f 1,2 no_conflict_coordinates_hapmap_fix.txt | sed s'|_|\t|'g | sed s'|,|\t|'g| cut -f 1,2,4 | sed s'|SVLEN=-||'g | sed s'|SVLEN=||'g | grep -v ID > variant_and_sv_size.txt
 
 
+grep -v ID fmt_no_conflict_coordinates_hapmap_R.csv | awk -F\TT '{print NF}'  > TT_count.txt
+grep -v ID fmt_no_conflict_coordinates_hapmap_R.csv | awk -F\NA '{print NF}'  > NA_count.txt
 
 
