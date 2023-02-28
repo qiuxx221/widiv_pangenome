@@ -1,0 +1,3 @@
+/home/hirschc1/qiuxx221/programs/gotranseq/gotranseq --sequence top10_uniq_plant_contigs_id1e5.fasta --outseq top10_uniq_plant_contigs_id1e5.faa --frame 6
+
+/home/hirschc1/qiuxx221/programs/gotranseq/gotranseq --sequence pan_contigs_no_hit.fasta --outseq pan_contigs_no_hit.faa --frame 6
