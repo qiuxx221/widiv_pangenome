@@ -1,3 +1,73 @@
 /home/hirschc1/qiuxx221/programs/gotranseq/gotranseq --sequence top10_uniq_plant_contigs_id1e5.fasta --outseq top10_uniq_plant_contigs_id1e5.faa --frame 6
 
 /home/hirschc1/qiuxx221/programs/gotranseq/gotranseq --sequence pan_contigs_no_hit.fasta --outseq pan_contigs_no_hit.faa --frame 6
+
+# split files into 1000 sequences per chuck and conduct parallel computing to speed up 
+
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%1000==0){file=sprintf("myseq%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' <  no_stop_top10_uniq_plant_contigs_id1e5.faa
+
+ls *.fa > subfiles_introproscan_input.txt
+
+
+while read p; do 
+    echo "interproscan.sh -goterms -i "$p" -appl Pfam"
+done < subfiles_introproscan_input.txt > introproscan_all_cmd
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=200gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o interproscan_plant_hit_split.out
+#SBATCH -e interproscan_plant_hit_split.err
+#SBATCH --tmp=300gb
+
+module load parallel/20190122
+module load interproscan
+cd /home/hirschc1/qiuxx221/widiv/de_novo/uniref_plant_hit_contigs_and_annotation
+
+parallel --tmpdir /scratch.global/qiuxx221/ --jobs 64 < introproscan_all_cmd 
+
+
+
+### for no uniref hit section
+
+# split files into 1000 sequences per chuck and conduct parallel computing to speed up 
+
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%10000==0){file=sprintf("myseq%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' <  no_stop_pan_contigs_no_hit.faa
+
+ls *.fa > subfiles_introproscan_input.txt
+
+
+while read p; do 
+    echo "interproscan.sh -goterms -i "$p" -appl Pfam"
+done < subfiles_introproscan_input.txt > introproscan_all_cmd
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=200gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o interproscan_no_hit_split.out
+#SBATCH -e interproscan_no_hit_split.err
+#SBATCH --tmp=300gb
+
+module load parallel/20190122
+module load interproscan
+cd /home/hirschc1/qiuxx221/widiv/de_novo/no_uniref_hit_contigs_and_annotation
+
+parallel --tmpdir /scratch.global/qiuxx221/ --jobs 64 < introproscan_all_cmd 
+
+
+
+
+
+
+
+
