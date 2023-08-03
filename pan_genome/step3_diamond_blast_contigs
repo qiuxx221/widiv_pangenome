@@ -1,3 +1,6 @@
+# August 3, new sequences obtained from the pan-contigs to do the new uniref blast search, and identify plant related contigs
+# previous blast contigs to reference has used coverage cutoff lower than 90% that resulted in a lot of contigs has low matching being lost during this process. 
+# We would expecting to see more contigs with genes out of this new workflow
 # diamond blast and obtain top 10 hits
 
 #!/bin/bash
