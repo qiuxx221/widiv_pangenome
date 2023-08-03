@@ -2,16 +2,17 @@
 # 001_blast_contigs_to_reference.sh
 
 #!/bin/bash
-#SBATCH --partition=agsmall
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=10
 #SBATCH --mem=200gb
 #SBATCH -t 5:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
-#SBATCH -o blast_pan_contigs_no_hit_qcovs_qcovhsp.out
-#SBATCH -e blast_pan_contigs_no_hit_qcovs_qcovhsp.err
+#SBATCH -o blast_pan_contigs_reference_qcovs_qcovhsp.out
+#SBATCH -e blast_pan_contigs_reference_qcovs_qcovhsp.err
 #SBATCH --tmp=150gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering
 
 module load ncbi_blast+
 module load parallel/20190122
@@ -28,9 +29,11 @@ done < blast_to_ref_list_fa> blast_to_ref_list_fa_cmd
 
 sed -i 's|6 std qcovs qcovhsp|"6 std qcovs qcovhsp"|g' blast_to_ref_list_fa_cmd
 
-cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering
 
 parallel --tmpdir /scratch.global/qiuxx221/ --jobs 10 < blast_to_ref_list_fa_cmd
+
+cat /scratch.global/qiuxx221/*ref75.out > merged_blast_to_ref75_qcov.out
+
 
 
 #############################################################################
