@@ -1,9 +1,8 @@
+
 # repeat masking for plant related contigs 
 cut -d '_' -f 1,2 top10_uniq_plant_contigs_id1e5.fasta > top10_uniq_plant_contigs_id1e5_short_header.fasta
-# file stored at /home/hirschc1/qiuxx221/widiv/de_novo/uniref_plant_hit_contigs_and_annotation
-RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa top10_uniq_plant_contigs_id1e5_short_header.fasta -pa 24
 
-
+module load repeatmasker/4.0.5
 
 
 # repeat masking for no hit related contigs 
@@ -11,12 +10,11 @@ RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/fmt_NAM_TE.fa top10_uniq_plant_
 cut -d '_' -f 1,2 pan_contigs_no_hit.fasta > pan_contigs_no_hit_short_header.fasta
 # split contigs into 0.1 million contigs frame 
 awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%100000==0){file=sprintf("no_hit_%d.fa",n_seq);} print >> file; n_seq++; next;} { print >> file; }' <  pan_contigs_no_hit_short_header.fasta
-ls *.fa > split_no_hit_fasta.list_fa
-# stored at ~/widiv/de_novo/no_uniref_hit_contigs_and_annotation
+ls *.fa > split_fasta.list_fa
 
 while read p; do
   echo "RepeatMasker -lib /home/hirschc1/qiuxx221/TE_lib/03212022_pan_TE_lib/fmt_pan_TE_lib.fasta "$p" -pa 24"
-done < split_no_hit_fasta.list_fa > repeat_masking_no_hit_contigs_cmd
+done < split_fasta.list_fa > repeat_masking_pan_contigs_cmd
 
 # on MSI
 module load trf phrap rmblast repeatmasker
@@ -29,7 +27,7 @@ module load trf phrap rmblast repeatmasker
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=6
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=100gb
 #SBATCH -t 20:00:00
 #SBATCH --mail-type=ALL
@@ -38,11 +36,11 @@ module load trf phrap rmblast repeatmasker
 #SBATCH -e repeat_masking.err
 #SBATCH --tmp=400gb
 
-cd /scratch.global/qiuxx221
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation
 module load parallel/20190122
 module load trf phrap rmblast repeatmasker
 
-parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 6 < repeat_masking_no_hit_contigs_cmd
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 8 < repeat_masking_pan_contigs_cmd
 
 
 
