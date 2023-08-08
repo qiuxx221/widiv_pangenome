@@ -1,4 +1,4 @@
-# counting total uniq transcript that is in the blast hit 815795
+# counting total uniq transcript that is in the blast hit 811,406
 cut -f 1  pan_contigs_blastx_v5.out | sort | uniq | wc -l 
 ###########
 
