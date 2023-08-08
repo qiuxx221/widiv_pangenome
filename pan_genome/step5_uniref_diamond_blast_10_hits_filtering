@@ -2,19 +2,19 @@
 cut -f 1  pan_contigs_blastx_v5.out | sort | uniq | wc -l 
 ###########
 
-#After 1e-5 e value filtering, # 5,361,285 hit retained. This will include contigs with more than 1 hits. 
-awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v5.out > pan_contigs_blastx_v5_10_hits_uniprot751e5.out # 5258167
+#After 1e-5 e value filtering, # 5,351,833 hit retained. This will include contigs with more than 1 hits. 
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v5.out > pan_contigs_blastx_v5_10_hits_uniprot751e5.out # 5351833
 
-# counting unique asssembly ID: 717666 
+# counting unique asssembly ID: 715181
 cut -f 1 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq | wc -l
 cut -f 1 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > pan_contigs_with_top10_hits.txt
 
 #########
-# full list of IDs 1,416,346
+# full list of IDs 1,386,183
 grep ">" /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs_ID_uniref_search.fasta | sed 's|>||g' > full_pan_contigs_id.txt
 
 # get a list of contigs has no blast hits or hits below the cutoff
-grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 698,680
+grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 671,002
 
 grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt > contigs_no_hits.txt
 
@@ -25,26 +25,26 @@ seqtk subseq /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs
 
 ########################## for contigs with hits: 
 # extract the accession number and search result in the blast output to extract lines with plant blast hit
-cut -f 2 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > top10_uniq_blastout_accession1e5.txt # 2,448,200 
+cut -f 2 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > top10_uniq_blastout_accession1e5.txt # 2,446,312
 
-# blast output and retrive all info for taxomony search for possible proteins coding terms in the diamond blast 2450029 vs old 2420547
+# blast output and retrive all info for taxomony search for possible proteins coding terms in the diamond blast 2,448,140 vs old 2420547
 grep -Fwf top10_uniq_blastout_accession1e5.txt /home/hirschc1/qiuxx221/db/uniprot_infoline.txt > top10_uniprop_blast_out_info_line1e5.txt
 
 
-# grep lines that have taxID in plants 231242 total plant related proteins, the actual number of protein that is present in the contigs are 133913 vs old 105468 
+# grep lines that have taxID in plants 231242 total plant related proteins, the actual number of protein that is present in the contigs are 132,054 vs old 105,468 
 grep -Fwf  /home/hirschc1/qiuxx221/db/taxon_file_search_db.txt top10_uniprop_blast_out_info_line1e5.txt > top10_viridirplantea_accession_info1e5.txt
 
 # get accession number for plant gene
-cut -f 1 -d ' ' top10_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top10_vidiriplante_accession_for_extraction1e5.txt # 133913
+cut -f 1 -d ' ' top10_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top10_vidiriplante_accession_for_extraction1e5.txt # 132054
 
 # finally, extracting plant related hits 
-grep -Fwf top10_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v5_10_hits_uniprot751e5.out > top10_plant_related_509_hits1e5.txt # 307874 vs 213146   
+grep -Fwf top10_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v5_10_hits_uniprot751e5.out > top10_plant_related_509_hits1e5.txt # 299,589 vs 213,146   
 
 # get unique plant related ID
 
-cut -f 1 top10_plant_related_509_hits1e5.txt | sort | uniq > top10_uniq_plant_contigs_id1e5.txt # 64424 vs 37865 
+cut -f 1 top10_plant_related_509_hits1e5.txt | sort | uniq > top10_uniq_plant_contigs_id1e5.txt # 62030 vs 37865 
 
-# extract fasta sequence for the 8,4102 contigs 
+# extract fasta sequence for the 62030 contigs 
 seqtk subseq /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs_ID_uniref_search.fasta top10_uniq_plant_contigs_id1e5.txt > top10_uniq_plant_contigs_id1e5.fasta
 
 # sequences were moved to /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation for annotation
