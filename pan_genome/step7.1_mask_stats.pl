@@ -18,3 +18,9 @@ while (<>) {
     my $numN = $seq =~ tr/N//;
     print "$seq_id $len $numN\n";
 }
+
+
+# run example 
+perl masked_stats.pl top10_uniq_plant_contigs_id1e5_short_header.fa.masked > top10_uniq_plant_contigs_id1e5_short_header.fa.masked.stats
+
+perl masked_stats.pl no_hit_masked_all.fasta > no_hit_masked_all.fasta.stats
