@@ -21,6 +21,8 @@ samtools view -u -f 12 -F 256 1538_B73v5.bam  > 1538_B73v5_unmap_unmap.bam
 
 samtools merge -o 1538_B73v5_unmapped_all.bam 1538_B73v5_unmap_map.bam 1538_B73v5_map_unmap.bam 1538_B73v5_unmap_unmap.bam
 
+
+# https://gist.github.com/darencard/72ddd9e6c08aaff5ff64ca512a04a6dd
 # xaa 
 while read p ; do
   echo "samtools view -u -f 4 -F 264 "$p"_B73v5.bam > "$p"_B73v5_unmap_R1.bam ; samtools view -u -f 8 -F 260 "$p"_B73v5.bam > "$p"_B73v5_unmap_R2.bam; samtools view -u -f 12 -F 256 "$p"_B73v5.bam  > "$p"_B73v5_unmap_R1R2.bam; samtools merge "$p"_B73v5_unmapped_all.bam "$p"_B73v5_unmap_R1.bam "$p"_B73v5_unmap_R2.bam "$p"_B73v5_unmap_R1R2.bam ; samtools sort "$p"_B73v5_unmapped_all.bam -o "$p"_B73v5_unmapped_all_sort.bam ; samtools view -h -o "$p"_B73v5_unmapped_all_sort.sam "$p"_B73v5_unmapped_all_sort.bam "  
