@@ -22,3 +22,6 @@ echo "augustus --species=maize --strand=both "$p" --gff3=on > gff3/"$p".gff3"
 done < masked_contigs.txt > augustus_all_cmd
 
 parallel --tmpdir /scratch.global/qiuxx221/ --jobs 8 < augustus_all_cmd
+
+
+grep -v "#" top10_uniq_plant_contigs_id1e5_short_header.fa.masked.gff3 | grep gene > top10_uniq_plant_contigs_id1e5_short_header.fa.masked.gff3.stats
