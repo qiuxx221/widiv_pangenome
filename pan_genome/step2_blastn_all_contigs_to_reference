@@ -43,12 +43,12 @@ cat /scratch.global/qiuxx221/*ref75.out > merged_blast_to_ref75_qcov.out
 awk '!seen[$1]++'  merged_blast_to_ref75_qcov.out > tophit_0.95_all_blast_back_ref_results.out
 
 ## column 3 is idenity and column 14 is for query coverage hsp, this is the number that trully reflect the % of alignment (qcov)
-awk -F"\t" '$1=$1' OFS="\t" tophit_0.95_all_blast_back_ref_results.out | awk '{ if (($3>90) && ($13 > 90 )){print}}' | cut -f 1  > contigs_ID_reference_blast_9090hit.out
+awk -F"\t" '$1=$1' OFS="\t" tophit_0.95_all_blast_back_ref_results.out | awk '{ if (($3>90) && ($14 > 85 )){print}}' | cut -f 1  > contigs_ID_reference_blast_9085hit.out
 
-# This step resulted 160605 alignment meet this requirement, will then me removed from the downstream analysis
+# This step resulted 178609 alignment meet this requirement, will then me removed from the downstream analysis
 grep ">" cluster_all_contigs_200_0.95_fixed.fasta | sed s'|>||g' > all_contigs_id.txt
 
-grep -Fvf contigs_ID_reference_blast_9090hit.out all_contigs_id.txt > contigs_ID_uniref_search.txt # Uniref search for 1386183
+grep -Fvf contigs_ID_reference_blast_9085hit.out all_contigs_id.txt > contigs_ID_uniref_search.txt # Uniref search for 1398342
 
 module load conda 
 conda activate apg_toolkits
