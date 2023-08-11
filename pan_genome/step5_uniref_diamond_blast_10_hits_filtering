@@ -1,11 +1,11 @@
-# counting total uniq transcript that is in the blast hit 811,406
+# counting total uniq transcript that is in the blast hit 812751
 cut -f 1  pan_contigs_blastx_v5.out | sort | uniq | wc -l 
 ###########
 
 #After 1e-5 e value filtering, # 5,351,833 hit retained. This will include contigs with more than 1 hits. 
-awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v5.out > pan_contigs_blastx_v5_10_hits_uniprot751e5.out # 5351833
+awk '{ if (($11 < 1e-5) && ($3 > 75 )){print}}' pan_contigs_blastx_v5.out > pan_contigs_blastx_v5_10_hits_uniprot751e5.out # 5353843
 
-# counting unique asssembly ID: 715181
+# counting unique asssembly ID: 715804
 cut -f 1 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq | wc -l
 cut -f 1 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > pan_contigs_with_top10_hits.txt
 
@@ -14,7 +14,7 @@ cut -f 1 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > pan_cont
 grep ">" /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs_ID_uniref_search.fasta | sed 's|>||g' > full_pan_contigs_id.txt
 
 # get a list of contigs has no blast hits or hits below the cutoff
-grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 671,002
+grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt | wc -l # total contigs with no hits: 682538
 
 grep -Fvf pan_contigs_with_top10_hits.txt full_pan_contigs_id.txt > contigs_no_hits.txt
 
@@ -27,22 +27,33 @@ seqtk subseq /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs
 # extract the accession number and search result in the blast output to extract lines with plant blast hit
 cut -f 2 pan_contigs_blastx_v5_10_hits_uniprot751e5.out | sort | uniq > top10_uniq_blastout_accession1e5.txt # 2,446,312
 
-# blast output and retrive all info for taxomony search for possible proteins coding terms in the diamond blast 2,448,140 vs old 2420547
+wc -l top10_uniq_blastout_accession1e5.txt 
+
+# blast output and retrive all info for taxomony search for possible proteins coding terms in the diamond blast 2448151 vs old 2420547
 grep -Fwf top10_uniq_blastout_accession1e5.txt /home/hirschc1/qiuxx221/db/uniprot_infoline.txt > top10_uniprop_blast_out_info_line1e5.txt
 
+wc -l top10_uniprop_blast_out_info_line1e5.txt
 
-# grep lines that have taxID in plants 231242 total plant related proteins, the actual number of protein that is present in the contigs are 132,054 vs old 105,468 
+# grep lines that have taxID in plants 231242 total plant related proteins, the actual number of protein that is present in the contigs are 132064 vs old 105,468 
 grep -Fwf  /home/hirschc1/qiuxx221/db/taxon_file_search_db.txt top10_uniprop_blast_out_info_line1e5.txt > top10_viridirplantea_accession_info1e5.txt
 
+wc -l top10_viridirplantea_accession_info1e5.txt
+
 # get accession number for plant gene
-cut -f 1 -d ' ' top10_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top10_vidiriplante_accession_for_extraction1e5.txt # 132054
+cut -f 1 -d ' ' top10_viridirplantea_accession_info1e5.txt | sed 's|>||g' > top10_vidiriplante_accession_for_extraction1e5.txt # 132064
+
+wc -l top10_vidiriplante_accession_for_extraction1e5.txt
+
 
 # finally, extracting plant related hits 
-grep -Fwf top10_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v5_10_hits_uniprot751e5.out > top10_plant_related_509_hits1e5.txt # 299,589 vs 213,146   
+grep -Fwf top10_vidiriplante_accession_for_extraction1e5.txt pan_contigs_blastx_v5_10_hits_uniprot751e5.out > top10_plant_related_509_hits1e5.txt # 301009 vs 213,146   
+
+wc -l top10_plant_related_509_hits1e5.txt
 
 # get unique plant related ID
 
-cut -f 1 top10_plant_related_509_hits1e5.txt | sort | uniq > top10_uniq_plant_contigs_id1e5.txt # 62030 vs 37865 
+cut -f 1 top10_plant_related_509_hits1e5.txt | sort | uniq > top10_uniq_plant_contigs_id1e5.txt # 62613 vs 37865 
+wc -l top10_uniq_plant_contigs_id1e5.txt
 
 # extract fasta sequence for the 62030 contigs 
 seqtk subseq /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/contigs_ID_uniref_search.fasta top10_uniq_plant_contigs_id1e5.txt > top10_uniq_plant_contigs_id1e5.fasta
