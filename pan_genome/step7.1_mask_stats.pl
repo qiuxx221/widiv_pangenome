@@ -22,5 +22,10 @@ while (<>) {
 
 # run example 
 perl masked_stats.pl top10_uniq_plant_contigs_id1e5_short_header.fa.masked > top10_uniq_plant_contigs_id1e5_short_header.fa.masked.stats
+mv top10_uniq_plant_contigs_id1e5_short_header.fa.masked top10_uniq_plant_contigs_id1e5_short_header.fa.mask
+
+cat *.masked > no_hit_masked_all.fasta
 
 perl masked_stats.pl no_hit_masked_all.fasta > no_hit_masked_all.fasta.stats
+
+mv top10_uniq_plant_contigs_id1e5_short_header.fa.mask top10_uniq_plant_contigs_id1e5_short_header.fa.masked
