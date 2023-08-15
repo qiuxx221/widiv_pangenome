@@ -17,3 +17,10 @@ echo "grep -v '"##"' "$p".bam.delly.vcf | grep DUP > "$p"_dup_call; cat "$p"_hea
 done < all_delly_vcf_list.txt > generate_delly_duplication_vcf_cmd
 
 bash generate_delly_duplication_vcf_cmd
+
+
+while read p; do
+echo "grep -v '"##"' "$p".bam.delly.vcf | grep INS > "$p"_ins_call; cat "$p"_header "$p"_ins_call > insertion/"$p"_insertion.vcf ; rm "$p"_ins_call " 
+done < all_delly_vcf_list.txt > generate_delly_insertion_vcf_cmd
+
+bash generate_delly_insertion_vcf_cmd
