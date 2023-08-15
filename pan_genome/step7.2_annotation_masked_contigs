@@ -25,5 +25,8 @@ parallel --tmpdir /scratch.global/qiuxx221/ --jobs 8 < augustus_all_cmd
 
 
 grep -v "#" top10_uniq_plant_contigs_id1e5_short_header.fa.masked.gff3 | grep gene > top10_uniq_plant_contigs_id1e5_short_header.fa.masked.gff3.stats
+grep -v "#" top10_uniq_plant_contigs_id1e5_short_header.fa.masked.gff3 | grep CDS > top10_uniq_plant_contigs_id1e5_cds.gff3.stats
+
 cat no_hit* > all_no_hit.gff3
 grep -v "#" all_no_hit.gff3| grep gene > all_no_hit.gff3.stats
+grep -v "#" all_no_hit.gff3| grep CDS > all_no_hit_cds.gff3.stats
