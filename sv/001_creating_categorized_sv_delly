@@ -1,0 +1,19 @@
+# find only deletion call
+
+ls *.vcf  | cut -f 1 -d "." > all_delly_vcf_list.txt
+
+while read p; do
+echo "grep '##' "$p".bam.delly.vcf > "$p"_header; grep -v '"##"' "$p".bam.delly.vcf | grep DEL > "$p"_deletion_call; cat "$p"_header "$p"_deletion_call > deletion/"$p"_deletion.vcf ; rm "$p"_deletion_call " 
+done < all_delly_vcf_list.txt > generate_delly_deletion_vcf_cmd
+
+bash generate_delly_deletion_vcf_cmd
+
+
+
+# find only duplication call
+
+while read p; do
+echo "grep -v '"##"' "$p".bam.delly.vcf | grep DUP > "$p"_dup_call; cat "$p"_header "$p"_dup_call > duplication/"$p"_duplication.vcf ; rm "$p"_dup_call " 
+done < all_delly_vcf_list.txt > generate_delly_duplication_vcf_cmd
+
+bash generate_delly_duplication_vcf_cmd
