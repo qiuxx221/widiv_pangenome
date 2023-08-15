@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --mem=200gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blast_pan_contigs_reference_qcovs_qcovhsp.out
+#SBATCH -e blast_pan_contigs_reference_qcovs_qcovhsp.err
+#SBATCH --tmp=150gb
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering
+
+module load ncbi_blast+
+module load parallel/20190122
+
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query top10_uniq_plant_contigs_id1e5.fasta \
+-perc_identity 75 -max_target_seqs 1 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/top10_uniq_plant_contigs_id1e5_blast.out
+
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query pan_contigs_no_hit.fasta \
+-perc_identity 75 -max_target_seqs 1 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/pan_contigs_no_hit.fasta_blast.out
+
+
+awk '!seen[$1]++'  top10_uniq_plant_contigs_id1e5_blast.out > tophit_top10_uniq_plant_contigs_id1e5_blast.out
+awk '!seen[$1]++'  pan_contigs_no_hit.fasta_blast.out > tophit_pan_contigs_no_hit.fasta_blast.out
+
