@@ -24,7 +24,7 @@ awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%50000==0){file=sprintf("contigs_for_blast%d
 ls *.fa > blast_to_ref_list_fa
 
 while read p; do
-  echo "blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query "$p" -perc_identity 75 -max_target_seqs 1 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/"$p"_blast_to_ref75.out "
+  echo "blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query "$p" -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/"$p"_blast_to_ref75.out "
 done < blast_to_ref_list_fa> blast_to_ref_list_fa_cmd
 
 sed -i 's|6 std qcovs qcovhsp|"6 std qcovs qcovhsp"|g' blast_to_ref_list_fa_cmd
@@ -32,7 +32,7 @@ sed -i 's|6 std qcovs qcovhsp|"6 std qcovs qcovhsp"|g' blast_to_ref_list_fa_cmd
 
 parallel --tmpdir /scratch.global/qiuxx221/ --jobs 10 < blast_to_ref_list_fa_cmd
 
-cat /scratch.global/qiuxx221/*ref75.out > merged_blast_to_ref75_qcov.out
+cat /scratch.global/qiuxx221/*ref75.out > merged_blast_to_ref75_qcov_no_max_target.out
 
 
 
