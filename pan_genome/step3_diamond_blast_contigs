@@ -18,4 +18,7 @@
 cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering
 
 module load diamond
-diamond blastx --db /home/hirschc1/qiuxx221/db/uniref90.dmnd -q contigs_ID_uniref_search.fasta --outfmt 6 -k 10 -o /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/uniref_blastx/pan_contigs_blastx_v5.out
+# diamond blastx --db /home/hirschc1/qiuxx221/db/uniref90.dmnd -q contigs_ID_uniref_search.fasta --outfmt 6 -k 10 -o /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/uniref_blastx/pan_contigs_blastx_v5.out
+diamond blastx --db /home/hirschc1/qiuxx221/db/uniref90.dmnd -q contigs_ID_uniref_search_no_max_target_9085hit.fasta --outfmt 6 -k 10 -o /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/uniref_blastx/pan_contigs_blastx_v5.out
+
+
