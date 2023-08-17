@@ -7,10 +7,61 @@ done < 509_sv_gp.txt
 
 ls *_sample.txt > sv_merge_sample_files
 
+# 1000 bp buffer
 while read p; do
   echo "echo "$p"_genotype"
   echo "/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 1000 2 1 0 0 25 "$p"_2_callers_merge_sv_no_strand.vcf " 
 done < 509_sv_gp.txt > SURVIVOR_merge_cmd_no_strand
+
+
+# 500 bp buffer 
+
+while read p; do
+  echo "echo "$p"_genotype"
+  echo "/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 500 2 1 0 0 25 "$p"_2_callers_merge_sv_no_strand_500bp.vcf " 
+done < 509_sv_gp.txt > SURVIVOR_merge_cmd_no_strand_500
+
+
+# 250 bp buffer 
+
+while read p; do
+  echo "echo "$p"_genotype"
+  echo "/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 250 2 1 0 0 25 "$p"_2_callers_merge_sv_no_strand_250bp.vcf " 
+done < 509_sv_gp.txt > SURVIVOR_merge_cmd_no_strand_250
+
+
+# 100 bp buffer 
+
+while read p; do
+  echo "echo "$p"_genotype"
+  echo "/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge "$p"_sample.txt 100 2 1 0 0 25 "$p"_2_callers_merge_sv_no_strand_100bp.vcf " 
+done < 509_sv_gp.txt > SURVIVOR_merge_cmd_no_strand_100
+
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --mem=200gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o sv_merging.out
+#SBATCH -e sv_merging.err
+#SBATCH --tmp=150gb
+
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging
+
+bash SURVIVOR_merge_cmd_no_strand_500
+bash SURVIVOR_merge_cmd_no_strand_250
+bash SURVIVOR_merge_cmd_no_strand_100
+
+mkdir 100bp_merging
+mkdir 250bp_merging
+mkdir 500bp_merging
+mv *500bp.vcf 500bp_merging
+mv *250bp.vcf 250bp_merging
+mv *100bp.vcf 100bp_merging
+
 
 
 
