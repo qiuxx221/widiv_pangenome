@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=200gb
+#SBATCH -t 90:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o xaa_filter20.out
+#SBATCH -e xaa_filter20.err
+#SBATCH --tmp=300gb
+
+module load samtools 
+cd /scratch.global/qiuxx221/MAPQ20_bams
+
+ls *_B73v5_marked_duplicates.bam | cut -f 1-2 -d "_" > 509_bams.txt
+
+while read p; do
+  echo "samtools view -bq 9 "$p"_marked_duplicates.bam  > /scratch.global/qiuxx221/MAPQ20_bams/mapq9/"$p"_MAPQ_9.bam "
+done <509_bams.txt > 509_mapq9_filtering
