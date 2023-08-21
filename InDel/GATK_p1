@@ -1,23 +1,30 @@
-cd /scratch.global/qiuxx221/MAPQ20_bams
-for finalbam in /scratch.global/qiuxx221/MAPQ20_bams/*.ba?; do
+# break up make window bins for variant calling
+cd /home/hirschc1/qiuxx221/p1_snp
+bedtools makewindows -w 100000 -b Zm00001eb014290_extended.bed > Zm00001eb014290_extended_100000bp.bed
+
+
+mkdir /home/hirschc1/qiuxx221/p1_gatk
+cd /home/hirschc1/qiuxx221/p1_gatk
+for finalbam in /scratch.global/qiuxx221/MAPQ20_bams/mapq9/*.ba?; do
   ln -s $finalbam
 done
 
-mkdir p1_gatk
-cd p1_gatk
-for finalbam in /scratch.global/qiuxx221/MAPQ20_bams/*.ba?; do
-  ln -s $finalbam
-done
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix.sh /home/hirschc1/qiuxx221/p1_snp/Zm00001eb014290_extended_100000bp.bed /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta *final.bam > gatk.cmds
 
-bash gatk3_cmdsgen_fix.sh /home/hirschc1/qiuxx221/p1_snp/Zm00001eb014290_extended.bed /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta *final.bam > gatk.cmds
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=500gb
+#SBATCH -t 96:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o p1_gatk.out
+#SBATCH -e p1_gatk.err
+#SBATCH --tmp=400gb
 
+cd /home/hirschc1/qiuxx221/p1_snp/
 
-
-
-gatk --java-options "-Xmx150g -XX:+UseParallelGC" HaplotypeCaller -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -I all_bams.list \
--L chr1:47648490-48254508 --output chr1:47648490-48254508.vcf
-
-
-
-gatk --java-options "-Xmx50g -XX:ParallelGCThreads=24" HaplotypeCaller -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -I all_bams.list \
--L chr1:47648490-48254508 --output chr1:47648490-48254508_threads.vcf
+module load parallel/20190122
+module load gatk
+parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 7 < /home/hirschc1/qiuxx221/p1_snp/gatk.cmds
