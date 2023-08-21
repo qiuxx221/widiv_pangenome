@@ -17,7 +17,7 @@ cd /scratch.global/qiuxx221/MAPQ20_bams
 ls *_B73v5_marked_duplicates.bam | cut -f 1-2 -d "_" > 509_bams.txt
 
 while read p; do
-  echo "samtools index "$p"_marked_duplicates.bam; samtools view -bq 9 "$p"_marked_duplicates.bam  > /scratch.global/qiuxx221/MAPQ20_bams/mapq9/"$p"_MAPQ_9.bam "
+  echo "samtools index "$p"_marked_duplicates.bam; samtools view -bq 9 "$p"_marked_duplicates.bam  > /scratch.global/qiuxx221/MAPQ20_bams/mapq9/"$p"_MAPQ_9.bam ; cd /scratch.global/qiuxx221/MAPQ20_bams/mapq9/; samtools index "$p"_MAPQ_9.bam"
 done <509_bams.txt > 509_mapq9_filtering
 
 
