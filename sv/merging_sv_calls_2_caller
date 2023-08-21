@@ -63,10 +63,38 @@ mv *250bp.vcf 250bp_merging
 mv *100bp.vcf 100bp_merging
 
 
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=10
+#SBATCH --mem=200gb
+#SBATCH -t 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o sv_merging.out
+#SBATCH -e sv_merging.err
+#SBATCH --tmp=150gb
 
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging
 
-# merging sv from different genotypes
-/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging
-
+# merging sv from different genotypes 1000 bp
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging/1000bp_merging
 ls *.vcf > sample_files
-/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 2 1 1 0 25 widiv_sv_merged_no_strand.vcf
+/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 1000 1 0 0 25 widiv_sv_merged_1000bp_no_strand.vcf
+
+# merging sv from different genotypes 500 bp
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging/500bp_merging
+ls *.vcf > sample_files
+/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 500 1 0 0 25 widiv_sv_merged_500bp_no_strand.vcf
+
+# merging sv from different genotypes 250 bp
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging/250bp_merging
+ls *.vcf > sample_files
+/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 250 1 0 0 25 widiv_sv_merged_250bp_no_strand.vcf
+
+
+# merging sv from different genotypes 100 bp
+cd /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_sv/sv_pool_merging/100bp_merging
+ls *.vcf > sample_files
+/home/hirschc1/qiuxx221/programs/SURVIVOR-master/Debug/SURVIVOR merge sample_files 100 1 0 0 25 widiv_sv_merged_100bp_no_strand.vcf
+
+
