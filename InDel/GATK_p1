@@ -1,0 +1,13 @@
+ls -1 all/*.sorted.bam | while read BAM
+do
+  samtools index ${OUT_DIR}/${SAMPLE}.gatk.bam
+   echo "${OUT_DIR}/${SAMPLE}.gatk.bam" >> all_bams.list
+done
+
+gatk --java-options "-Xmx150g -XX:+UseParallelGC" HaplotypeCaller -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -I all_bams.list \
+-L chr1:47648490-48254508 --output chr1:47648490-48254508.vcf
+
+
+
+gatk --java-options "-Xmx50g -XX:ParallelGCThreads=24" HaplotypeCaller -R /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -I all_bams.list \
+-L chr1:47648490-48254508 --output chr1:47648490-48254508_threads.vcf
