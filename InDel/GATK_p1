@@ -15,7 +15,7 @@ bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix.sh /home/hirschc1/qiux
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=500gb
+#SBATCH --mem=560gb
 #SBATCH -t 96:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=qiuxx221@umn.edu
