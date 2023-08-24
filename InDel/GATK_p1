@@ -28,3 +28,53 @@ cd /home/hirschc1/qiuxx221/p1_snp/
 module load parallel/20190122
 module load gatk
 parallel --tmpdir /home/hirschc1/qiuxx221/temp/ --jobs 7 < /home/hirschc1/qiuxx221/p1_snp/gatk.cmds
+
+
+### Merging SV calls 
+
+module load vcftools
+module load GIF/datamash
+module load gatk
+module load bcftools
+module load parallel
+
+
+#!/bin/bash
+# script to filter snps
+# gatk tutorial
+# Arun Seetharam
+# 5/16/2019
+
+
+mkdir -p vcffiles idxfiles
+# merge vcf files
+mv *.vcf ./vcffiles
+mv *.idx ./idxfiles
+cd vcffiles
+vcf=(*.vcf)
+parallel "grep -v '^#' {}" ::: *.vcf >> ../${merged}.body
+grep "^#" ${vcf[1]} > ../${merged}.head
+cd ..
+cat ${merged}.head ${merged}.body >> ${merged}.vcf
+cat ${merged}.vcf | awk '$1 ~ /^#/ {print $0;next} {print $0 | "sort -k1,1 -k2,2n"}' > out_sorted.vcf
+
+# calculate stats
+
+maxdepth=$(grep -oh ";DP=.*;" out_sorted.vcf | cut -d ";" -f 2 | cut -d "="  -f 2 | datamash mean 1 sstdev 1 | awk '{print $1+$2*5}')
+# separate SNPs and INDELs
+vcftools --vcf out_sorted.vcf --keep-only-indels --recode --recode-INFO-all --out p1_sorted-indels.vcf
+vcftools --vcf out_sorted.vcf --remove-indels --recode --recode-INFO-all --out p1_sorted-snps.vcf
+gatk --java-options -Xmx80g VariantFiltration \
+    --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+    --variant p1_sorted-snps.vcf.recode.vcf \
+    --filter-expression "QD < 2.0 || FS > 60.0 || MQ < 45.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0 || DP > 12490.5 "\
+    --filter-name "FAIL" \
+    --output p1_filtered-snps.vcf
+
+
+gatk --java-options -Xmx80g VariantFiltration \
+    --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+    --variant p1_sorted-indels.vcf.recode.vcf \
+    --filter-expression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0" \
+    --filter-name "FAIL" \
+    --output p1_filtered-indels.vcf
