@@ -60,10 +60,10 @@ cat ${merged}.vcf | awk '$1 ~ /^#/ {print $0;next} {print $0 | "sort -k1,1 -k2,2
 
 # calculate stats
 
-maxdepth=$(grep -oh ";DP=.*;" out_sorted.vcf | cut -d ";" -f 2 | cut -d "="  -f 2 | datamash mean 1 sstdev 1 | awk '{print $1+$2*5}')
+maxdepth=$(grep -oh ";DP=.*;" unique_out_sorted.vcf | cut -d ";" -f 2 | cut -d "="  -f 2 | datamash mean 1 sstdev 1 | awk '{print $1+$2*5}')
 # separate SNPs and INDELs
-vcftools --vcf out_sorted.vcf --keep-only-indels --recode --recode-INFO-all --out p1_sorted-indels.vcf
-vcftools --vcf out_sorted.vcf --remove-indels --recode --recode-INFO-all --out p1_sorted-snps.vcf
+vcftools --vcf unique_out_sorted.vcf --keep-only-indels --recode --recode-INFO-all --out p1_sorted-indels.vcf
+vcftools --vcf unique_out_sorted.vcf --remove-indels --recode --recode-INFO-all --out p1_sorted-snps.vcf
 gatk --java-options -Xmx80g VariantFiltration \
     --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
     --variant p1_sorted-snps.vcf.recode.vcf \
