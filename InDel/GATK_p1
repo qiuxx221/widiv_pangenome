@@ -71,6 +71,8 @@ gatk --java-options -Xmx80g VariantFiltration \
     --filter-name "FAIL" \
     --output p1_filtered-snps.vcf
 
+vcftools --vcf p1_filtered-snps.vcf --remove-filtered-all --recode --recode-INFO-all --out p1_filtered-snps_recode_share.vcf
+
 
 gatk --java-options -Xmx80g VariantFiltration \
     --reference /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
@@ -78,3 +80,6 @@ gatk --java-options -Xmx80g VariantFiltration \
     --filter-expression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0" \
     --filter-name "FAIL" \
     --output p1_filtered-indels.vcf
+
+vcftools --vcf p1_filtered-indels.vcf --remove-filtered-all --recode --recode-INFO-all --out p1_filtered-indels_recode_share.vcf
+
