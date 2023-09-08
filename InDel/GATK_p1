@@ -71,6 +71,9 @@ gatk --java-options -Xmx80g VariantFiltration \
     --filter-name "FAIL" \
     --output p1_filtered-snps.vcf
 
+# QD: quality by depth; FS: fisherstrand; MQ:RMSMappingQuality; MQRankSum:MappingQualityRankSumTest; ReadPosRankSum:ReadPosRankSumTest; DP: depth
+
+
 vcftools --vcf p1_filtered-snps.vcf --remove-filtered-all --recode --recode-INFO-all --out p1_filtered-snps_recode_share.vcf
 
 
