@@ -6,10 +6,10 @@ awk -v OFS="\t" '{print $1,$2-1,$2,$0}' DEL_1mb_meta.txt | cut -f 1-3,6- > 1Mb_D
 
 # format gff3 for intersect to see where those deletions are in terms of gene or non-geneic regions
 
-grep -v "#" Zm-B73-REFERENCE-NAM-5.0_Zm00001e.1.gff | cut -d ';' -f 1 | grep -v assembly | cut -f 1,4,5,3,9 | awk ' { t = $2; $2 = $3; $3 = t; print; } ' | awk ' { t = $3; $3 = $4; $4 = t; print; } ' > fmt_gff_bed_intersect.bed
+grep -v "#" Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3 | cut -d ';' -f 1 | grep -v assembly | cut -f 1,4,5,3,9 | awk ' { t = $2; $2 = $3; $3 = t; print; } ' | awk ' { t = $3; $3 = $4; $4 = t; print; } ' | sed 's| |\t|g' > fmt_gff_bed_intersect.bed
 
 # intersect bed from DEL vs gene model, edit the header file and cat files together 
-
+module load bedtools
 bedtools intersect -a 1Mb_DEL_fmt.bed -b fmt_gff_bed_intersect.bed -wa -wb > intersect_del_gene_model.txt
 # check the column count of this one
 cat vcf_header.txt intersect_del_gene_model.txt > header_intersect_del_gene_model.txt
@@ -17,14 +17,17 @@ cat vcf_header.txt intersect_del_gene_model.txt > header_intersect_del_gene_mode
 
 # create an anchor to remove DEL that has intersection with gene model
 awk '{print $1 "_" $2 "_" $3 "_" $4 "_" $5 " " $0}' 1Mb_DEL_fmt.bed  > 1Mb_DEL_fmt_with_anchor.bed
+# there are case where all the flags are identical:
+cut -f 1  1Mb_DEL_fmt_with_anchor.bed | sort | uniq -cd  | cut -f 8 -d " " > identical_anchor_dups 
+
 awk '{print $1 "_" $2 "_" $3 "_" $4 "_" $5 " " $0}' intersect_del_gene_model.txt  > intersect_del_gene_model_with_anchor.bed
 
 
 # count intersected del anchor
-cut -f 1 intersect_del_gene_model_with_anchor.bed | uniq > anchor_intersected_del.txt
+cut -f 1 intersect_del_gene_model_with_anchor.bed | sort|  uniq  > anchor_intersected_del.txt
 
 grep -Fvf anchor_intersected_del.txt 1Mb_DEL_fmt_with_anchor.bed | cut -f 1- > no_intersect_DEL.txt
 
 
 # extracting pan-gene info for B73
-cut -d ',' -f 4,30,31,32 pan_gene_matrix_v3_cyverse.csv | sed 's|_|,|g' | cut -d '_' -f 1,3- > B73_pan_gene_info.txt
+cut -d ',' -f 4,30,31,32 pan_gene_matrix_v3_cyverse.csv  > B73_pan_gene_info.txt
