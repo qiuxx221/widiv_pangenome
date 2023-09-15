@@ -4,8 +4,11 @@
 grep -v "##" widiv_sv_merged_250bp_no_strand.vcf  | sed 's|;|\t|g' | sed 's|SUPP=||g'| sed 's|SVLEN=-||g' | sed 's|SVLEN=||g' | grep SVTYPE=DEL | cut -f 1,2,8,10,11,19-| sed 's|./.:NaN:0:0,0:--:NaN:NaN:NaN:NAN:NAN:NAN|NA|g' | awk '{if ($4 < 1000000 ) {print }}' > DEL_1mb_meta.txt
 
 # below, added pan_del_XX as a unique anchor for count etc. 
-awk -v OFS="\t" '{print $1,$2-1,$2,$0}' DEL_1mb_meta.txt | cut -f 1-3,6- | awk 'BEGIN{OFS=" "; col_a1="pan_del"}{print $0,col_a1;col_a1="pan_del"}' | awk 'BEGIN{OFS=" "; col_a1=1}{print $0,col_a1;col_a1+=1}' | awk 'BEGIN{OFS=" "; col_a1="end"}{print $0,col_a1;col_a1="end"}' | awk '{print $0" "$516"_"$517"_"$518}' | sed 's| |\t|g' > 1Mb_DEL_fmt.bed
+# this command below only extend the breakpoint by 1 
+# awk -v OFS="\t" '{print $1,$2-1,$2,$0}' DEL_1mb_meta.txt | cut -f 1-3,6- | awk 'BEGIN{OFS=" "; col_a1="pan_del"}{print $0,col_a1;col_a1="pan_del"}' | awk 'BEGIN{OFS=" "; col_a1=1}{print $0,col_a1;col_a1+=1}' | awk 'BEGIN{OFS=" "; col_a1="end"}{print $0,col_a1;col_a1="end"}' | awk '{print $0" "$516"_"$517"_"$518}' | sed 's| |\t|g' > 1Mb_DEL_fmt.bed
 
+# change it into padded bed file
+awk -v OFS="\t" '{print $1,$2,$2+$4,$0}' DEL_1mb_meta.txt | cut -f 1-3,6- | awk 'BEGIN{OFS=" "; col_a1="pan_del"}{print $0,col_a1;col_a1="pan_del"}' | awk 'BEGIN{OFS=" "; col_a1=1}{print $0,col_a1;col_a1+=1}' | awk 'BEGIN{OFS=" "; col_a1="end"}{print $0,col_a1;col_a1="end"}' | awk '{print $0" "$516"_"$517"_"$518}' | sed 's| |\t|g' > 1Mb_DEL_fmt_del_size_pad.bed
 
 
 # format gff3 for intersect to see where those deletions are in terms of gene or non-geneic regions
@@ -14,15 +17,52 @@ grep -v "#" Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3 | cut -d ';' -f 1 | grep -
 
 # intersect bed from DEL vs gene model, edit the header file and cat files together 
 module load bedtools
-bedtools intersect -a 1Mb_DEL_fmt.bed -b fmt_gff_bed_intersect.bed -wa -wb > intersect_del_gene_model.txt
-# check the column count of this one
-# cat vcf_header.txt intersect_del_gene_model.txt > header_intersect_del_gene_model.txt
+
+#bedtools intersect -a 1Mb_DEL_fmt.bed -b fmt_gff_bed_intersect.bed -wa -wb > intersect_del_gene_model.txt # this one is about breakpoint falling into the gene
+
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b fmt_gff_bed_intersect.bed -wa -wb > intersect_del_gene_model_padded.txt # this one is about the range has intersection with the gene
 
 
 # create an anchor to remove DEL that has intersection with gene model
-cut -f 519 intersect_del_gene_model.txt | sort | uniq > anchor_intersected_del.txt
+#cut -f 519 intersect_del_gene_model.txt | sort | uniq > anchor_intersected_del.txt
+cut -f 519 intersect_del_gene_model_padded.txt | sort | uniq > anchor_intersected_del_padded.txt
 
-grep -Fvf anchor_intersected_del.txt 1Mb_DEL_fmt.bed | cut -f 1- > no_intersect_DEL.txt
+#grep -Fvf anchor_intersected_del.txt 1Mb_DEL_fmt.bed | cut -f 1- > no_intersect_DEL.txt
+
+grep -Fvf anchor_intersected_del_padded.txt 1Mb_DEL_fmt_del_size_pad.bed | cut -f 1- > no_intersect_DEL_padded.txt
+cut -f 1-5,519 no_intersect_DEL_padded.txt > no_intersect_DEL_padded_stats.txt
+
+
+# deletion encompassing a gene 
+# generate a new bed file that has the end coordinates added using the deletion size
+
+awk -v OFS="\t" '{print $1,$2,$2+$4,$0}' DEL_1mb_meta.txt | cut -f 1-3,6- | awk 'BEGIN{OFS=" "; col_a1="pan_del"}{print $0,col_a1;col_a1="pan_del"}' | awk 'BEGIN{OFS=" "; col_a1=1}{print $0,col_a1;col_a1+=1}' | awk 'BEGIN{OFS=" "; col_a1="end"}{print $0,col_a1;col_a1="end"}' | awk '{print $0" "$516"_"$517"_"$518}' | sed 's| |\t|g' > 1Mb_DEL_fmt_del_size_pad.bed
+
+module load bedtools
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b fmt_gff_bed_intersect.bed -F 1 -wa -wb > intersect_del_gene_model_encompassing.txt
+
+# count how many unique genes are encompassed in a deletion
+
+cut -f 1-5,519,523,524 intersect_del_gene_model_encompassing.txt | grep gene > del_encompassing_gene_stats.txt 
+cut -f 523,524 intersect_del_gene_model_encompassing.txt | grep gene | sort | uniq | cut -f 2 | wc -l 
+
+
+# get all the deletion id that are encompassing gene
+cut -f 6 del_encompassing_gene_stats.txt | sort | uniq > del_id_encompassing_gene.txt
+
+
+# extracting intersected sv that is not encompassing gene
+grep -Fvf del_id_encompassing_gene.txt intersect_del_gene_model_padded.txt > del_intersect_not_encompassing_gene.txt
+
+
+# extracting frequency and size information from this class
+cut -f 1-5,519,523,524 del_intersect_not_encompassing_gene.txt | grep gene > del_intersect_not_encompassing_gene_stats.txt 
+
+
+
+
+
+
 
 
 # extracting pan-gene info for B73
