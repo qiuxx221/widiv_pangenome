@@ -1,0 +1,6 @@
+conda activate apg_toolkits
+# convert gff3 to bed file 
+gff2bed < Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3 > Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3.bed
+
+
+mosdepth -n --fast-mode --by /home/apg/qiuxx221/pan_sv/Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3.bed B73_B73_test B73_B73v5_marked_duplicates.bam_MAPQ_20.bam
