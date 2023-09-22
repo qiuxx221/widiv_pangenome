@@ -2,5 +2,7 @@ conda activate apg_toolkits
 # convert gff3 to bed file 
 gff2bed < Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3 > Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3.bed
 
+cut -f 1-3,8,10 Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3.bed| awk -F '\t' '{print $1,$2,$3,$4 ";"$5}' | cut -f 1-2 -d ";" > mosdepth_B73_gff3.bed
+
 
 mosdepth -n --fast-mode --by /home/apg/qiuxx221/pan_sv/Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.gff3.bed B73_B73_test B73_B73v5_marked_duplicates.bam_MAPQ_20.bam
