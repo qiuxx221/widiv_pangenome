@@ -1,3 +1,3 @@
-python Generate_SpeedSeqAlign_commands.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set1/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set1 -c 8 -m 80 -s /home/hirschc1/qiuxx221/programs/speedseq/| grep -v Error > speedseq_set1_cmd.txt
+python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set1/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set1_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set1_cmd.txt
 
 python2 generate_slurm_speedseq.py 8 speedseq_set1_cmd.txt
