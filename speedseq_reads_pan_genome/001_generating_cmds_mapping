@@ -18,6 +18,19 @@ python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_re
 
 python2 generate_slurm_speedseq.py 8 speedseq_set4_cmd.txt
 
+
+# 5_1 
+python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set5/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set5_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set5_1_cmd.txt
+
+python2 generate_slurm_speedseq.py 8 speedseq_set5_1_cmd.txt
+
+
+python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set6/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set6_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set6_cmd.txt
+
+python2 generate_slurm_speedseq.py 8 speedseq_set6_cmd.txt
+
+
+
 python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set8/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set8_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set8_cmd.txt
 
 python2 generate_slurm_speedseq.py 8 speedseq_set8_cmd.txt
