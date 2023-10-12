@@ -1,0 +1,2 @@
+for i in */*.bam ; do echo "samtools sort "$i" -o "$i"_sorted.bam"; done > sort_bam_cmd.txt
+
