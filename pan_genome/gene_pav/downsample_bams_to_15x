@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=100gb
+#SBATCH -t 90:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o downsampling.out
+#SBATCH -e downsampling.err
+#SBATCH --tmp=300gb
+
+module load samtools
+
+cd ~/Widiv_pangenome/pan_gene_pav/bams
+
+
+samtools view -s 0.4729 -b B73_B73v5_marked_duplicates.bam_MAPQ_20.bam > B73_B73_15x.sam; samtools view -bS B73_B73_15x.sam  > B73_B73_MAPQ20_15x.bam; rm B73_B73_15x.sam 
+samtools view -s 0.9699 -b B97_B73v5_marked_duplicates.bam_MAPQ_20.bam > B97_B73_15x.sam; samtools view -bS B97_B73_15x.sam  > B97_B73_MAPQ20_15x.bam; rm B97_B73_15x.sam 
+samtools view -s 0.9097 -b MS71_B73v5_marked_duplicates.bam_MAPQ_20.bam > MS71_B73_15x.sam; samtools view -bS MS71_B73_15x.sam  > MS71_B73_MAPQ20_15x.bam; rm MS71_B73_15x.sam 
+samtools view -s 0.5311 -b Oh43_B73v5_marked_duplicates.bam_MAPQ_20.bam > Oh43_B73_15x.sam; samtools view -bS Oh43_B73_15x.sam  > Oh43_B73_MAPQ20_15x.bam; rm Oh43_B73_15x.sam 
+
