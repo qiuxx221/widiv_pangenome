@@ -58,3 +58,11 @@ python2 generate_slurm_speedseq.py 8 speedseq_set9_cmd.txt
 python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set1011/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/set1011_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set1011_cmd.txt
 
 python2 generate_slurm_speedseq.py 8 speedseq_set1011_cmd.txt
+
+
+
+# set biomap
+# make sure add _1_R1 or _1_R2 in the reads name to make it work
+python Generate_SpeedSeqAlign_commands_sam2bam.py -f /home/apg/qiuxx221/widiv_reads/Widiv_clean_reads_set_biomap/ -k sample_fastq_key.txt -r reference_path_B73v5_pan_genome.txt -o /scratch.global/qiuxx221/speedseq/setbiomap_sam_bam -c 8 -m 80 -s /common/software/install/migrated/bwa/0.7.17.CentOS7/ | grep -v Error > speedseq_set_biomap_cmd.txt
+
+python2 generate_slurm_speedseq.py 8 speedseq_set_biomap_cmd.txt
