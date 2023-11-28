@@ -1,0 +1,1 @@
+python test_merge_cmd.py -s key_fastq_test.txt -o merged_bams/ -r reference_path_B73v5_pan_genome.txt -b set1234567891011/ > merged_bams_cmds_830.txt
