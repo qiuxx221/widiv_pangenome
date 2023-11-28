@@ -1,0 +1,14 @@
+# the goal is to check what % of the gene is tuncated vs just because assembly is not full
+# all the final gff3s are located: /home/apg/qiuxx221/gff3
+grep gene top10_uniq_plant_contigs_id1e5_short_header.fa.masked_partial.gff3_stats.gff3 > plant_hit_partial_gene_position.txt
+grep gene no_hit_partial_all.gff3_stats.gff3 > no_hit_partial_gene_position.txt
+
+# all the final complete gene model 
+grep gene top10_uniq_plant_contigs_id1e5_short_header.fa.masked_complete.gff3_stats.gff3 > plant_hit_complete_gene_position.txt
+grep gene no_hit_complete.gff3_stats.gff3_stats.gff3 > no_hit_complete_gene_position.txt
+
+# going to use the repeat masking stats file to get the size of the contigs and merge two files into one
+
+# repeat masking stats can be found /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/no_hit_masked_all.fasta.stats and
+# /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/top10_uniq_plant_contigs_id1e5_short_header.fa.masked.stats
+
