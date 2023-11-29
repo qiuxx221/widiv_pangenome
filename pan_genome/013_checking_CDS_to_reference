@@ -5,7 +5,7 @@ module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query all_pan_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out all_pan_gene_content_blastn.txt
 
 
-awk -F"\t" '$1=$1' OFS="\t" all_pan_gene_content_blastn.txt | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > gene_content_fasta_blast_9085hit.out
+awk -F"\t" '$1=$1' OFS="\t" all_pan_gene_content_blastn.txt | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > all_pan_gene_content_fasta_blast_9085hit.out
 
 ########
 
@@ -21,10 +21,16 @@ bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filterin
 module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query plant_partial_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out plant_partial_gene_content_blastn.txt
 
-# no hit partial 
-bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed no_hit_complete_gene_position.txt > no_hit_complete_content.fasta
+# no hit complete 
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed no_hit_complete.gff3_stats.gff3 > no_hit_complete_content.fasta
 module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_complete_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_complete_gene_content_blastn.txt
+
+# no hit partial 
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed no_hit_partial_all.gff3_stats.gff3 > no_hit_partial_content.fasta
+module load ncbi_toolkit
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_partial_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_partial_gene_content_blastn.txt
+
 
 # counting how many CDS hits passed the cutoff
 for i in *_blastn.txt; do awk -F"\t" '$1=$1' OFS="\t" "$i" | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > contig_id_"$i"_9085hit.out
