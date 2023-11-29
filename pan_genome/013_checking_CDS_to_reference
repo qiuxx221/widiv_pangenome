@@ -26,5 +26,8 @@ bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filterin
 module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_complete_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_complete_gene_content_blastn.txt
 
-
+# counting how many CDS hits passed the cutoff
 for i in *_blastn.txt; do awk -F"\t" '$1=$1' OFS="\t" "$i" | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > contig_id_"$i"_9085hit.out
+
+# counting how many gene models included at least 1 CDS meeting this cutoff 
+for i in *.out ; do cut -f 1 -d ":" $i | sort | uniq | wc -l ; done
