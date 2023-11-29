@@ -1,0 +1,16 @@
+~/Widiv_pangenome/pan_genome/pan_contigs
+
+grep ">"  top10_uniq_plant_contigs_id1e5.fasta | sed 's|>||g' | cut -f 1-2 -d "_" > short_plant_hit_id.txt
+grep ">"  top10_uniq_plant_contigs_id1e5.fasta | sed 's|>||g'> full_plant_hit_id.txt
+
+paste short_plant_hit_id.txt full_plant_hit_id.txt > plant_hit_info_extract.txt
+
+grep ">"  pan_contigs_no_hit.fasta | sed 's|>||g' | cut -f 1-2 -d "_" > short_no_hit_id.txt
+grep ">"  pan_contigs_no_hit.fasta | sed 's|>||g'> full_no_hit_id.txt
+
+paste short_no_hit_id.txt full_no_hit_id.txt > no_hit_info_extract.txt
+
+cat no_hit_info_extract.txt plant_hit_info_extract.txt > all_pan_contig_info.txt
+
+~/gff3
+cat top10_uniq_plant_contigs_id1e5_short_header.fa.masked_complete.gff3_stats.gff3 top10_uniq_plant_contigs_id1e5_short_header.fa.masked_partial.gff3_stats.gff3 no_hit_partial_all.gff3_stats.gff3 no_hit_complete.gff3_stats.gff3 | grep gene | cut -f 1,4,5,9> all_pan_gene_mosdepth.bed
