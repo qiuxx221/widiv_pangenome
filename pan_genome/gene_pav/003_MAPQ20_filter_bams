@@ -1,0 +1,3 @@
+for i in *_sorted.bam; do
+  echo "samtools view -h -q 20 $i | samtools view -bS > MAPQ20/MAPQ_20_"$i"; samtools index MAPQ20/MAPQ_20_"$i" "
+done > MAPQ20_filter_cmd
