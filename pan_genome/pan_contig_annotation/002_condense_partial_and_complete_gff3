@@ -1,1 +1,13 @@
+# for all the genes in the gene model
 
+for i in *.gff3; do 
+grep gene $i > gene_$i
+done 
+
+module load bedtools 
+# intersecting plant contig complete and partial gene models with strand direction requirement 
+bedtools intersect -a gene_plant_hit_masked_complete_hints.gff3 -b gene_plant_hit_masked_partial_hints.gff3 -wa -wb -s > gene_plant_hit_intersect_complete_partial.bed
+## there is a total of 2948 hits
+# intersecting no hit contig complete and partial gene models with strand direction requirement 
+bedtools intersect -a gene_all_no_hit_masked_complete_hints.gff3 -b gene_all_no_hit_masked_partial_hints.gff3 -wa -wb -s > gene_no_hit_intersect_complete_partial.bed
+## these a total of 3069 hits 
