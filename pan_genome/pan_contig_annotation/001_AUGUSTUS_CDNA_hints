@@ -1,1 +1,21 @@
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation
+conda activate apg_toolkits
+module load parallel/20190122
 
+blat -minIdentity=92 pan_contigs_all_short_header.fa /home/hirschc1/qiuxx221/widiv/de_novo/NAM_CDS/NAM_CDS.fasta NAM_CDNA_to_pan_contigs.psl
+/home/apg/qiuxx221/.conda/envs/apg_toolkits/scripts/blat2hints.pl --in=NAM_CDNA_to_pan_contigs.psl -out=NAM_cds_pan_contigs_hints.M.gff
+
+parallel --tmpdir /scratch.global/qiuxx221/ --jobs 4 < no_split_augustus_hints_cmd.txt
+
+# no_split_augustus_hints_cmd.txt contents:
+augustus --species=maize --strand=both --start=on --stop=on --genemodel=complete --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg no_hit_masked_all.fasta > /home/apg/qiuxx221/gff3/all_no_hit_masked_complete_hints.gff3
+augustus --species=maize --strand=both --start=on --stop=on --genemodel=partial --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg no_hit_masked_all.fasta > /home/apg/qiuxx221/gff3/all_no_hit_masked_partial_hints.gff3
+augustus --species=maize --strand=both --start=on --stop=on --genemodel=complete --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg top10_uniq_plant_contigs_id1e5_short_header.fa.masked > /home/apg/qiuxx221/gff3/plant_hit_masked_complete_hints.gff3
+augustus --species=maize --strand=both --start=on --stop=on --genemodel=partial --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg  top10_uniq_plant_contigs_id1e5_short_header.fa.masked> /home/apg/qiuxx221/gff3/plant_hit_masked_partial_hints.gff3
+
+# extracting aa sequence for GO annotation: 
+cd /home/apg/qiuxx221/gff3/cds_hints_annotation_test
+perl getAnnoFasta.pl plant_hit_masked_complete_hints.gff3
+perl getAnnoFasta.pl plant_hit_masked_partial_hints.gff3
+perl getAnnoFasta.pl all_no_hit_masked_complete_hints.gff3
+perl getAnnoFasta.pl all_no_hit_masked_partial_hints.gff3
