@@ -13,9 +13,27 @@ augustus --species=maize --strand=both --start=on --stop=on --genemodel=partial 
 augustus --species=maize --strand=both --start=on --stop=on --genemodel=complete --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg top10_uniq_plant_contigs_id1e5_short_header.fa.masked > /home/apg/qiuxx221/gff3/plant_hit_masked_complete_hints.gff3
 augustus --species=maize --strand=both --start=on --stop=on --genemodel=partial --gff3=on --protein=on --hintsfile=NAM_cds_pan_contigs_hints.M.gff --extrinsicCfgFile=/home/apg/qiuxx221/.conda/envs/apg_toolkits/config/extrinsic/extrinsic.ME.cfg  top10_uniq_plant_contigs_id1e5_short_header.fa.masked> /home/apg/qiuxx221/gff3/plant_hit_masked_partial_hints.gff3
 
+
+# renaming all the transcript by each group
+sed 's|=g|=no_hit_complete_hints_g|' all_no_hit_masked_complete_hints.gff3 | grep -v "#" |sed 's|=g|=no_hit_complete_hints_g|' > rename_transcript_id_all_no_hit_masked_complete_hints.gff3
+sed 's|=g|=no_hit_complete_hints_g|' all_no_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=no_hit_partial_hints_g|' > rename_transcript_id_all_no_hit_masked_partial_hints.gff3
+
+sed 's|=g|=no_hit_complete_hints_g|' plant_hit_masked_complete_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_complete_hints_g|' > rename_transcript_id_plant_hit_masked_complete_hints.gff3
+sed 's|=g|=no_hit_complete_hints_g|' plant_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_partial_hints_g|' > rename_transcript_id_plant_hit_masked_partial_hints.gff3
+
+
+
+
 # extracting aa sequence for GO annotation: 
 cd /home/apg/qiuxx221/gff3/cds_hints_annotation_test
 perl getAnnoFasta.pl plant_hit_masked_complete_hints.gff3
 perl getAnnoFasta.pl plant_hit_masked_partial_hints.gff3
 perl getAnnoFasta.pl all_no_hit_masked_complete_hints.gff3
 perl getAnnoFasta.pl all_no_hit_masked_partial_hints.gff3
+
+
+# change the protein sequence name 
+sed 's|>g|>plant_hit_complete_hints_g|g' plant_hit_masked_complete_hints3.aa > rename_id_plant_hit_masked_complete_hints.aa
+sed 's|>g|>plant_hit_partial_hints_g|g' plant_hit_masked_partial_hints3.aa > rename_id_plant_hit_masked_partial_hints.aa
+sed 's|>g|>no_hit_complete_hints_g|g' all_no_hit_masked_complete_hints3.aa > rename_id_plant_hit_masked_complete_hints.aa
+sed 's|>g|>no_hit_partial_hints_g|g' all_no_hit_masked_partial_hints3.aa > rename_id_plant_hit_masked_partial_hints.aa
