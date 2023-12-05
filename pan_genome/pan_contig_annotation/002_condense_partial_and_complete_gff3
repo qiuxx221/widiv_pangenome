@@ -6,23 +6,23 @@ done
 
 module load bedtools 
 # intersecting plant contig complete and partial gene models with strand direction requirement 
-bedtools intersect -a gene_plant_hit_masked_complete_hints.gff3 -b gene_plant_hit_masked_partial_hints.gff3 -wa -wb -s > gene_plant_hit_intersect_complete_partial.bed
+bedtools intersect -a gene_rename_transcript_id_plant_hit_masked_complete_hints.gff3 -b gene_rename_transcript_id_plant_hit_masked_partial_hints.gff3 -wa -wb -s > gene_plant_hit_intersect_complete_partial.bed
 ## there is a total of 2948 hits
 # intersecting no hit contig complete and partial gene models with strand direction requirement 
-bedtools intersect -a gene_all_no_hit_masked_complete_hints.gff3 -b gene_all_no_hit_masked_partial_hints.gff3 -wa -wb -s > gene_no_hit_intersect_complete_partial.bed
+bedtools intersect -a gene_rename_transcript_id_all_no_hit_masked_complete_hints.gff3 -b gene_rename_transcript_id_all_no_hit_masked_partial_hints.gff3 -wa -wb -s > gene_no_hit_intersect_complete_partial.bed
 ## these a total of 3494 hits 
 
 
 
 ## find out lines with no overlap as the base using -v flag (Only report those entries in A that have no overlap in B) this 
 
-bedtools intersect -a gene_plant_hit_masked_complete_hints.gff3 -b gene_plant_hit_masked_partial_hints.gff3 -v -s > keep_no_overlap_gene_plant_hit_masked_complete_hints.gff3 # 340 records were saved 
+bedtools intersect -a gene_rename_transcript_id_plant_hit_masked_complete_hints.gff3 -b gene_rename_transcript_id_plant_hit_masked_partial_hints.gff3 -v -s > keep_no_overlap_gene_plant_hit_masked_complete_hints.gff3 # 340 records were saved 
 
-bedtools intersect -a gene_plant_hit_masked_partial_hints.gff3 -b gene_plant_hit_masked_complete_hints.gff3  -v -s > keep_no_overlap_gene_plant_hit_masked_partial_hints.gff3 # 10792 records were saved 
+bedtools intersect -a gene_rename_transcript_id_plant_hit_masked_partial_hints.gff3 -b gene_rename_transcript_id_plant_hit_masked_complete_hints.gff3  -v -s > keep_no_overlap_gene_plant_hit_masked_partial_hints.gff3 # 10792 records were saved 
 
 # those two added up correctly with the total number of model before finding overlaps
  
-bedtools intersect -a gene_all_no_hit_masked_complete_hints.gff3 -b gene_all_no_hit_masked_partial_hints.gff3  -v -s > keep_no_overlap_gene_no_hit_intersect_masked_complete_hints.gff3 # 539 saved
+bedtools intersect -a gene_rename_transcript_id_all_no_hit_masked_complete_hints.gff3 -b gene_rename_transcript_id_all_no_hit_masked_partial_hints.gff3  -v -s > keep_no_overlap_gene_no_hit_intersect_masked_complete_hints.gff3 # 539 saved
 
-bedtools intersect -a gene_all_no_hit_masked_partial_hints.gff3 -b gene_all_no_hit_masked_complete_hints.gff3 -v -s > keep_no_overlap_gene_no_hit_intersect_masked_partial_hints.gff3  # 26144 saved
+bedtools intersect -a gene_rename_transcript_id_all_no_hit_masked_partial_hints.gff3 -b gene_rename_transcript_id_all_no_hit_masked_complete_hints.gff3 -v -s > keep_no_overlap_gene_no_hit_intersect_masked_partial_hints.gff3  # 26144 saved
 
