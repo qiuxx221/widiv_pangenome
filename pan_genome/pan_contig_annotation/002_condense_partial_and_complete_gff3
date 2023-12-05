@@ -1,7 +1,7 @@
 # for all the genes in the gene model
 
 for i in *.gff3; do 
-grep gene $i > gene_$i
+grep -v "#" $i | grep gene > gene_$i
 done 
 
 module load bedtools 
