@@ -16,10 +16,10 @@ augustus --species=maize --strand=both --start=on --stop=on --genemodel=partial 
 
 # renaming all the transcript by each group
 sed 's|=g|=no_hit_complete_hints_g|' all_no_hit_masked_complete_hints.gff3 | grep -v "#" |sed 's|=g|=no_hit_complete_hints_g|' > rename_transcript_id_all_no_hit_masked_complete_hints.gff3
-sed 's|=g|=no_hit_complete_hints_g|' all_no_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=no_hit_partial_hints_g|' > rename_transcript_id_all_no_hit_masked_partial_hints.gff3
+sed 's|=g|=no_hit_partial_hints_g|' all_no_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=no_hit_partial_hints_g|' > rename_transcript_id_all_no_hit_masked_partial_hints.gff3
 
-sed 's|=g|=no_hit_complete_hints_g|' plant_hit_masked_complete_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_complete_hints_g|' > rename_transcript_id_plant_hit_masked_complete_hints.gff3
-sed 's|=g|=no_hit_complete_hints_g|' plant_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_partial_hints_g|' > rename_transcript_id_plant_hit_masked_partial_hints.gff3
+sed 's|=g|=plant_hit_complete_hints_g|' plant_hit_masked_complete_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_complete_hints_g|' > rename_transcript_id_plant_hit_masked_complete_hints.gff3
+sed 's|=g|=plant_hit_partial_hints_g|' plant_hit_masked_partial_hints.gff3 | grep -v "#" |sed 's|=g|=plant_hit_partial_hints_g|' > rename_transcript_id_plant_hit_masked_partial_hints.gff3
 
 
 
