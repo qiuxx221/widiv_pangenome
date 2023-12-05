@@ -1,0 +1,18 @@
+# intersect those two lists again and remove 
+bedtools intersect -a no_hit_complete_list_from_overlap_for_extraction.txt -b no_hit_partial_list_from_overlap_for_extraction.txt -wa -wb -s > r2_intersect_no_hit_complete_partial.bed
+
+bedtools intersect -a plant_hit_complete_list_from_overlap_for_extraction.txt -b plant_hit_partial_list_from_overlap_for_extraction.txt -wa -wb -s > r2_intersect_plant_hit_complete_partial.bed
+
+
+# getting non_overlap from the R1 intersect
+
+bedtools intersect -a plant_hit_complete_list_from_overlap_for_extraction.txt -b plant_hit_partial_list_from_overlap_for_extraction.txt -v -s > keep_no_overlap_R1_gene_plant_hit_masked_complete_hints.gff3 # 340 records were saved 
+bedtools intersect -a plant_hit_partial_list_from_overlap_for_extraction.txt -b plant_hit_complete_list_from_overlap_for_extraction.txt  -v -s > keep_no_overlap_R1_gene_plant_hit_masked_partial_hints.gff3 # 10792 records were saved 
+
+
+
+
+bedtools intersect -a no_hit_complete_list_from_overlap_for_extraction.txt -b no_hit_partial_list_from_overlap_for_extraction.txt -v -s > keep_no_overlap_R1_gene_no_hit_masked_complete_hints.gff3 # 340 records were saved 
+bedtools intersect -a no_hit_partial_list_from_overlap_for_extraction.txt -b no_hit_complete_list_from_overlap_for_extraction.txt  -v -s > keep_no_overlap_R1_gene_no_hit_masked_partial_hints.gff3 # 10792 records were saved 
+
+cat keep_no_overlap_* *R2_extraction.txt > all_contigs_annotation.gff3 
