@@ -35,5 +35,5 @@ perl getAnnoFasta.pl all_no_hit_masked_partial_hints.gff3
 # change the protein sequence name 
 sed 's|>g|>plant_hit_complete_hints_g|g' plant_hit_masked_complete_hints3.aa > rename_id_plant_hit_masked_complete_hints.aa
 sed 's|>g|>plant_hit_partial_hints_g|g' plant_hit_masked_partial_hints3.aa > rename_id_plant_hit_masked_partial_hints.aa
-sed 's|>g|>no_hit_complete_hints_g|g' all_no_hit_masked_complete_hints3.aa > rename_id_plant_hit_masked_complete_hints.aa
-sed 's|>g|>no_hit_partial_hints_g|g' all_no_hit_masked_partial_hints3.aa > rename_id_plant_hit_masked_partial_hints.aa
+sed 's|>g|>no_hit_complete_hints_g|g' all_no_hit_masked_complete_hints3.aa > rename_id_no_hit_masked_complete_hints.aa
+sed 's|>g|>no_hit_partial_hints_g|g' all_no_hit_masked_partial_hints3.aa > rename_id_no_hit_masked_partial_hints.aa
