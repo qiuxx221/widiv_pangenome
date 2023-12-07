@@ -1,0 +1,35 @@
+# all the gff3s used to finalize the final gff3s were renamed and stored here
+/home/apg/qiuxx221/gff3/cds_hints_annotation_test/gff3
+
+# the gff classifer was added to each g in the id conlumn, for example, all the transcript becomes Parent=no_hit_complete_hints_g9.t1 rather than g9.t1
+
+# a final full gff3 was made via 
+cat rename_transcript_id_* > all_pan_contigs_renamed_output.gff3
+
+# condensed gff3 was stored in ~/gff3/cds_hints_annotation_test/NR_checked
+
+# all_pan_contig_annotation.gff3 is the file from all the intersect and has 126 rows still has overlap and it has been manually curated to be a set of 44110 gene models that has no overlap to each other
+the list list_to_remove.txt was used to remove the duplicates. when there are overlaps, pick longer ones, when identical and even by partial or complete, picked the higher score
+
+# the full complete gff3 is extracted using the transcript id as the anchor 
+# need to add a .t to each of the contig id to extract related information
+cut -f 9 manual_cleaned_all_pan_contigs.gff3 | cut -f 2 -d "=" | sed 's/$/.t/' > gff3_feature_extraction.txt
+
+# extracting all features
+
+grep -Ff gff3_feature_extraction.txt /home/apg/qiuxx221/gff3/cds_hints_annotation_test/gff3/all_pan_contigs_renamed_output.gff3 > pan_contig_extracted_gene_feature.gff3
+
+cat manual_cleaned_all_pan_contigs.gff3 pan_contig_extracted_gene_feature.gff3 | sort > 44110_final_contigs.gff3
+
+# randomly spot checking to see if any information is missed, looks good
+# extracting cds fasta sequence and blast against reference genome  ~/gff3/cds_hints_annotation_test/NR_checked
+grep CDS 44110_final_contigs.gff3 > 44110_gene_cds.gff3
+
+# all the contigs sequences
+cd /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation 
+
+cat pan_contigs_no_hit_short_header.fasta top10_uniq_plant_contigs_id1e5_short_header.fasta > pan_contig_no_scaf_no_chr_short_name.fasta
+# extracting fasta for the CDS
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contig_no_scaf_no_chr_short_name.fasta -bed ~/gff3/cds_hints_annotation_test/NR_checked/44110_gene_cds.gff3 > 44110_gene_model_cds.fasta
+
+  
