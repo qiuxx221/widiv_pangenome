@@ -47,22 +47,23 @@ grep no_hit_complete manual_cleaned_all_pan_contigs.gff3 > no_hit_gene_complete.
 grep plant_hit_complete manual_cleaned_all_pan_contigs.gff3 > plant_hit_gene_complete.gff3
 grep plant_hit_partial manual_cleaned_all_pan_contigs.gff3 > plant_hit_gene_partial.gff3
 
-bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/plant_hit_complete.gff3 > plant_complete_cds_content.fasta
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/plant_hit_gene_complete.gff3 > plant_complete_gene_content.fasta
 module load ncbi_toolkit
-blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query plant_complete_cds_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out plant_complete_gene_cds_content_blastn.txt
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query plant_complete_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out plant_complete_gene_content_blastn.txt
 
 # plant hit partial
-bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/plant_hit_partial.gff3 > plant_partial_cds_content.fasta
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/plant_hit_gene_partial.gff3 > plant_partial_gene_content.fasta
 module load ncbi_toolkit
-blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query plant_partial_cds_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out plant_partial_gene_cds_content_blastn.txt
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query plant_partial_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out plant_partial_gene_content_blastn.txt
 
 # no hit complete
-bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/no_hit_complete.gff3 > no_hit_complete_cds_content.fasta
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/no_hit_gene_complete.gff3 > no_hit_complete_gene_content.fasta
 module load ncbi_toolkit
-blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_complete_cds_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_complete_gene_cds_content_blastn.txt
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_complete_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_complete_gene_content_blastn.txt
 
 # no hit partial
-bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/no_hit_partial.gff3 > no_hit_partial_cds_content.fasta
+bedtools getfasta -fi /home/hirschc1/qiuxx221/widiv/de_novo/pan_contigs_filtering/pan_contigs_annotation/pan_contigs_all_short_header.fa -bed /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/no_hit_gene_partial.gff3 > no_hit_partial_gene_content.fasta
 module load ncbi_toolkit
-blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_partial_cds_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_partial_gene_cds_content_blastn.txt
+blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query no_hit_partial_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out no_hit_partial_gene_content_blastn.txt
+
 
