@@ -1,0 +1,19 @@
+cd /scratch.global/qiuxx221/speedseq/merged_bams/MAPQ20
+
+for i in *.bam; do
+  echo " mkdir /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv/"$i" ; mosdepth -n --fast-mode --by /home/apg/qiuxx221/gff3/44110_pan_contig_B73_gene_mosdepth.bed /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv/"$i" $i "; 
+done > mosdepth_cmd_all.txt
+
+
+# rename all the files
+rename MAPQ_20_ '' *.gz
+rename _B73v5_pan_genome.bam_sorted.bam.regions '' *.gz
+
+gunzip *.gz 
+
+ls *.bed > file_name.txt
+
+while read -r f
+do
+    sed "s|^|$f |" "$f"
+done < file_name.txt | sed 's|.bed||g' > merge_15x.txt
