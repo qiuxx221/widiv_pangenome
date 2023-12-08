@@ -5,7 +5,7 @@ module load ncbi_toolkit
 blastn -db /home/hirschc1/qiuxx221//widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query all_pan_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out all_pan_gene_content_blastn.txt
 
 
-awk -F"\t" '$1=$1' OFS="\t" all_pan_gene_content_blastn.txt | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > all_pan_gene_content_fasta_blast_9085hit.out
+awk -F"\t" '$1=$1' OFS="\t" 44110_pan_gene_cds_blastn.txt | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > all_pan_gene_content_fasta_blast_9085hit.out
 
 ########
 
