@@ -1,0 +1,31 @@
+#!/bin/bash
+#SBATCH --account=msistaff
+#SBATCH -p ag2tb,a100-4,agsmall
+#SBATCH -N 1
+#SBATCH -n 12
+#SBATCH -t 20:00:00
+#SBATCH --mem=120gb
+#SBATCH --tmp=400gb
+#SBATCH -J test_merge
+#SBATCH -o 2pg_merge.o%j
+#SBATCH -e 2pg_merge.e%j
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH --mail-type=ALL
+
+cd /scratch.global/qiuxx221/speedseq
+module load samtools
+
+samtools merge merged_bams/Tr_B73v5_pan_genome.bam set1234567891011/r1372_FDPL190729885-1a_HTF2GDSXX_L1_B73v5_pan_genome/r1372_FDPL190729885-1a_HTF2GDSXX_L1_B73v5_pan_genome.bam \
+set1234567891011/GH17_1372_DSW62536-V_HL5FLCCXY_L1_B73v5_pan_genome/GH17_1372_DSW62536-V_HL5FLCCXY_L1_B73v5_pan_genome.bam   && samtools index merged_bams/Tr_B73v5_pan_genome.bam && echo "merged_bams/Tr_B73v5_pan_genome.bam MERGE SUCCESSFUL"
+
+samtools merge merged_bams/PHK93_B73v5_pan_genome.bam set1234567891011/GH17_1358_DSW62535-V_HL5FLCCXY_L1_B73v5_pan_genome/GH17_1358_DSW62535-V_HL5FLCCXY_L1_B73v5_pan_genome.bam \
+GH17_1358_DSW62535-V_HL5FLCCXY_L1_B73v5_pan_genome/GH17_1358_DSW62535-V_HL5FLCCXY_L1_B73v5_pan_genome.bam   && samtools index merged_bams/PHK93_B73v5_pan_genome.bam && echo "merged_bams/Tr_B73v5_pan_genome.bam MERGE SUCCESSFUL"
+
+cd merged_bams/
+
+samtools sort Tr_B73v5_pan_genome.bam -o Tr_B73v5_pan_genome.bam_sorted.bam ; samtools index Tr_B73v5_pan_genome.bam_sorted.bam 
+samtools sort PHK93_B73v5_pan_genome.bam -o PHK93_B73v5_pan_genome.bam_sorted.bam ; samtools index PHK93_B73v5_pan_genome.bam_sorted.bam 
+
+samtools view -h -q 20 Tr_B73v5_pan_genome.bam_sorted.bam | samtools view -bS > MAPQ20/MAPQ_20_Tr_B73v5_pan_genome.bam_sorted.bam; samtools index MAPQ20/MAPQ_20_Tr_B73v5_pan_genome.bam_sorted.bam 
+samtools view -h -q 20 PHK93_B73v5_pan_genome.bam_sorted.bam | samtools view -bS > MAPQ20/MAPQ_20_PHK93_B73v5_pan_genome.bam_sorted.bam; samtools index MAPQ20/MAPQ_20_PHK93_B73v5_pan_genome.bam_sorted.bam 
+
