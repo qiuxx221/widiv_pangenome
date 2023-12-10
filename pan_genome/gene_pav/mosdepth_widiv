@@ -15,12 +15,12 @@ gunzip *.gz
 # make files for each coverage 
 cd /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/widiv_coverage
 
-while read p; do
-  echo "mv $i coverage_15x"
+while read i; do
+  echo "mv $i.bed coverage_15x"
 done < /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/widiv_coverage/25_below.txt > mv_15x_files.txt
 
-while read p; do
-  echo "mv $i coverage_30x"
+while read i; do
+  echo "mv $i.bed coverage_30x"
 done < /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/widiv_coverage/25_and_above.txt > mv_30x_files.txt
 
 cd coverage_15x
