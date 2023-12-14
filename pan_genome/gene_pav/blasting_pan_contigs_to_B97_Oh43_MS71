@@ -70,3 +70,10 @@ scontrol show job $SLURM_JOB_ID
 
 
 
+awk -F"\t" '$1=$1' OFS="\t" pan_contigs_MS71.out | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > pan_contigs_to_Ms71_qcov_no_max_target_9085hit.out
+awk -F"\t" '$1=$1' OFS="\t" pan_contigs_Oh43.out | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > pan_contigs_to_Oh43_qcov_no_max_target_9085hit.out
+awk -F"\t" '$1=$1' OFS="\t" pan_contigs_B97.out | awk '{ if (($3>=90) && ($14 >=85 )){print}}' | cut -f 1 | sort | uniq > pan_contigs_to_B97_qcov_no_max_target_9085hit.out
+
+
+
+
