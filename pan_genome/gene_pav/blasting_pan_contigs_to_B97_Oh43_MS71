@@ -7,6 +7,7 @@
 /home/apg/qiuxx221/reference_genomes/Zm-Oh43-REFERENCE-NAM-1.0.fa
 
 
+/home/apg/qiuxx221/gff3/extracted_fasta/all_pan_gene_content.fasta
 
 
 
@@ -37,3 +38,35 @@ blastn -db /home/apg/qiuxx221/reference_genomes/Zm-Ms71-REFERENCE-NAM-1.0.fa -qu
 blastn -db /home/apg/qiuxx221/reference_genomes/Zm-B97-REFERENCE-NAM-1.0.fa -query /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_no_chr_scaf_full_contig_name.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/pan_contigs_B97.out
 FIL
 scontrol show job $SLURM_JOB_ID
+
+
+
+
+
+# blasting gene sequence to the NAM genomes
+
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=100gb
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o blastcontigs_NAM_gene_content.out
+#SBATCH -e blastcontigs_NAM_gene_content.err
+#SBATCH --tmp=100gb
+
+module load ncbi_toolkit
+
+cd /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/benchmark_pan_contigs
+module load parallel
+parallel -j 3 --joblog blastn_gene_seq.log --workdir $PWD <<FIL
+blastn -db /home/apg/qiuxx221/reference_genomes/Zm-Oh43-REFERENCE-NAM-1.0.fa -query /home/apg/qiuxx221/gff3/extracted_fasta/all_pan_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/pan_contigs_gene_content_Oh43.out
+blastn -db /home/apg/qiuxx221/reference_genomes/Zm-Ms71-REFERENCE-NAM-1.0.fa -query /home/apg/qiuxx221/gff3/extracted_fasta/all_pan_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/pan_contigs_gene_content_MS71.out
+blastn -db /home/apg/qiuxx221/reference_genomes/Zm-B97-REFERENCE-NAM-1.0.fa -query /home/apg/qiuxx221/gff3/extracted_fasta/all_pan_gene_content.fasta -perc_identity 75 -outfmt "6 std qcovs qcovhsp" -out /scratch.global/qiuxx221/pan_contigs_gene_content_B97.out
+FIL
+scontrol show job $SLURM_JOB_ID
+
+
+
