@@ -1,0 +1,18 @@
+# sv bed file  
+/home/apg/qiuxx221/pan_sv/1Mb_DEL_fmt_del_size_pad.bed
+
+#Crossmap SNPs 
+CrossMap.py vcf /home/hirschc1/qiuxx221/chain/B73_RefGen_v4_to_Zm-B73-REFERENCE-NAM-5.0.chain  /home/hirschc1/oconnorc/indel_call_files/freebayes_output/WiDiv509_B73v4_allchr_SNPS_maxmiss0.10.recode.vcf.gz /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta lift_v4_v5_filtered_snp.vcf
+
+/home/hirschc1/oconnorc/indel_call_files/freebayes_output/WiDiv509_B73v4_allchr_SNPS_maxmiss0.10.recode.vcf.gz
+
+
+
+# identify snps falls into deletion boundary 
+tail -n +2 /home/hirschc1/qiuxx221/lift_v4_v5.vcf  | awk '{print $1"\t"$2"\t"$2}' > /home/apg/qiuxx221/pan_sv/sv_snp_ld/b73_snp_vcf.bed
+
+
+module load bedtools
+sed 's|chr||g' 1Mb_DEL_fmt_del_size_pad.bed > rename_chr_1_mb_deletion_padded.bed
+cut -f 1-3 rename_chr_1_mb_deletion_padded.bed > rename_chr_1_mb_deletion_short.bed
+bedtools intersect -a b73_snp_vcf.bed -b rename_chr_1_mb_deletion_short.bed -v -wa | cut -f 1-2 > Widiv_509_v5_SNPs_notinDELs.txt
