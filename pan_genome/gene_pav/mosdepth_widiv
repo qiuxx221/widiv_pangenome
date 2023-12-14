@@ -59,3 +59,13 @@ do
     sed "s|^|$f\t|" "$f"
 done < file_name.txt | sed 's|.bed||g' > merge_30x.txt
 
+
+########## with each base coverage
+cd /scratch.global/qiuxx221/speedseq/merged_bams/MAPQ20
+for i in *.bam; do
+  echo " mkdir /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv_base_coverage/"$i" ; mosdepth --fast-mode --by /home/apg/qiuxx221/gff3/44110_pan_contig_B73_gene_mosdepth.bed /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv_base_coverage/"$i" $i "; 
+done > /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv_base_coverage/mosdepth_cmd_all.txt
+
+cd /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/mosdepth_widiv_base_coverage/
+
+
