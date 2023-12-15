@@ -1,1 +1,2 @@
-coverageBed -a /scratch.global/qiuxx221/speedseq/merged_bams/MAPQ20/MAPQ_20_Oh43_B73v5_pan_genome.bam_sorted.bam 
+coverageBed -hist -a /scratch.global/qiuxx221/speedseq/merged_bams/MAPQ20/MAPQ_20_Oh43_B73v5_pan_genome.bam_sorted.bam -b pan_contig_bed_for_cov.bed
+
