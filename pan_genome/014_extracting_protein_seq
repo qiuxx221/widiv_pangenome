@@ -1,0 +1,6 @@
+
+# use t1 as the representitve transcript when the contigs gene has more than 1 transcript 
+grep transcript 44110_final_contigs.gff3 | cut -f 9 | cut -f 1 -d ';' | grep "t1" | sed 's|ID=||g' > 44110_t1_transcript.txt
+
+seqtk subseq ~/gff3/cds_hints_annotation_test/aa/all_pan_contig.aa ~/gff3/cds_hints_annotation_test/NR_checked/44110_t1_transcript.txt > 44110_gene_prot.aa
+
