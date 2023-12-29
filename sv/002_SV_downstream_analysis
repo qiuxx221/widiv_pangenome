@@ -22,6 +22,10 @@ module load bedtools
 
 bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b fmt_gff_bed_intersect.bed -wa -wb > intersect_del_gene_model_padded.txt # this one is about the range has intersection with the gene
 
+# making a narrow version of this to link pan-gene to deletion
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad_narrow.bed -b fmt_gff_bed_intersect_gene_only.bed -wa -wb -F 1 | cut -f 11 | sort | uniq > DEL_encompassing_B73_genes.txt
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad_narrow.bed -b fmt_gff_bed_intersect_gene_only.bed -wa -wb -F 1  > full_DEL_encompassing_B73_genes.txt
+
 
 # create an anchor to remove DEL that has intersection with gene model
 #cut -f 519 intersect_del_gene_model.txt | sort | uniq > anchor_intersected_del.txt
