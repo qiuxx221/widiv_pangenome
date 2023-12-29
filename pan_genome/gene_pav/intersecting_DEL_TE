@@ -1,0 +1,19 @@
+cut -f 1-3,519 1Mb_DEL_fmt_del_size_pad.bed > 1Mb_del_for_intersect.bed
+
+# test 1: Minimum overlap required as a fraction of A. Default is 1E-9 (i.e. 1bp). in this case, 1 was used so it will be 100% that SV is in a TE
+
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b filtered_B73.EDTA.TEanno.gff3 -f 1 | wc -l
+# 62254 count 
+# test 2: Minimum overlap required as a fraction of B. Default is 1E-9 (i.e., 1bp). meaning the TE is totally nested in the DEL
+
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b filtered_B73.EDTA.TEanno.gff3 -F 1 | wc -l
+
+
+
+# test 3 Require that the fraction of overlap be reciprocal for A and B. In other words, if -f is 0.90 and -r is used, this requires that B overlap at least 90% of A and that A also overlaps at least 90% of B.
+# TE = SV 
+bedtools intersect -a 1Mb_DEL_fmt_del_size_pad.bed -b filtered_B73.EDTA.TEanno.gff3 -f 1 -r | wc -l
+
+# 8548 counts
+
+
