@@ -20,6 +20,8 @@ bedtools intersect -a b73_snp_vcf.bed -b rename_chr_1_mb_deletion_short.bed -v -
 # kept 1,720,316 out of 3,143,025 SNPs that are not located in existing deletion range
 
 vcftools --vcf lift_v4_v5_filtered_snp.vcf --out WiDiv509_ref.B73v5_SNPs_not.in.DELs_allchr --positions Widiv_509_v5_SNPs_notinDELs.txt --recode --recode-INFO-all
-/home/hirschc1/qiuxx221/programs/tassel-5-standalone/run_pipeline.pl -Xmx100g -importGuess WiDiv509_ref.B73v5_SNPs_not.in.DELs_allchr.recode.vcf \
-                -export WiDiv509_ref.B73_SNPs_not.in.DELs_allchr.hmp.txt \
+
+# making hapmap for snp only
+/home/hirschc1/qiuxx221/programs/tassel-5-standalone/run_pipeline.pl -Xmx100g -importGuess lift_v4_v5_filtered_snp.vcf \
+                -export WiDiv509_ref.B73v5_SNPs_allchr.hmp.txt \
                 -exportType HapmapDiploid
