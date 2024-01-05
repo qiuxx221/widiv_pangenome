@@ -1,0 +1,17 @@
+bedtools intersect -a nss_private_del.bed -b ~/pan_sv/fmt_gff_bed_intersect.bed -wa -wb > nss_intersect_b73_gene.txt
+bedtools intersect -a sss_private_del.bed -b ~/pan_sv/fmt_gff_bed_intersect.bed -wa -wb > sss_intersect_b73_gene.txt
+
+# getting gene ID only for GO enrichment testing
+grep gene nss_intersect_b73_gene.txt | cut -f 9 | sed 's|ID=||g' > nss_intersected_gene_feature.txt
+grep gene sss_intersect_b73_gene.txt | cut -f 9 | sed 's|ID=||g' > sss_intersected_gene_feature.txt
+
+
+
+grep gene nss_intersect_b73_gene.txt | cut -f 1,2 > nss_del_anchor.txt
+grep gene sss_intersect_b73_gene.txt | cut -f 1,2 > sss_del_anchor.txt
+
+grep -Fwf nss_del_anchor.txt ~/pan_sv/sv_gene_encompassing_narrow.txt > nss_encompassing_gene_del.txt
+grep -Fwf sss_del_anchor.txt ~/pan_sv/sv_gene_encompassing_narrow.txt > sss_encompassing_gene_del.txt
+
+cut -f 3 nss_encompassing_gene_del.txt | sed 's|ID=||g' > nss_encompassing_gene_del_gene_id.txt
+cut -f 3 sss_encompassing_gene_del.txt | sed 's|ID=||g' > sss_encompassing_gene_del_gene_id.txt
