@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH -p ag2tb,a100-4,agsmall
+#SBATCH -N 1
+#SBATCH -n 24
+#SBATCH -t 48:00:00
+#SBATCH --mem=200gb
+#SBATCH --tmp=400gb
+#SBATCH -J Oh43_nam_pan_MAPQ
+#SBATCH -o Oh43_nam_pan_MAPQ.out
+#SBATCH -e Oh43_nam_pan_MAPQ.err
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH --mail-type=ALL
+
+cd /home/apg/qiuxx221/benchmarking_MAPQ
+module load gatk
+module load samtools
+module load parallel
+parallel -j 2 --joblog benchmarking_MAPQ_0.log --workdir $PWD <<FIL
+gatk --java-options "-Xmx100g -XX:+UseParallelGC" HaplotypeCaller --minimum-mapping-quality 10 -R /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta -I Oh43_NAM_pan.bam --output Oh43_NAM_pan_MAPQ10.vcf
+gatk --java-options "-Xmx100g -XX:+UseParallelGC" HaplotypeCaller --minimum-mapping-quality 20 -R /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta -I Oh43_NAM_pan.bam --output Oh43_NAM_pan_MAPQ20.vcf
