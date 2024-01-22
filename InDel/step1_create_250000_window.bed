@@ -2,10 +2,18 @@ bedtools makewindows -w 250000 -g sizes.genome |\
    awk '{print $1"\t"$2+1"\t"$3}' |\
    sed 's/\t/:/1' |\
    sed 's/\t/-/1' > B73_250000_window.bed
-   
+
+
+
 # create link for the bam files 
 for finalbam in /scratch.global/qiuxx221/MAPQ20_bams/*_MAPQ_20.ba? ; do ln -s $finalbam; done
 
+bedtools makewindows -w 250000 -g scaf_window.bed |\
+   sed 's/\t/:/1' |\
+   sed 's/\t/-/1' > B73_v5_scaf_250000_window.bed
+
+# generate the final window file for gatk calling on scaffold and missed call for B73v5 reference only 
+cat B73_v5_scaf_250000_window.bed gatk_miss_calls_0_1_window.bed > B73_v5_missed_scaf_recall.bed
 
 
 # creating pan-genome window for variant calling
