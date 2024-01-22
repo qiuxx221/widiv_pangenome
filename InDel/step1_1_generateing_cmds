@@ -1,0 +1,8 @@
+bash gatk3_cmdsgen_fix_scaf.sh /home/hirschc1/qiuxx221/widiv/B73_index/B73_v5_missed_scaf_recall.bed \
+/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta \
+/scratch.global/qiuxx221/widiv_509_v5_bam/*.bam > gatk_missed_scaf.cmds
+
+# bed file format
+# scaf_21:0-250000
+# scaf_21:250000-500000
+# scaf_21:500000-712123
