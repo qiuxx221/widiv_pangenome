@@ -57,3 +57,8 @@ gatk --java-options "-Xmx80g" VariantFiltration \
 grep chr1 Oh43_samtools_filter_pan_MAPQ20_long_SNP_filtered-snps.vcf | grep PASS | cut -f 1,2,4,5 | awk '{$1=(NR==0?"ID":$1"_"$2); $2=""}1' | awk '{$2=(NR==0?"ID":$2"_"$3); $3=""}1' > MAPQ20_samtools_filter_pan__chr1_fmt.txt
 grep chr1 Oh43_samtools_filter_pan_MAPQ10_long_SNP_filtered-snps.vcf | grep PASS | cut -f 1,2,4,5 | awk '{$1=(NR==0?"ID":$1"_"$2); $2=""}1' | awk '{$2=(NR==0?"ID":$2"_"$3); $3=""}1' > MAPQ10_samtools_filter_pan__chr1_fmt.txt
 
+
+
+grep _length_ Oh43_samtools_filter_pan_MAPQ20_long_SNP_filtered-snps.vcf | grep PASS | cut -f 1,2,4,5 | awk '{$1=(NR==0?"ID":$1"_"$2); $2=""}1' | awk '{$2=(NR==0?"ID":$2"_"$3); $3=""}1' > MAPQ20_samtools_filter_pan_contig_fmt.txt
+grep _length_ Oh43_samtools_filter_pan_MAPQ10_long_SNP_filtered-snps.vcf | grep PASS | cut -f 1,2,4,5 | awk '{$1=(NR==0?"ID":$1"_"$2); $2=""}1' | awk '{$2=(NR==0?"ID":$2"_"$3); $3=""}1' > MAPQ10_samtools_filter_pan_contig_fmt.txt
+
