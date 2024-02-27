@@ -1,0 +1,23 @@
+# Summary
+
+## GATK for variant calling was done on the pan-genome bams, where all the reads were mapped to B73 reference genome + pan contigs.
+
+## all the bed file windows are listed in /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index
+
+## mapq filter of 20 was applied to all the picard marked bams for the variant calling 
+
+
+## for mapq filters:
+
+cd /scratch.global/qiuxx221_share/widiv_pan_bams_raw/picard_markdups/509_mapped_to_pan_genome_picard
+for i in *.bam; do   echo "samtools view -bq 20 $i > /scratch.global/qiuxx221/mapq509/"$i"_MAPQ20.bam; samtools index /scratch.global/qiuxx221/mapq509/"$i"_MAPQ20.bam " ; done > samtool_mapq_20_filter_cmd.txt
+
+# modify slurm batch job python and submit jobs
+
+python2 ~/utility/generate_slurm_speedseq_mapq20_filter_pan_bams.py 48 samtool_mapq_20_filter_cmd.txt
+
+for i in *.sub; do sbatch $i; done
+
+
+
+
