@@ -1,0 +1,13 @@
+mkdir /home/apg/qiuxx221/Widiv_pangenome/snp
+cd /home/apg/qiuxx221/Widiv_pangenome/snp
+for finalbam in /scratch.global/qiuxx221/mapq509/*.ba?; do
+  ln -s $finalbam
+done
+
+# bed files 
+/home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_chr_250000.bed
+
+/home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_chr_250000.bed *.bam > gatk_pan_chr.cmds
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed *.bam_MAPQ20.bam > gatk_pan_contig.cmds
