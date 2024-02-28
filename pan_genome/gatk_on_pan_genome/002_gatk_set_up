@@ -9,5 +9,5 @@ done
 
 /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed
 
-bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_chr_250000.bed *.bam > gatk_pan_chr.cmds
-bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed *.bam_MAPQ20.bam > gatk_pan_contig.cmds
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_chr_250000.bed ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta *.bam > gatk_pan_chr.cmds
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed -R *.bam_MAPQ20.bam > gatk_pan_contig.cmds
