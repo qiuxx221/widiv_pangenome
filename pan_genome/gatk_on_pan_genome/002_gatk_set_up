@@ -11,3 +11,52 @@ done
 
 bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_chr_250000.bed ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta *.bam > gatk_pan_chr.cmds
 bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_genome_window_contigs_250000.bed -R *.bam_MAPQ20.bam > gatk_pan_contig.cmds
+
+
+# due to the pan-contigs file is too long, file will be chopped into segments to run through 
+# ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed
+split -l 100000 pan_genome_window_contigs_250000.bed pan_contigs_bed_split 
+
+# files becomes 
+#-rw-------. 1 qiuxx221 apg 32628100 Apr 12 11:06 pan_genome_window_contigs_250000.bed
+#-rw-------. 1 qiuxx221 apg  4404160 Apr 12 11:07 pan_contigs_bed_splitaa
+#-rw-------. 1 qiuxx221 apg  4345100 Apr 12 11:07 pan_contigs_bed_splitab
+#-rw-------. 1 qiuxx221 apg  4470272 Apr 12 11:07 pan_contigs_bed_splitac
+#-rw-------. 1 qiuxx221 apg  4373775 Apr 12 11:07 pan_contigs_bed_splitad
+#-rw-------. 1 qiuxx221 apg  4462194 Apr 12 11:07 pan_contigs_bed_splitae
+#-rw-------. 1 qiuxx221 apg  4494692 Apr 12 11:07 pan_contigs_bed_splitaf
+#-rw-------. 1 qiuxx221 apg  4436134 Apr 12 11:07 pan_contigs_bed_splitag
+#-rw-------. 1 qiuxx221 apg  1641773 Apr 12 11:07 pan_contigs_bed_splitah
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitaa \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_a.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitab \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_b.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitac \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_c.cmds
+
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitad \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_d.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitae \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_e.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitaf \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_f.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitag \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_g.cmds
+
+bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
+~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitah \
+-R *.bam_MAPQ20.bam > gatk_pan_contig_h.cmds
