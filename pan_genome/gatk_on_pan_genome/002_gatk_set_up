@@ -32,6 +32,10 @@ bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
 ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitaa \
 -R *.bam_MAPQ20.bam > gatk_pan_contig_a.cmds
 
+
+cd ~/Widiv_pangenome/snp
+python2 generate_slurm_speedseq_24_jobs.py 200 gatk_pan_contig_a.cmds
+
 bash /home/hirschc1/qiuxx221/widiv/gatk/gatk3_cmdsgen_fix_scaf.sh  \
 ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_bed_splitab \
 -R *.bam_MAPQ20.bam > gatk_pan_contig_b.cmds
