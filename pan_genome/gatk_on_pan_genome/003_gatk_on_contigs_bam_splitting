@@ -1,0 +1,7 @@
+# due to the extensive run time, we are splitting bam files and will only read in the part that has contigs information
+
+# remove chr postion 
+# /home/apg/qiuxx221/reference_genomes/B73v5_chr.bed
+
+samtools view -H ZS635_B73v5_pan_genome.sorted_marked_duplicates.bam_MAPQ20.bam | grep -v chr > mdf_header
+samtools view -b -L /home/apg/qiuxx221/reference_genomes/B73v5_chr.bed -U myFileWithoutSpecificRegions.bam ZS635_B73v5_pan_genome.sorted_marked_duplicates.bam_MAPQ20.bam > overlappingSpecificRegions.bam
