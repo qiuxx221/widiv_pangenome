@@ -3,5 +3,13 @@
 # remove chr postion 
 # /home/apg/qiuxx221/reference_genomes/B73v5_chr.bed
 
-samtools view -H ZS635_B73v5_pan_genome.sorted_marked_duplicates.bam_MAPQ20.bam | grep -v chr > mdf_header
-samtools view -b -L /home/apg/qiuxx221/reference_genomes/B73v5_chr.bed -U myFileWithoutSpecificRegions.bam ZS635_B73v5_pan_genome.sorted_marked_duplicates.bam_MAPQ20.bam > overlappingSpecificRegions.bam
+# production
+ls *.bam | cut -f 1-3 -d '_' > bam_list.txt
+while read p; do 
+  echo "samtools view -H "$p"_genome.sorted_marked_duplicates.bam_MAPQ20.bam | grep -v chr > "$p"_header.sam; samtools view -b -L /home/apg/qiuxx221/reference_genomes/B73v5_chr.bed -U "$p"_WithoutSpecificRegions.bam "$p"_genome.sorted_marked_duplicates.bam_MAPQ20.bam > "$p"_overlappingSpecificRegions.bam ; samtools view "$p"_WithoutSpecificRegions.bam | cat "$p"_header.sam - | samtools view -Sb - > contigs_bam/"$p"_contig_only.bam ; samtools index contigs_bam/"$p"_contig_only.bam " 
+done < bam_list.txt > split_bam_cmd
+
+
+python2 ~/ultility/generate_slurm_remake_bam.py 24 split_bam_cmd
+
+for i in *.sub; do sbatch $i; done
