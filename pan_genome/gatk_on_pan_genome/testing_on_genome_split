@@ -1,0 +1,20 @@
+readlink -f *.bam > ~/Widiv_pangenome/snp/contigs_gatk/bam_input.list
+
+
+#!/bin/bash
+#SBATCH -N 1
+#SBATCH -n 32
+#SBATCH -t 96:00:00
+#SBATCH --mem=400gb
+#SBATCH --tmp=400gb
+#SBATCH -J gatk_pan_bam
+#SBATCH -o gatk_pan_bam.o
+#SBATCH -e gatk_pan_bam.e
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH --mail-type=ALL
+cd ~/Widiv_pangenome/snp/contigs_gatk
+
+module load gatk
+module load parallel
+module load gatk
+gatk --java-options "-Xmx400g -XX:+UseParallelGC" HaplotypeCaller -R /home/apg/qiuxx221/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta -I bam_input.list --output contigs_calls.vcf
