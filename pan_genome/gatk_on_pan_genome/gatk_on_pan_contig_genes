@@ -1,0 +1,25 @@
+# this folder has the final gff3 for the pan contig
+cd /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/
+# note, there are 44110 gene models but 42448 contigs, some contigs contain more than 1 gene models 
+cut -f 1 44110_final_contigs.gff3 | sort | uniq > contigs_names_for_gatk
+
+
+
+# extracting windows that contains gene models 
+cd ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/
+
+grep -Ff  /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/contigs_names_for_gatk  pan_genome_window_contigs_250000.bed > pan_contigs_with_genes.txt
+# this gives me 42453 contigs, 5 more than what it should be. Those 5 will be removed manually after gatk mapping
+
+grep -Ff  /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/contigs_names_for_gatk  pan_genome_window_contigs_250000.bed| cut -f 1-2 -d "_"  | sort | uniq > extracted_pan_contig_id.txt
+
+cat /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/contigs_names_for_gatk extracted_pan_contig_id.txt | sort | uniq -c | grep "1 "
+
+      1 6M502A_108333
+      1 MS24A_125413
+      1 MS24A_94753
+      1 MS24A_95227
+      1 PHG80_43882
+
+grep -Ff  /home/apg/qiuxx221/gff3/cds_hints_annotation_test/NR_checked/contigs_names_for_gatk  pan_genome_window_contigs_250000.bed | grep -v 6M502A_108333 | grep -v MS24A_125413 | grep -v MS24A_94753 | grep -v MS24A_95227 | grep -v PHG80_43882 > pan_contigs_with_genes.txt
+
