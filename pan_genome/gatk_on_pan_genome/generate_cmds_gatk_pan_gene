@@ -1,3 +1,7 @@
 gatk3_cmdsgen_fix_pan_contigs.sh 
 
 bash ~/Widiv_pangenome/snp/contigs_gatk/gatk3_cmdsgen_fix_pan_contigs.sh  ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_with_genes.txt ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta *.bam > gatk_pan_gene_contigs.cmds
+
+
+bash ~/Widiv_pangenome/snp/contigs_gatk/gatk3_cmdsgen_fix_pan_gene_full_bam.sh  ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contig_bed/pan_contigs_with_genes.txt ~/Widiv_pangenome/pan_gene_pav/bwa_index/pan_contigs_all.fasta *.bam > gatk_pan_gene_full_bam.cmds
+
