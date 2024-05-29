@@ -1,0 +1,6 @@
+# all the pan gene annotation is listed in 
+~/gff3/cds_hints_annotation_test/NR_checked/44110_gene_cds.gff3 
+
+# the id in the info column was used in the pan-gene pav matrix, this information will be grep out and add into the final pangene matrix for clarity 
+cd ~/Widiv_pangenome/pan_gene_pav/contigs_id_gene_id_link
+grep -v Zm0 /home/apg/qiuxx221/gff3/44110_pan_contig_B73_gene_mosdepth.bed > contigs_gene_annotation_sequence_id_pair.txt
