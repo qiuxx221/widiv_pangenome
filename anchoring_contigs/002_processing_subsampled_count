@@ -1,0 +1,4 @@
+grep ">" B73v5_chr1-10_sampled_fragments.fasta | cut -f 9 -d ' ' > random_sampled_size.txt
+
+grep ">" B73v5_chr1-10_sampled_fragments.fasta | cut -f 1 -d ' ' | cut -f 1,2 -d "_" > random_sampled_chr_location.txt
+
