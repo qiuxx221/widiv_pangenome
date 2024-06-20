@@ -1,0 +1,6 @@
+# format PAV matrix into hapmap format and will be used for GWAS 
+sed 's|absent|AA|g' pan_gene_pav_matrix_meta.txt | sed 's|present|TT|g' | sed 's|"||g' > /scratch.global/qiuxx221/pan_gene_pav_hmp.txt 
+
+# columns below will be added to the matrix for formatting
+## rs	alleles	chrom	pos	strand	assembly	center	protLSID	assayLSID	panelLSID	QCcode
+
