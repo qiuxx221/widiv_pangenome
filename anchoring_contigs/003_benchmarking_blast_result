@@ -1,0 +1,14 @@
+# get the truth coordinate
+grep ">" B73v5_chr1-10_sampled_fragments.fasta | cut -f 1 -d ' ' | sed 's|>||g' > fragment_sequence_header
+
+
+# working dir will be at 
+/home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_genes
+
+
+module load ncbi_toolkit/25.2.0  
+makeblastdb -in Zm-B73-REFERENCE-NAM-5.0_Chr1-10.fasta -dbtype nucl -parse_seqids
+
+
+# parase blastoutput for benchmarking
+cut -f 1,2,9,10
