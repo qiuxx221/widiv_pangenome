@@ -1,0 +1,5 @@
+find . -maxdepth 1 -name 'gz' | xargs ls | cut -f 1-3 -d "." > contig_vcf_names.txt
+
+while read p; do echo "gunzip "$p".gz; grep "$p" -v "#" > variant_"$p" "; done < contig_vcf_names.txt > filter_variant_cmd.txt
+
+sed -i 's|#|"#"|g' filter_variant_cmd.txt
