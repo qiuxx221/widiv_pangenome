@@ -1,0 +1,9 @@
+awk '{gsub(/\|/, "\t", $1); print}' FS="\t" OFS="\t" flank50_1k_blast.out | sed 's|start:||g' | sed 's|end:||g' > fmt_flank50_full.txt
+
+awk '{gsub(/\|/, "\t", $1); print}' FS="\t" OFS="\t" flank100_1k_blast.out | sed 's|start:||g' | sed 's|end:||g' > fmt_flank100_full.txt
+
+awk '{gsub(/\|/, "\t", $1); print}' FS="\t" OFS="\t" flank150_1k_blast.out | sed 's|start:||g' | sed 's|end:||g' > fmt_flank150_full.txt
+
+awk '{gsub(/\|/, "\t", $1); print}' FS="\t" OFS="\t" flank200_1k_blast.out | sed 's|start:||g' | sed 's|end:||g' > fmt_flank200_full.txt
+
+awk '{gsub(/\|/, "\t", $1); print}' FS="\t" OFS="\t" flank250_1k_blast.out | sed 's|start:||g' | sed 's|end:||g' > fmt_flank250_full.txt
