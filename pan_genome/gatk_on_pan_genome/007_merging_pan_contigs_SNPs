@@ -1,5 +1,6 @@
 find /scratch.global/qiuxx221/pan_contig_vcf -name "*.gz" > pan_contig_vcf_list.txt
 
+split -l 1000 pan_contig_vcf_list.txt batch_
 
 
 bcftools merge -l pan_contig_vcf_list.txt -o /scratch.global/qiuxx221/merged_pan_contig_via_bcftools_merge.vcf
