@@ -1,9 +1,23 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20gb
+#SBATCH -t 20:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=qiuxx221@umn.edu
+#SBATCH -o pan_contig_blast.out
+#SBATCH -e pan_contig_blast.err
+#SBATCH --tmp=100gb
 
+cd /scratch.global/qiuxx221
+module load ncbi_toolkit
 # reference without scaffolds
-/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0_Chr1-10.fasta
+## /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0_Chr1-10.fasta
 
 # reference with scaffolds
-/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta
+## /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta
 
 
-blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_genes/pan_gene_contigs.fasta -outfmt 6 > 2FACC_blast.out
+blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_genes/pan_gene_contigs.fasta -outfmt 6 > pan_gene_blast_with_scaf.out
+blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0_Chr1-10.fasta -query /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_genes/pan_gene_contigs.fasta -outfmt 6 > pan_gene_blast_without_scaf.out
