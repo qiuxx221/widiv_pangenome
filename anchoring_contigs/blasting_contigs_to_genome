@@ -1,0 +1,9 @@
+
+# reference without scaffolds
+/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0_Chr1-10.fasta
+
+# reference with scaffolds
+/home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta
+
+
+blastn -db /home/hirschc1/qiuxx221/widiv/B73_index/Zm-B73-REFERENCE-NAM-5.0.fasta -query /home/hirschc1/shared/projects/Yinjie_project/Widiv_pangenome/pan_genome/pan_genes/pan_gene_contigs.fasta -outfmt 6 > 2FACC_blast.out
